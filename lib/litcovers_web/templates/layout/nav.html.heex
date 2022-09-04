@@ -1,0 +1,8 @@
+  <div class="flex justify-between items-center">
+    <a href="/" class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">Logo TBD</a>
+    <%= if @conn.assigns.current_user do %>
+      <a href="#" class="btn">Кабинет Автора</a>
+    <% else %>
+      <%= link "Логин", to: Routes.user_session_path(@conn, :new), class: "btn" %>
+    <% end %>
+  </div>
