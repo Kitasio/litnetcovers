@@ -59,6 +59,12 @@ defmodule LitcoversWeb.Router do
 
   ## Authentication routes
 
+  scope "/admin", LitcoversWeb do
+    pipe_through [:browser, :require_authenticated_admin]
+
+    live "/", AdminLive.Index
+  end
+
   scope "/", LitcoversWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 

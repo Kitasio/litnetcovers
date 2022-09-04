@@ -17,3 +17,9 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
+
+## Create admin user
+1. Connet to IEX (`iex -S mix` for develpment)
+2. `alias Litcovers.Accounts`
+3. `user = %{email: "admin@whatever.mail", password: "yourpassword", is_admin: true}`
+4. `Accounts.register_admin(user)`

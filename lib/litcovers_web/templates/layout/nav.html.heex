@@ -1,7 +1,17 @@
   <div class="flex justify-between items-center">
     <a href="/" class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">Logo TBD</a>
     <%= if @conn.assigns.current_user do %>
-      <a href="#" class="btn">Кабинет Автора</a>
+      <%= if @conn.assigns.current_user.is_admin do %>
+        <div class="flex gap-4 items-center">
+          <%= link "Выход", to: Routes.user_session_path(@conn, :delete), method: :delete, class: "link" %>
+          <a href="/admin" class="btn">Кабинет Админа</a>
+        </div>
+      <% else %>
+        <div class="flex gap-4 items-center">
+          <%= link "Выход", to: Routes.user_session_path(@conn, :delete), method: :delete, class: "link" %>
+          <a href="#" class="btn">Кабинет Автора</a>
+        </div>
+      <% end %>
     <% else %>
       <div class="flex gap-4 items-center">
         <%= link "Регистрация", to: Routes.user_registration_path(@conn, :new), class: "link" %>

@@ -80,6 +80,12 @@ defmodule Litcovers.Accounts do
     |> Repo.insert()
   end
 
+  def register_admin(attrs) do
+    %User{}
+    |> User.admin_registration_changeset(attrs)
+    |> Repo.insert()
+  end
+
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
