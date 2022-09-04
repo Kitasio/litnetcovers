@@ -3,6 +3,17 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+@layer base {
+  html {
+    font-family: Helvetica Neue, system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply p-3 text-slate-200 hover:text-slate-300 rounded-full bg-gradient-to-r from-pink-800 to-pink-500 border-2 border-pink-600 hover:border-gray-200 transition-all duration-300;
+  }
+}
 
 /* Alerts and form errors used by phx.new */
 .alert {
