@@ -3,6 +3,9 @@
     <%= if @conn.assigns.current_user do %>
       <a href="#" class="btn">Кабинет Автора</a>
     <% else %>
-      <%= link "Логин", to: Routes.user_session_path(@conn, :new), class: "btn" %>
+      <div class="flex gap-4 items-center">
+        <%= link "Регистрация", to: Routes.user_registration_path(@conn, :new), class: "link" %>
+        <%= link "Логин", to: Routes.user_session_path(@conn, :new), class: "btn" %>
+      </div>
     <% end %>
   </div>
