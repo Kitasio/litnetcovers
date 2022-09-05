@@ -1,0 +1,28 @@
+<h1>Show Placeholder</h1>
+
+<ul>
+
+  <li>
+    <strong>Author:</strong>
+    <%= @placeholder.author %>
+  </li>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @placeholder.title %>
+  </li>
+
+  <li>
+    <strong>Vibe:</strong>
+    <%= @placeholder.vibe %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @placeholder.description %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.placeholder_path(@conn, :edit, @placeholder) %></span> |
+<span><%= link "Back", to: Routes.placeholder_path(@conn, :index) %></span>

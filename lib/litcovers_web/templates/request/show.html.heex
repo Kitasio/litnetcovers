@@ -1,0 +1,43 @@
+<h1>Show Request</h1>
+
+<ul>
+
+  <li>
+    <strong>Status:</strong>
+    <%= @request.status %>
+  </li>
+
+  <li>
+    <strong>Max:</strong>
+    <%= @request.max %>
+  </li>
+
+  <li>
+    <strong>Author:</strong>
+    <%= @request.author %>
+  </li>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @request.title %>
+  </li>
+
+  <li>
+    <strong>Vibe:</strong>
+    <%= @request.vibe %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @request.description %>
+  </li>
+
+  <li>
+    <strong>Genre:</strong>
+    <%= @request.genre %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.request_path(@conn, :edit, @request) %></span> |
+<span><%= link "Back", to: Routes.request_path(@conn, :index) %></span>

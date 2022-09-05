@@ -1,0 +1,32 @@
+<h1>Listing Placeholders</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Author</th>
+      <th>Title</th>
+      <th>Vibe</th>
+      <th>Description</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for placeholder <- @placeholders do %>
+    <tr>
+      <td><%= placeholder.author %></td>
+      <td><%= placeholder.title %></td>
+      <td><%= placeholder.vibe %></td>
+      <td><%= placeholder.description %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.placeholder_path(@conn, :show, placeholder) %></span>
+        <span><%= link "Edit", to: Routes.placeholder_path(@conn, :edit, placeholder) %></span>
+        <span><%= link "Delete", to: Routes.placeholder_path(@conn, :delete, placeholder), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Placeholder", to: Routes.placeholder_path(@conn, :new) %></span>
