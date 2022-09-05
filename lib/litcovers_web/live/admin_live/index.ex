@@ -9,14 +9,26 @@ defmodule LitcoversWeb.AdminLive.Index do
       socket
       |> assign(
         current_user: Accounts.get_user_by_session_token(session["user_token"]),
-        title: "Admin page live",
+        tokens: Accounts.list_invite_tokens(),
+        title: "Admin page live"
       )
     }
   end
 
-  def render(assigns) do
-    ~H"""
-    <h1><%= @title %></h1>
-    """
+  def handle_event("create_token", %{}, socket) do
+    Accounts.create_token()
+    {:noreply, assign(
+      socket,
+      tokens: Accounts.list_invite_tokens()
+    )}
+  end
+
+  def handle_event("delete_token", %{"token_id" => token_id}, socket) do
+    token = Accounts.get_token!(token_id)
+    Accounts.delete_token(token)
+    {:noreply, assign(
+      socket,
+      tokens: Accounts.list_invite_tokens()
+    )}
   end
 end

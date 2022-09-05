@@ -6,7 +6,7 @@ defmodule Litcovers.Accounts do
   import Ecto.Query, warn: false
   alias Litcovers.Repo
 
-  alias Litcovers.Accounts.{User, UserToken, UserNotifier}
+  alias Litcovers.Accounts.{User, UserToken, UserNotifier, Token}
 
   ## Database getters
 
@@ -355,5 +355,114 @@ defmodule Litcovers.Accounts do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+  @doc """
+  Returns the list of invite_tokens.
+
+  ## Examples
+
+      iex> list_invite_tokens()
+      [%Token{}, ...]
+
+  """
+  def list_invite_tokens do
+    Token
+    |> order_by_id_query()
+    |> Repo.all()
+  end
+
+  def order_by_id_query(query) do
+    from(t in query, order_by: [desc: t.id])
+  end
+
+  @doc """
+  Gets a single token.
+
+  Raises `Ecto.NoResultsError` if the Token does not exist.
+
+  ## Examples
+
+      iex> get_token!(123)
+      %Token{}
+
+      iex> get_token!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_token!(id), do: Repo.get!(Token, id)
+
+  def get_token_if_unused(params) do
+    %{"token" => supplied_token} = params
+
+    case Ecto.UUID.cast(supplied_token) do
+      {:ok, token} ->
+        query = from t in Token, where: t.used == false
+
+        case Repo.get_by(query, token: token) do
+          nil ->
+            {:error, "Token not found"}
+
+          token ->
+            {:ok, token}
+        end
+
+      :error ->
+        {:error, "Wrong token format"}
+    end
+  end
+
+  def create_token() do
+    token_params = %{token: Ecto.UUID.generate}
+    %Token{}
+    |> Token.changeset(token_params)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a token.
+
+  ## Examples
+
+      iex> update_token(token, %{field: new_value})
+      {:ok, %Token{}}
+
+      iex> update_token(token, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_token(%Token{} = token, attrs) do
+    token
+    |> Token.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a token.
+
+  ## Examples
+
+      iex> delete_token(token)
+      {:ok, %Token{}}
+
+      iex> delete_token(token)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_token(%Token{} = token) do
+    Repo.delete(token)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking token changes.
+
+  ## Examples
+
+      iex> change_token(token)
+      %Ecto.Changeset{data: %Token{}}
+
+  """
+  def change_token(%Token{} = token, attrs \\ %{}) do
+    Token.changeset(token, attrs)
   end
 end

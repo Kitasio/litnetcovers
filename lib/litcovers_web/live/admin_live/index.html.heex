@@ -1,0 +1,25 @@
+<h1><%= @title %></h1>
+
+<h1>Tokens</h1>
+<button class="btn my-3" phx-click="create_token">Create token</button>
+
+<table class="table-auto border-collapse border border-slate-500">
+  <thead>
+    <tr>
+      <th class="p-4 border border-slate-600">Token</th>
+      <th class="p-4 border border-slate-600">Used?</th>
+      <th class="p-4 border border-slate-600">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for token <- @tokens do %>
+        <tr>
+          <td class="p-4 border border-slate-700"><%= token.token %></td>
+          <td class="p-4 border border-slate-700"><%= token.used %></td>
+          <td class="p-4 border border-slate-700">
+            <button class="link" phx-click="delete_token" phx-value-token_id={token.id}>Delete</button>
+          </td>
+        </tr>
+    <% end %>
+  </tbody>
+</table>
