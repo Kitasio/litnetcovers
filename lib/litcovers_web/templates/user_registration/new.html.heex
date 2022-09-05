@@ -1,4 +1,4 @@
-<h1>Register</h1>
+<h1 class="mt-10 text-4xl font-bold">Регистрация</h1>
 
 <.form let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
   <%= if @changeset.action do %>
@@ -16,11 +16,7 @@
   <%= error_tag f, :password %>
 
   <div>
-    <%= submit "Register" %>
+    <%= submit "Зарегистрироваться", class: "btn mt-5" %>
   </div>
 </.form>
 
-<p>
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %> |
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %>
-</p>

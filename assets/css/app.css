@@ -11,11 +11,27 @@
 
 @layer components {
   .btn {
-    @apply p-3 text-slate-200 hover:text-slate-300 rounded-full bg-gradient-to-r from-pink-800 to-pink-500 border-2 border-pink-600 hover:border-gray-200 transition-all duration-300;
+    @apply px-5 py-3 text-slate-200 hover:text-slate-300 rounded-full hover:scale-105 bg-gradient-to-r from-pink-800 to-pink-500 border-2 border-pink-600 hover:border-gray-200 transition-all duration-200;
   }
   .link {
     @apply text-slate-200 hover:text-pink-600 hover:underline transition duration-200;
   }
+  .input {
+    @apply block w-full px-0.5 bg-transparent border-0 border-b-2 border-slate-200 focus:ring-0 focus:border-pink-600; 
+  }
+  .label {
+    @apply mt-5 block font-bold text-xl;
+  }
+}
+
+label {
+  @apply mt-10 block font-bold text-xl;
+}
+input[type=email] {
+  @apply block w-full px-0.5 bg-transparent border-0 border-b-2 border-slate-200 focus:ring-0 focus:border-pink-600; 
+}
+input[type=password] {
+  @apply block w-full px-0.5 bg-transparent border-0 border-b-2 border-slate-200 focus:ring-0 focus:border-pink-600; 
 }
 
 /* Alerts and form errors used by phx.new */
