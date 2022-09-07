@@ -7,6 +7,7 @@ defmodule Litcovers.Media do
   alias Litcovers.Repo
 
   alias Litcovers.Media.Request
+  alias Litcovers.Accounts
 
   @doc """
   Returns the list of requests.
@@ -19,6 +20,16 @@ defmodule Litcovers.Media do
   """
   def list_requests do
     Repo.all(Request)
+  end
+
+  def list_user_requests(%Accounts.User{} = user) do
+    Request
+    |> user_requests_query(user)
+    |> Repo.all()
+  end
+
+  defp user_requests_query(query, %Accounts.User{id: user_id}) do
+    from(r in query, where: r.user_id == ^user_id)
   end
 
   @doc """
@@ -49,10 +60,17 @@ defmodule Litcovers.Media do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_request(attrs \\ %{}) do
+  def create_request(%Accounts.User{} = user, attrs \\ %{}) do
     %Request{}
     |> Request.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
+  end
+
+  def user_requests_amount(%Accounts.User{} = user) do
+    Request
+    |> user_requests_query(user)
+    |> Repo.aggregate(:count)
   end
 
   @doc """

@@ -10,6 +10,8 @@ defmodule Litcovers.Accounts.User do
     field :is_admin, :boolean
     field :max_requests, :integer
 
+    has_many :requests, Litcovers.Media.Request
+
     timestamps()
   end
 

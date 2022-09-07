@@ -4,7 +4,6 @@
   <thead>
     <tr>
       <th>Status</th>
-      <th>Max</th>
       <th>Author</th>
       <th>Title</th>
       <th>Vibe</th>
@@ -18,7 +17,6 @@
 <%= for request <- @requests do %>
     <tr>
       <td><%= request.status %></td>
-      <td><%= request.max %></td>
       <td><%= request.author %></td>
       <td><%= request.title %></td>
       <td><%= request.vibe %></td>
