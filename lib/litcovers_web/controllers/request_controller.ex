@@ -17,7 +17,8 @@ defmodule LitcoversWeb.RequestController do
 
   def create(conn, %{"request" => request_params}) do
     cond do
-      Media.user_requests_amount(conn.assigns.current_user)+ 1 < conn.assigns.current_user.max_requests ->
+      Media.user_requests_amount(conn.assigns.current_user) + 1 <
+          conn.assigns.current_user.max_requests ->
         case Media.create_request(conn.assigns.current_user, request_params) do
           {:ok, request} ->
             conn
@@ -28,7 +29,7 @@ defmodule LitcoversWeb.RequestController do
             placeholder = Media.get_random_placeholder() |> List.first()
             render(conn, "new.html", changeset: changeset, placeholder: placeholder)
         end
-      
+
       true ->
         conn
         |> put_flash(:error, "Вы подали максимальное количество заявок")
