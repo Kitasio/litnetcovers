@@ -60,6 +60,21 @@ defmodule Litcovers.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def list_regular_users() do
+    User
+    |> list_not_admins_query()
+    |> order_by_id_query()
+    |> Repo.all()
+  end
+
+  def order_by_id_query(query) do
+    from(u in query, order_by: [desc: u.id])
+  end
+
+  defp list_not_admins_query(query) do
+    from(u in query, where: u.is_admin == false)
+  end
+
   ## User registration
 
   @doc """
@@ -84,6 +99,12 @@ defmodule Litcovers.Accounts do
     %User{}
     |> User.admin_registration_changeset(attrs)
     |> Repo.insert()
+  end
+
+  def update_max_requests(user, attrs) do
+    user
+    |> User.max_requests_changeset(attrs)
+    |> Repo.update!()
   end
 
   @doc """

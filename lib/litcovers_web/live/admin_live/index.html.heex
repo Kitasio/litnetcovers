@@ -1,25 +1,56 @@
 <h1><%= @title %></h1>
 
-<h1>Tokens</h1>
-<button class="btn my-3" phx-click="create_token">Create token</button>
+<div class="flex flex-col gap-7">
+  <div>
+    <h1>Tokens</h1>
+    <button class="btn my-3" phx-click="create_token">Create token</button>
 
-<table class="table-auto border-collapse border border-slate-500">
-  <thead>
-    <tr>
-      <th class="p-4 border border-slate-600">Token</th>
-      <th class="p-4 border border-slate-600">Used?</th>
-      <th class="p-4 border border-slate-600">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= for token <- @tokens do %>
+    <table class="table-auto border-collapse border border-slate-500">
+      <thead>
         <tr>
-          <td class="p-4 border border-slate-700"><%= token.token %></td>
-          <td class="p-4 border border-slate-700"><%= token.used %></td>
-          <td class="p-4 border border-slate-700">
-            <button class="link" phx-click="delete_token" phx-value-token_id={token.id}>Delete</button>
-          </td>
+          <th class="p-4 border border-slate-600">Token</th>
+          <th class="p-4 border border-slate-600">Used?</th>
+          <th class="p-4 border border-slate-600">Actions</th>
         </tr>
-    <% end %>
-  </tbody>
-</table>
+      </thead>
+      <tbody>
+        <%= for token <- @tokens do %>
+            <tr>
+              <td class="p-4 border border-slate-700"><%= token.token %></td>
+              <td class="p-4 border border-slate-700"><%= token.used %></td>
+              <td class="p-4 border border-slate-700">
+                <button class="link" phx-click="delete_token" phx-value-token_id={token.id}>Delete</button>
+              </td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div>
+    <h1>Users</h1>
+
+    <table class="table-auto border-collapse border border-slate-500">
+      <thead>
+        <tr>
+          <th class="p-4 border border-slate-600">Email</th>
+          <th class="p-4 border border-slate-600">Max requests</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for user <- @users do %>
+            <tr>
+              <td class="p-4 border border-slate-700"><%= user.email %></td>
+              <td class="p-4 border border-slate-700">
+                <div class="flex justify-between items-center">
+                  <span><%= user.max_requests %></span>
+                  <span class="cursor-pointer" phx-click="remove_requests" phx-value-user_id={user.id}>-</span>
+                  <span class="cursor-pointer" phx-click="add_requests" phx-value-user_id={user.id}>+</span>
+                </div>
+              </td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

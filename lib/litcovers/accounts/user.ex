@@ -8,6 +8,7 @@ defmodule Litcovers.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
     field :is_admin, :boolean
+    field :max_requests, :integer
 
     timestamps()
   end
@@ -41,6 +42,11 @@ defmodule Litcovers.Accounts.User do
     |> cast(attrs, [:email, :password, :is_admin])
     |> validate_email()
     |> validate_password(opts)
+  end
+
+  def max_requests_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:max_requests])
   end
 
   defp validate_email(changeset) do
