@@ -5,7 +5,7 @@
     </div>
   <% end %>
 
-  <%= label f, :author %>
+  <%= label f, "Автор" %>
   <%= text_input f, :author, placeholder: @placeholder.author %>
   <%= error_tag f, :author %>
 
@@ -18,14 +18,14 @@
   <%= error_tag f, :vibe %>
 
   <%= label f, :description %>
-  <%= textarea f, :description, placeholder: @placeholder.description %>
+  <%= textarea f, :description, placeholder: @placeholder.description, rows: "4" %>
   <%= error_tag f, :description %>
 
   <%= label f, :genre %>
   <%= text_input f, :genre %>
   <%= error_tag f, :genre %>
 
-  <div>
-    <%= submit "Save" %>
+  <div class="mt-7 flex w-full items-center justify-center">
+    <%= submit "Save", class: "btn" %>
   </div>
 </.form>
