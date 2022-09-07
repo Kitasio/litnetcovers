@@ -29,7 +29,7 @@ defmodule Litcovers.Media.Request do
 
   def admin_changeset(request, attrs) do
     request
-    |> cast(attrs, [:status, :max, :author, :title, :vibe, :description, :genre])
-    |> validate_required([:status, :max, :author, :title, :vibe, :description, :genre])
+    |> cast(attrs, [:status, :author, :title, :vibe, :description, :genre])
+    |> validate_required([:status, :author, :title, :vibe, :description, :genre])
   end
 end
