@@ -39,6 +39,12 @@ input[type=text] {
 textarea {
   @apply block w-full px-0.5 bg-transparent border-0 border-b-2 border-slate-200 focus:ring-0 focus:border-pink-600; 
 }
+select {
+  @apply block w-full px-0.5 bg-transparent border-0 border-b-2 border-slate-200 focus:ring-0 focus:border-pink-600; 
+}
+select[multiple] {
+  @apply block w-full px-0.5 bg-transparent border-0 border-b-2 border-slate-200 focus:ring-0 focus:border-pink-600; 
+}
 
 /* Alerts and form errors used by phx.new */
 .alert {

@@ -6,7 +6,6 @@ defmodule Litcovers.Media.Request do
     field :author, :string
     field :description, :string
     field :genre, :string
-    field :max, :integer
     field :status, :string
     field :title, :string
     field :vibe, :string
