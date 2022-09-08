@@ -11,6 +11,7 @@ defmodule Litcovers.Media.Request do
     field :vibe, :string
     
     belongs_to :user, Litcovers.Accounts.User
+    has_many :covers, Litcovers.Media.Cover
 
     timestamps()
   end

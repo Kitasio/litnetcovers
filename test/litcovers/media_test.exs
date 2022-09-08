@@ -128,4 +128,58 @@ defmodule Litcovers.MediaTest do
       assert %Ecto.Changeset{} = Media.change_placeholder(placeholder)
     end
   end
+
+  describe "covers" do
+    alias Litcovers.Media.Cover
+
+    import Litcovers.MediaFixtures
+
+    @invalid_attrs %{cover_url: nil}
+
+    test "list_covers/0 returns all covers" do
+      cover = cover_fixture()
+      assert Media.list_covers() == [cover]
+    end
+
+    test "get_cover!/1 returns the cover with given id" do
+      cover = cover_fixture()
+      assert Media.get_cover!(cover.id) == cover
+    end
+
+    test "create_cover/1 with valid data creates a cover" do
+      valid_attrs = %{cover_url: "some cover_url"}
+
+      assert {:ok, %Cover{} = cover} = Media.create_cover(valid_attrs)
+      assert cover.cover_url == "some cover_url"
+    end
+
+    test "create_cover/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Media.create_cover(@invalid_attrs)
+    end
+
+    test "update_cover/2 with valid data updates the cover" do
+      cover = cover_fixture()
+      update_attrs = %{cover_url: "some updated cover_url"}
+
+      assert {:ok, %Cover{} = cover} = Media.update_cover(cover, update_attrs)
+      assert cover.cover_url == "some updated cover_url"
+    end
+
+    test "update_cover/2 with invalid data returns error changeset" do
+      cover = cover_fixture()
+      assert {:error, %Ecto.Changeset{}} = Media.update_cover(cover, @invalid_attrs)
+      assert cover == Media.get_cover!(cover.id)
+    end
+
+    test "delete_cover/1 deletes the cover" do
+      cover = cover_fixture()
+      assert {:ok, %Cover{}} = Media.delete_cover(cover)
+      assert_raise Ecto.NoResultsError, fn -> Media.get_cover!(cover.id) end
+    end
+
+    test "change_cover/1 returns a cover changeset" do
+      cover = cover_fixture()
+      assert %Ecto.Changeset{} = Media.change_cover(cover)
+    end
+  end
 end
