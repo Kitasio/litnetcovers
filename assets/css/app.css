@@ -11,10 +11,10 @@
 
 @layer components {
   .btn {
-    @apply px-5 py-3 text-slate-200 hover:text-slate-300 rounded-full hover:scale-105 bg-gradient-to-r from-pink-800 to-pink-500 border-2 border-pink-600 hover:border-gray-200 transition-all duration-200;
+    @apply px-3 py-2 md:px-5 md:py-3 text-sm md:text-base text-slate-200 hover:text-slate-300 rounded-full hover:scale-105 bg-gradient-to-r from-pink-800 to-pink-500 border-2 border-pink-600 hover:border-gray-200 transition-all duration-200;
   }
   .link {
-    @apply text-slate-200 hover:text-pink-600 hover:underline transition duration-200;
+    @apply text-slate-200 text-sm md:text-base hover:text-pink-600 hover:underline transition duration-200;
   }
   .input {
     @apply block w-full px-0.5 bg-transparent border-0 border-b-2 border-slate-200 focus:ring-0 focus:border-pink-600; 
@@ -24,6 +24,9 @@
   }
 }
 
+h1 {
+  @apply text-2xl md:text-3xl lg:text-4xl font-bold;
+}
 label {
   @apply mt-10 block font-bold text-xl;
 }
