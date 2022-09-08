@@ -22,11 +22,22 @@ defmodule Litcovers.Media do
     Repo.all(Request)
   end
 
+  def list_uncompleted_requests do
+    Request
+    |> uncompleted_query()
+    |> Repo.all()
+    |> Repo.preload(:user)
+  end
+
   def list_user_requests(%Accounts.User{} = user) do
     Request
     |> user_requests_query(user)
     |> Repo.all()
     |> Repo.preload(:covers)
+  end
+
+  defp uncompleted_query(query) do
+    from(r in query, where: r.completed == false)
   end
 
   defp user_requests_query(query, %Accounts.User{id: user_id}) do

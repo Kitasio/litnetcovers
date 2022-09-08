@@ -63,6 +63,7 @@ defmodule LitcoversWeb.Router do
     pipe_through [:browser, :require_authenticated_admin]
 
     live "/", AdminLive.Index
+    live "/:request_id", AdminLive.Show
     resources "/placeholders", PlaceholderController
   end
 

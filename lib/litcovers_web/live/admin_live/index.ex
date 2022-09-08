@@ -2,6 +2,7 @@ defmodule LitcoversWeb.AdminLive.Index do
   use LitcoversWeb, :live_view
 
   alias Litcovers.Accounts
+  alias Litcovers.Media
 
   def mount(_params, session, socket) do
     {
@@ -11,7 +12,8 @@ defmodule LitcoversWeb.AdminLive.Index do
         current_user: Accounts.get_user_by_session_token(session["user_token"]),
         tokens: Accounts.list_invite_tokens(),
         users: Accounts.list_regular_users(),
-        title: "Admin page live"
+        requests: Media.list_uncompleted_requests(),
+        title: "Admin page"
       )
     }
   end

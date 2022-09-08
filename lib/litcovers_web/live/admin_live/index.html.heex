@@ -2,6 +2,29 @@
 
 <div class="flex flex-col gap-7">
   <div>
+    <h1>Requests</h1>
+
+    <table class="table-auto border-collapse border border-slate-500">
+      <thead>
+        <tr>
+          <th class="p-4 border border-slate-600">Author email</th>
+          <th class="p-4 border border-slate-600">Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for request <- @requests do %>
+            <tr>
+              <td class="p-4 border border-slate-700"><%= request.user.email %></td>
+              <td class="p-4 border border-slate-700">
+                <%= live_redirect request.title, to: Routes.live_path(@socket, LitcoversWeb.AdminLive.Show, request.id), class: "link" %>
+              </td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div>
     <h1>Tokens</h1>
     <button class="btn my-3" phx-click="create_token">Create token</button>
 
