@@ -9,6 +9,8 @@ defmodule Litcovers.Media.Request do
     field :status, :string
     field :title, :string
     field :vibe, :string
+    field :completed, :boolean
+    field :selected_cover, :integer
     
     belongs_to :user, Litcovers.Accounts.User
     has_many :covers, Litcovers.Media.Cover
@@ -29,7 +31,6 @@ defmodule Litcovers.Media.Request do
 
   def admin_changeset(request, attrs) do
     request
-    |> cast(attrs, [:status, :author, :title, :vibe, :description, :genre])
-    |> validate_required([:status, :author, :title, :vibe, :description, :genre])
+    |> cast(attrs, [:status, :author, :title, :vibe, :description, :genre, :completed, :selected_cover])
   end
 end

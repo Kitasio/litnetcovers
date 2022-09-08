@@ -26,6 +26,7 @@ defmodule Litcovers.Media do
     Request
     |> user_requests_query(user)
     |> Repo.all()
+    |> Repo.preload(:covers)
   end
 
   defp user_requests_query(query, %Accounts.User{id: user_id}) do
