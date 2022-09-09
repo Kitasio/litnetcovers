@@ -18,6 +18,14 @@ defmodule LitcoversWeb.AdminLive.Index do
     }
   end
 
+  def handle_event("show_all_requests", %{}, socket) do
+    {:noreply,
+    socket
+    |> assign(
+      requests: Media.list_requests()
+    )}
+  end
+
   def handle_event("create_token", %{}, socket) do
     Accounts.create_token()
     {:noreply, assign(

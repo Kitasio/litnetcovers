@@ -19,7 +19,9 @@ defmodule Litcovers.Media do
 
   """
   def list_requests do
-    Repo.all(Request)
+    Request
+    |> Repo.all()
+    |> Repo.preload(:user)
   end
 
   def list_uncompleted_requests do
