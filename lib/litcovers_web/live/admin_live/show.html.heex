@@ -68,9 +68,11 @@
 	          <% end %>
 	        <% end %>
 	      </div>
-	      <div class="mt-3">
-	        <%= submit "Save", phx_disable_with: "Saving...", class: "btn" %>
-	      </div>
+	      <%= unless Enum.empty?(@uploads.cover.entries) do %>
+	        <div class="mt-5 flex items-center justify-center">
+	          <%= submit "Save", phx_disable_with: "Saving...", class: "btn" %>
+	        </div>
+	      <% end %>
 	      <%= for err <- upload_errors(@uploads.cover) do %>
 	        <p class="alert alert-danger"><%= error_to_string(err) %></p>
 	      <% end %>
