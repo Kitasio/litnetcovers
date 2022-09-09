@@ -8,12 +8,12 @@
         </div>
       <% else %>
         <div class="flex gap-4 items-center">
-          <%= if @conn.request_path == Routes.profile_path(@conn, :index) do %>
+          <%= if @conn.request_path == "/profile" do %>
             <svg class="animate-bounce-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="rgba(226,232,240,1)"/></svg>
             <%= link "Создать обложку", to: Routes.request_path(@conn, :new), class: "btn" %>
           <% else %>
             <%= link "Выход", to: Routes.user_session_path(@conn, :delete), method: :delete, class: "link" %>
-            <%= link "Кабинет Автора", to: Routes.profile_path(@conn, :index), class: "btn" %>
+            <%= link "Кабинет Автора", to: "/profile", class: "btn" %>
           <% end %>
         </div>
       <% end %>
