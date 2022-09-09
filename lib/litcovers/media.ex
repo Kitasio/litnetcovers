@@ -60,7 +60,7 @@ defmodule Litcovers.Media do
   """
   def get_request!(id), do: Repo.get!(Request, id)
 
-  def get_request_and_covers!(id), do: Repo.get!(Request, id) |> Repo.preload(:covers)
+  def get_request_and_covers!(id), do: Repo.get!(Request, id) |> Repo.preload(:covers) |> Repo.preload(:user)
 
   @doc """
   Creates a request.
@@ -102,6 +102,12 @@ defmodule Litcovers.Media do
   def update_request(%Request{} = request, attrs) do
     request
     |> Request.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def admin_update_request(%Request{} = request, attrs) do
+    request
+    |> Request.admin_changeset(attrs)
     |> Repo.update()
   end
 

@@ -17,7 +17,7 @@ defmodule LitcoversWeb.RequestController do
 
   def create(conn, %{"request" => request_params}) do
     cond do
-      Media.user_requests_amount(conn.assigns.current_user) + 1 <
+      Media.user_requests_amount(conn.assigns.current_user) <
           conn.assigns.current_user.max_requests ->
         case Media.create_request(conn.assigns.current_user, request_params) do
           {:ok, request} ->

@@ -8,4 +8,28 @@ defmodule LitcoversWeb.UiComponents do
     </button>
     """
   end
+
+  def h1(assigns) do
+    ~H"""
+    <h1 class="text-2xl lg:text-4xl font-bold text-gray-200">
+      <%= render_slot(@inner_block) %>
+    </h1>
+    """
+  end
+
+  def h2(assigns) do
+    ~H"""
+    <h2 class="text-xl lg:text-2xl font-bold text-gray-200">
+      <%= render_slot(@inner_block) %>
+    </h2>
+    """
+  end
+
+  def p(assigns) do
+    ~H"""
+    <p class="lg:text-lg font-light text-gray-400">
+      <%= render_slot(@inner_block) %>
+    </p>
+    """
+  end
 end

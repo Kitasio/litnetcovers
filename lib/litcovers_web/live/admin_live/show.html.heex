@@ -1,61 +1,85 @@
 <div class="my-5">
-  <h1><%= @title %></h1>
+  <.h1>Запрос пользователя <%= @request.user.email %></.h1>
 
-  <div>id: <%= @request.id %></div>
-  <div>title: <%= @request.title %></div>
-  <div>description: <%= @request.description %></div>
-  <div>completed: <%= @request.completed %></div>
+  <%= if @request.completed do %>
+    <button phx-click="toggle_complete" class="text-green-400">Статус: завершен</button>
+  <% else %>
+    <button phx-click="toggle_complete" class="text-red-400">Статус: в процессе</button>
+  <% end %>
+  <div class="mt-5 flex flex-col gap-7">
+    <div>
+      <.h2>Автор</.h2>
+      <.p><%= @request.author %></.p>
+    </div>
+    <div>
+      <.h2>Название</.h2>
+      <.p><%= @request.title %></.p>
+    </div>
+    <div>
+      <.h2>Настроения</.h2>
+      <.p><%= @request.vibe %></.p>
+    </div>
+    <div>
+      <.h2>Описание</.h2>
+      <.p><%= @request.description %></.p>
+    </div>
+  </div>
 
-  <div phx-drop-target={@uploads.cover.ref}>
-	  <.form
-	    let={f}
-      for={@changeset}
-	    id="upload-form"
-	    phx-change="validate"
-	    phx-submit="save">
+  <div class="mt-5" x-data="{ open: false }">
+    <div class="flex justify-center">
+      <button class="btn" @click="open = !open">Add Cover</button>
+    </div>
+    <div x-show="open" x-transition phx-drop-target={@uploads.cover.ref}>
+	    <.form
+	      let={f}
+        for={@changeset}
+	      id="upload-form"
+	      phx-change="validate"
+	      phx-submit="save">
+	    
+	      <div class="flex justify-center items-center w-full">
+	        <label class="flex flex-col justify-center items-center w-full h-64 bg-black rounded-lg border-2 border-gray-900 border-dashed cursor-pointer hover:bg-[#111]">
+	            <div class="flex flex-col justify-center items-center pt-5 pb-6">
+	                <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+	                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+	                <p class="text-xs text-gray-500 dark:text-gray-400">PNG or JPG</p>
+	            </div>
+	            <%= live_file_input @uploads.cover, class: "hidden" %>
+	        </label>
+	      </div> 
+	      <%= hidden_input f, :cover_url %>
+	      <div class="mt-5 flex flex-wrap gap-5">
+	        <%= for entry <- @uploads.cover.entries do %>
+	          <div class="flex flex-col">
+	            <div class="flex-grow h-[20vh]">
+	              <%= live_img_preview entry, class: "object-cover align-bottom max-h-full mix-w-full" %>
+	            </div>
 	  
-	    <div class="flex justify-center items-center w-full">
-	      <label class="flex flex-col justify-center items-center w-full h-64 bg-black rounded-lg border-2 border-gray-900 border-dashed cursor-pointer hover:bg-[#111]">
-	          <div class="flex flex-col justify-center items-center pt-5 pb-6">
-	              <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-	              <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-	              <p class="text-xs text-gray-500 dark:text-gray-400">PNG or JPG</p>
+	            <%= link "cancel", to: "#", phx_click: "cancel_upload", phx_value_ref: entry.ref, class: "border-b-2 border-blue-clue" %>
+	  
+	            <%= if entry.progress > 0 do %>
+	              <progress value={entry.progress} max="100"> <%= entry.progress %>% </progress>
+	            <% end %>
+	  
 	          </div>
-	          <%= live_file_input @uploads.cover, class: "hidden" %>
-	      </label>
-	    </div> 
-	    <%= hidden_input f, :cover_url %>
-	    <div class="mt-10 flex flex-wrap gap-5">
-	      <%= for entry <- @uploads.cover.entries do %>
-	        <div class="flex flex-col">
-	          <div class="flex-grow h-[20vh]">
-	            <%= live_img_preview entry, class: "object-cover align-bottom max-h-full mix-w-full" %>
-	          </div>
-	
-	          <%= link "cancel", to: "#", phx_click: "cancel_upload", phx_value_ref: entry.ref, class: "border-b-2 border-blue-clue" %>
-	
-	          <%= if entry.progress > 0 do %>
-	            <progress value={entry.progress} max="100"> <%= entry.progress %>% </progress>
+	  
+	          <%= for err <- upload_errors(@uploads.cover, entry) do %>
+	            <p class="alert alert-danger"><%= error_to_string(err) %></p>
 	          <% end %>
-	
-	        </div>
-	
-	        <%= for err <- upload_errors(@uploads.cover, entry) do %>
-	          <p class="alert alert-danger"><%= error_to_string(err) %></p>
 	        <% end %>
+	      </div>
+	      <div class="mt-3">
+	        <%= submit "Save", phx_disable_with: "Saving...", class: "btn" %>
+	      </div>
+	      <%= for err <- upload_errors(@uploads.cover) do %>
+	        <p class="alert alert-danger"><%= error_to_string(err) %></p>
 	      <% end %>
-	    </div>
-	    <div>
-	      <%= submit "Save", phx_disable_with: "Saving..." %>
-	    </div>
-	    <%= for err <- upload_errors(@uploads.cover) do %>
-	      <p class="alert alert-danger"><%= error_to_string(err) %></p>
-	    <% end %>
-	  </.form>
-	</div>
+	    </.form>
+	  </div>
+  </div>
 
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+  <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
     <%= for cover <- @request.covers do %>
       <div class="group">
         <img class="w-full object-cover" src={cover.cover_url} />

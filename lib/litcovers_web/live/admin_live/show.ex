@@ -1,6 +1,7 @@
 defmodule LitcoversWeb.AdminLive.Show do
   use LitcoversWeb, :live_view
 
+  import LitcoversWeb.UiComponents
   alias Litcovers.Accounts
   alias Litcovers.Media
 
@@ -39,12 +40,22 @@ defmodule LitcoversWeb.AdminLive.Show do
 
     {:noreply,
      socket
-     |> push_redirect(to: Routes.live_path(socket, LitcoversWeb.AdminLive.Show, socket.assigns.request.id))}
+     |> push_redirect(
+       to: Routes.live_path(socket, LitcoversWeb.AdminLive.Show, socket.assigns.request.id)
+     )}
   end
 
   def handle_event("delete", %{"cover_id" => cover_id}, socket) do
     cover = Media.get_cover!(cover_id)
     Media.delete_cover(cover)
+
+    request = Media.get_request_and_covers!(socket.assigns.request.id)
+
+    {:noreply, assign(socket, request: request)}
+  end
+
+  def handle_event("toggle_complete", %{}, socket) do
+    Media.admin_update_request(socket.assigns.request, %{completed: !socket.assigns.request.completed})
 
     request = Media.get_request_and_covers!(socket.assigns.request.id)
 
