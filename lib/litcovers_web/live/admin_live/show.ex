@@ -18,7 +18,7 @@ defmodule LitcoversWeb.AdminLive.Show do
         request: request,
         title: "Request page"
       )
-      |> allow_upload(:cover, accept: ~w(.jpg .jpeg .png), max_entries: 5)
+      |> allow_upload(:cover, accept: ~w(.jpg .jpeg .png), max_entries: 5, max_file_size: 16_000_000)
     }
   end
 
