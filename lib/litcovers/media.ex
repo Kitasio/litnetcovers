@@ -60,6 +60,8 @@ defmodule Litcovers.Media do
   """
   def get_request!(id), do: Repo.get!(Request, id)
 
+  def get_request_and_covers!(id), do: Repo.get!(Request, id) |> Repo.preload(:covers)
+
   @doc """
   Creates a request.
 
