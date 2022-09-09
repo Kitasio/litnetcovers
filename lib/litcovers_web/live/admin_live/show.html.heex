@@ -6,24 +6,7 @@
   <% else %>
     <button phx-click="toggle_complete" class="text-red-400">Статус: в процессе</button>
   <% end %>
-  <div class="mt-5 flex flex-col gap-7">
-    <div>
-      <.h2>Автор</.h2>
-      <.p><%= @request.author %></.p>
-    </div>
-    <div>
-      <.h2>Название</.h2>
-      <.p><%= @request.title %></.p>
-    </div>
-    <div>
-      <.h2>Настроения</.h2>
-      <.p><%= @request.vibe %></.p>
-    </div>
-    <div>
-      <.h2>Описание</.h2>
-      <.p><%= @request.description %></.p>
-    </div>
-  </div>
+  <.request_info request={@request} />
 
   <div class="mt-5" x-data="{ open: false }">
     <div class="flex justify-center">

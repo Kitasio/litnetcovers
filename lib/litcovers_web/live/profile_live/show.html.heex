@@ -1,0 +1,11 @@
+<%= @title %>
+
+<.request_info request={@request} />
+
+<div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+  <%= for cover <- @request.covers do %>
+    <div class="group">
+      <img class="w-full object-cover" src={cover.cover_url} />
+    </div>
+  <% end %>
+</div>

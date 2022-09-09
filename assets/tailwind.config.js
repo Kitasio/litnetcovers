@@ -12,13 +12,20 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        'bounce-x': 'bounce-x 1s infinite'
+        'bounce-x': 'bounce-x 1s infinite',
+        'slow-spin': 'slow-spin 1s infinite'
       },
       keyframes: {
         'bounce-x': {
           '0%, 100%': { transform: 'translateX(-25%)', 'animation-timing-function': 'cubic-bezier(0.8, 0, 1, 1)' },
           '50%': { transform: 'translateX(0)', 'animation-timing-function': 'cubic-bezier(0, 0, 0.2, 1)' },
+        },
+        'slow-spin': {
+          '0%, 10%': { transform: 'rotate(-180deg)'}
         }
+      },
+      aspectRatio: {
+        'cover': '10/16'
       }
     },
   },

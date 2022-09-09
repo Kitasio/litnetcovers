@@ -19,4 +19,10 @@ defmodule LitcoversWeb.ProfileLive.Index do
       )
     }
   end
+
+  def first_cover_url(covers) do
+    first = covers |> List.first()
+    %{cover_url: url} = first
+    url
+  end
 end

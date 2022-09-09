@@ -84,6 +84,7 @@ defmodule LitcoversWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live "/profile", ProfileLive.Index
+    live "/profile/:request_id", ProfileLive.Show
     resources "/requests", RequestController
 
     get "/users/settings", UserSettingsController, :edit

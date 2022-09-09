@@ -9,7 +9,7 @@
     <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
     <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
   </head>
-  <body class="bg-[#111]">
+  <body class="bg-gray-900">
     <%= if @conn.request_path == "/" do %>
       <div class="bg-overlay h-screen" style="--overlay-image: url(https://ik.imagekit.io/soulgenesis/litnet/bg.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1662304728307); --overlay-angle: 90deg; --overlay-colors: rgba(0, 0, 0, 0.93), rgba(0, 0, 0, 0.1);">
         <div class="text-slate-200 max-w-screen-lg mx-auto px-4">

@@ -1,1 +1,21 @@
-<.h1><%= @title %></.h1>
+<div class="my-10">
+  <.h1><%= @title %></.h1>
+
+  <div class="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+    <%= for request <- @requests do %>
+      <%= live_redirect to: Routes.live_path(@socket, LitcoversWeb.ProfileLive.Show, request.id) do %>
+        <%= if request.completed do %>
+          <div class="relative flex items-center aspect-cover w-full border border-gray-200">
+            <.request_status completed={request.completed} />
+            <img class="w-full h-full object-cover" src={first_cover_url(request.covers)} />
+          </div>
+        <% else %>
+          <div class="p-4 relative flex items-center aspect-cover w-full border border-gray-200">
+            <.request_status completed={request.completed} />
+            <p><%= request.title %></p>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
