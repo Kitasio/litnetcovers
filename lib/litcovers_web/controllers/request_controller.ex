@@ -11,9 +11,19 @@ defmodule LitcoversWeb.RequestController do
 
   def new(conn, _params) do
     changeset = Media.change_request(%Request{})
-    placeholder = Media.get_random_placeholder() |> List.first()
+    placeholder = placeholder_or_empty(Media.get_random_placeholder() |> List.first())
     render(conn, "new.html", changeset: changeset, placeholder: placeholder)
   end
+
+  def placeholder_or_empty(nil),
+    do: %{
+      author: "Герман Мелвилл",
+      title: "Моби Дик",
+      description: "История о мести человека гигантскому белому киту. После того, как кит нападает и убивает его друга, мужчина, Ахав, посвящает свою жизнь выслеживанию и убийству этого существа. В романе затрагиваются темы борьбы добра со злом, Бога и человеческой способности к дикости.",
+      vibe: "приключения, опасность, одержимость"
+    }
+
+  def placeholder_or_empty(placeholder), do: placeholder
 
   def create(conn, %{"request" => request_params}) do
     cond do
