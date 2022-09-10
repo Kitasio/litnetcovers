@@ -24,6 +24,15 @@ defmodule LitcoversWeb.UiComponents do
     """
   end
 
+  def pinger(assigns) do
+    ~H"""
+    <span class="absolute -top-1 -right-1 flex h-3 w-3">
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+      <span class={"relative inline-flex rounded-full h-3 w-3 #{assigns.color}"}></span>
+    </span>
+    """
+  end
+
   def request_status(assigns) do
     ~H"""
     <%= if assigns.completed do %>
@@ -63,8 +72,9 @@ defmodule LitcoversWeb.UiComponents do
   end
 
   def p(assigns) do
+    assigns = assign_new(assigns, :class, fn -> nil end)
     ~H"""
-    <p class="lg:text-lg font-light text-gray-400">
+    <p class={"lg:text-lg font-light text-gray-400 #{assigns.class}"}>
       <%= render_slot(@inner_block) %>
     </p>
     """

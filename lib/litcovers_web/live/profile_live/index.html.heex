@@ -1,21 +1,32 @@
 <div class="my-10">
   <.h1><%= @title %></.h1>
 
-  <div class="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-    <%= for request <- @requests do %>
-      <%= live_redirect to: Routes.live_path(@socket, LitcoversWeb.ProfileLive.Show, request.id) do %>
-        <%= if request.completed do %>
-          <div class="relative flex items-center aspect-cover w-full border border-gray-200">
-            <.request_status completed={request.completed} />
-            <img class="w-full h-full object-cover" src={first_cover_url(request.covers)} />
-          </div>
-        <% else %>
-          <div class="p-4 relative flex items-center aspect-cover w-full border border-gray-200">
-            <.request_status completed={request.completed} />
-            <p><%= request.title %></p>
-          </div>
+  <%= if Enum.empty?(@requests) do %>
+    <%= live_redirect to: Routes.request_path(@socket, :new) do %>
+      <div class="mt-10 flex items-center justify-center w-full h-96 rounded border border-zinc-400 hover:border-pink-500 transition duration-300">
+        <.p class="text-center">Сейчас тут ничего нет,<br> пора это исправить по нажатию кнопки</.p>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <%= for request <- @requests do %>
+        <%= live_redirect to: Routes.live_path(@socket, LitcoversWeb.ProfileLive.Show, request.id) do %>
+          <%= if request.completed do %>
+            <div class="relative flex items-center aspect-cover w-full border rounded border-zinc-400 hover:border-pink-500 transition duration-300">
+              <.request_status completed={request.completed} />
+              <img class="w-full h-full object-cover" src={first_cover_url(request.covers)} />
+            </div>
+          <% else %>
+            <div class="p-4 relative flex items-center justify-center aspect-cover w-full border rounded border-zinc-400 hover:border-pink-500 transition duration-300">
+              <.request_status completed={request.completed} />
+              <div class="space-y-2">
+                <.p class="text-center font-extrabold"><%= request.title %></.p>
+                <.p class="text-center">Обложки готовятся</.p>
+              </div>
+            </div>
+          <% end %>
         <% end %>
       <% end %>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>

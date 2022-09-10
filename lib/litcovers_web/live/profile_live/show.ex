@@ -15,7 +15,7 @@ defmodule LitcoversWeb.ProfileLive.Show do
       |> assign(
         current_user: Accounts.get_user_by_session_token(session["user_token"]),
         request: request,
-        title: "Request page"
+        title: "Создание обложки"
       )
     }
   end
