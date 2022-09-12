@@ -49,7 +49,7 @@ defmodule LitcoversWeb.UiComponents do
           <img class="w-full h-full object-cover" src={assigns.cover.cover_url} />
         </div>
       <% else %>
-        <div class="aspect-cover rounded border-2 overflow-hidden border-zinc-400">
+        <div class="aspect-cover rounded border-2 brightness-50 overflow-hidden border-zinc-400">
           <img class="w-full h-full object-cover" src={insert_image_watermark(assigns.cover.cover_url)} />
         </div>
       <% end %>
