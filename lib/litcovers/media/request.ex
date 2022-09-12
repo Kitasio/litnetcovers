@@ -23,10 +23,10 @@ defmodule Litcovers.Media.Request do
     request
     |> cast(attrs, [:author, :title, :vibe, :description, :genre, :selected_cover])
     |> validate_required([:author, :title, :vibe, :description, :genre])
-    |> validate_length(:author, max: 20)
-    |> validate_length(:title, max: 30)
-    |> validate_length(:vibe, max: 40)
-    |> validate_length(:description, min: 20, max: 255)
+    |> validate_length(:author, max: 30)
+    |> validate_length(:title, max: 40)
+    |> validate_length(:vibe, max: 50)
+    |> validate_length(:description, max: 600)
   end
 
   def admin_changeset(request, attrs) do
