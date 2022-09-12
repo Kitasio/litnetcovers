@@ -63,4 +63,24 @@ defmodule LitcoversWeb.RequestsLive.Index do
     }
 
   def placeholder_or_empty(placeholder), do: placeholder
+
+  def genres do
+    [
+      "Любовные романы",
+      "Молодёжная проза",
+      "Фанфик",
+      "Боевик",
+      "Фэнтези",
+      "Фантастика",
+      "Попаданцы",
+      "Детективы",
+      "Триллеры",
+      "ЛитРПГ",
+      "Исторический роман",
+      "Женский роман",
+      "Проза",
+      "Мистика/Ужасы",
+      "Уся"
+    ]
+  end
 end

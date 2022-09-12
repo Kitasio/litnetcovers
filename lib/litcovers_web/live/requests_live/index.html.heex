@@ -13,7 +13,7 @@
     <%= error_tag f, :title %>
 
     <%= label f, "3. Жанр", class: "capitalize text-2xl" %>
-    <%= select f, :genre, ["Фантастика", "Попаданцы", "Уся"], prompt: "Выберите основной жанр произведения", class: "mt-3" %>
+    <%= select f, :genre, genres(), prompt: "Выберите основной жанр произведения", class: "mt-3" %>
     <%= error_tag f, :genre %>
 
     <%= label f, "4. Настроения", class: "capitalize text-2xl" %>
