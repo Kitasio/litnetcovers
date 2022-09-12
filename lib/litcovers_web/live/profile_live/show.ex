@@ -29,8 +29,26 @@ defmodule LitcoversWeb.ProfileLive.Show do
     )}
   end
 
+  def insert_image_high_res(link) do
+    uri = link |> URI.parse()
+    %URI{host: host, path: path} = uri
+
+    {filename, list} = path |> String.split("/") |> List.pop_at(-1)
+    bucket = list |> List.last()
+    transformation = "tr:q-100"
+
+    case host do
+      "ik.imagekit.io" ->
+        Path.join(["https://", host, bucket, transformation, filename])
+
+      _ ->
+        link
+    end
+  end
+
   def get_cover(id) do
     %{cover_url: url} = Media.get_cover!(id)
+    url = insert_image_high_res(url)
     %HTTPoison.Response{body: body} = HTTPoison.get!(url)
     Base.encode64(body)
   end
