@@ -10,6 +10,8 @@
         <tr>
           <th class="p-4 border border-slate-600">Author email</th>
           <th class="p-4 border border-slate-600">Title</th>
+          <th class="p-4 border border-slate-600">Completed?</th>
+          <th class="p-4 border border-slate-600">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -18,6 +20,10 @@
               <td class="p-4 border border-slate-700"><%= request.user.email %></td>
               <td class="p-4 border border-slate-700">
                 <%= live_redirect request.title, to: Routes.live_path(@socket, LitcoversWeb.AdminLive.Show, request.id), class: "link" %>
+              </td>
+              <td class="p-4 border border-slate-700"><%= request.completed %></td>
+              <td class="p-4 border border-slate-700">
+                <button class="link" phx-click="delete_request" phx-value-request_id={request.id}>Delete</button>
               </td>
             </tr>
         <% end %>

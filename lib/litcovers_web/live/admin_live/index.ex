@@ -34,6 +34,15 @@ defmodule LitcoversWeb.AdminLive.Index do
     )}
   end
 
+  def handle_event("delete_request", %{"request_id" => request_id}, socket) do
+    request = Media.get_request!(request_id)
+    Media.delete_request(request)
+    {:noreply, assign(
+      socket,
+      requests: Media.list_uncompleted_requests()
+    )}
+  end
+
   def handle_event("delete_token", %{"token_id" => token_id}, socket) do
     token = Accounts.get_token!(token_id)
     Accounts.delete_token(token)
