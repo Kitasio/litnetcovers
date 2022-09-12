@@ -13,11 +13,14 @@
     <%= if @request.completed do %>
       <div class="pt-10">
         <.h2>Варианты по вашему запросу</.h2>
+        <%= if @request.selected_cover == nil do %>
+          <.p>Выберите обложку которая нравится нажав на нее (можно сделать только один раз)</.p>
+        <% else %>
+          <.p>Вы можете скачать обложку нажав на кнопку внизу</.p>
+        <% end %>
         <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
           <%= for cover <- @request.covers do %>
-            <div class="aspect-cover">
-              <img class="w-full object-cover" src={cover.cover_url} />
-            </div>
+            <.cover_selector_box selected_cover={@request.selected_cover} cover={cover} />
           <% end %>
         </div>
       </div>

@@ -33,6 +33,26 @@ defmodule LitcoversWeb.UiComponents do
     """
   end
 
+  def cover_selector_box(assigns) do
+    ~H"""
+    <%= if assigns.selected_cover == nil do %>
+      <div phx-click="select_cover" phx-value-cover_id={assigns.cover.id} class="aspect-cover p-2 cursor-pointer rounded border border-zinc-400 hover:border-pink-600">
+        <img class="w-full h-full object-cover" src={assigns.cover.cover_url} />
+      </div>
+    <% else %>
+      <%= if assigns.cover.id == assigns.selected_cover do %>
+        <div class="aspect-cover p-2 rounded border border-lime-300">
+          <img class="w-full h-full object-cover" src={assigns.cover.cover_url} />
+        </div>
+      <% else %>
+        <div class="aspect-cover p-2 rounded border border-zinc-400">
+          <img class="w-full h-full object-cover" src={assigns.cover.cover_url} />
+        </div>
+      <% end %>
+    <% end %>
+    """
+  end
+
   def cover_status_box(assigns) do
     ~H"""
     <%= if assigns.request.completed do %>
