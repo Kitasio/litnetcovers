@@ -33,14 +33,36 @@ defmodule LitcoversWeb.UiComponents do
     """
   end
 
+  def cover_status_box(assigns) do
+    ~H"""
+    <%= if assigns.request.completed do %>
+      <div class="relative flex items-center justify-center aspect-cover w-full border rounded border-zinc-400 hover:border-pink-500 transition duration-300">
+        <.request_status completed={assigns.request.completed} />
+        <div class="space-y-2">
+          <.p class="text-center font-extrabold"><%= assigns.request.title %></.p>
+          <.p class="text-center text-teal-400">Обложки готовы</.p>
+        </div>
+      </div>
+    <% else %>
+      <div class="p-4 relative flex items-center justify-center aspect-cover w-full border rounded border-zinc-400 hover:border-pink-500 transition duration-300">
+        <.request_status completed={assigns.request.completed} />
+        <div class="space-y-2">
+          <.p class="text-center font-extrabold"><%= assigns.request.title %></.p>
+          <.p class="text-center text-orange-400">Обложки готовятся</.p>
+        </div>
+      </div>
+    <% end %>
+    """
+  end
+
   def request_status(assigns) do
     ~H"""
     <%= if assigns.completed do %>
-      <div class="p-2 absolute top-4 left-4 rounded-full bg-teal-200">
+      <div class="p-2 absolute top-4 right-4 rounded-full bg-teal-200">
         <svg class="fill-teal-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"/></svg>
       </div>
     <% else %>
-      <div class="p-2 absolute top-4 left-4 rounded-full bg-orange-200">
+      <div class="p-2 absolute top-4 right-4 rounded-full bg-orange-200">
         <svg class="fill-orange-600 animate-slow-spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3.055 13H5.07a7.002 7.002 0 0 0 13.858 0h2.016a9.001 9.001 0 0 1-17.89 0zm0-2a9.001 9.001 0 0 1 17.89 0H18.93a7.002 7.002 0 0 0-13.858 0H3.055z"/></svg>
       </div>
     <% end %>

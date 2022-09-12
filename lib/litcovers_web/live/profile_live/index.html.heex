@@ -11,19 +11,10 @@
     <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
       <%= for request <- @requests do %>
         <%= live_redirect to: Routes.live_path(@socket, LitcoversWeb.ProfileLive.Show, request.id) do %>
-          <%= if request.completed do %>
-            <div class="relative flex items-center aspect-cover w-full border rounded border-zinc-400 hover:border-pink-500 transition duration-300">
-              <.request_status completed={request.completed} />
-              <img class="w-full h-full object-cover" src={first_cover_url(request.covers)} />
-            </div>
+          <%= if request.selected_cover do %>
+            selected cover
           <% else %>
-            <div class="p-4 relative flex items-center justify-center aspect-cover w-full border rounded border-zinc-400 hover:border-pink-500 transition duration-300">
-              <.request_status completed={request.completed} />
-              <div class="space-y-2">
-                <.p class="text-center font-extrabold"><%= request.title %></.p>
-                <.p class="text-center">Обложки готовятся</.p>
-              </div>
-            </div>
+            <.cover_status_box request={request} />
           <% end %>
         <% end %>
       <% end %>
