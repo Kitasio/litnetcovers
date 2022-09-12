@@ -1,0 +1,33 @@
+<div class="my-7">
+  <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-center">Создание обложки</h1>
+
+  <.form let={f} for={@changeset} phx-change="validate" phx-submit="save">
+    <%= label f, "1. Автор", class: "capitalize text-2xl" %>
+    <p class="font-light">Будет отображаться на самой обложке</p>
+    <%= text_input f, :author, placeholder: @placeholder.author, class: "mt-3" %>
+    <%= error_tag f, :author %>
+
+    <%= label f, "2. Название", class: "capitalize text-2xl" %>
+    <p class="font-light">Будет отображаться на самой обложке</p>
+    <%= text_input f, :title, placeholder: @placeholder.title, class: "mt-3" %>
+    <%= error_tag f, :title %>
+
+    <%= label f, "3. Настроения", class: "capitalize text-2xl" %>
+    <p class="font-light">Напишите слова, которые наиболее точно описывают настроение вашей книги</p>
+    <%= text_input f, :vibe, placeholder: @placeholder.vibe, class: "mt-3" %>
+    <%= error_tag f, :vibe %>
+
+    <%= label f, "4. Описание", class: "capitalize text-2xl" %>
+    <p class="font-light">Расскажите о чем ваша книга</p>
+    <%= textarea f, :description, placeholder: @placeholder.description, rows: "3", class: "mt-3" %>
+    <%= error_tag f, :description %>
+
+    <%= label f, "5. Жанр", class: "capitalize text-2xl" %>
+    <%= select f, :genre, ["Фантастика", "Попаданцы", "Уся"], prompt: "Выберите основной жанр произведения", class: "mt-3" %>
+    <%= error_tag f, :genre %>
+
+    <div class="mt-7 flex w-full items-center justify-center">
+      <%= submit "Отправить", class: "btn" %>
+    </div>
+  </.form>
+</div>
