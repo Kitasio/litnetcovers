@@ -28,4 +28,10 @@ defmodule LitcoversWeb.ProfileLive.Show do
       request: Media.get_request_and_covers!(socket.assigns.request.id)
     )}
   end
+
+  def get_cover(id) do
+    %{cover_url: url} = Media.get_cover!(id)
+    %HTTPoison.Response{body: body} = HTTPoison.get!(url)
+    Base.encode64(body)
+  end
 end

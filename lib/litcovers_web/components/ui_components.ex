@@ -97,6 +97,14 @@ defmodule LitcoversWeb.UiComponents do
     """
   end
 
+  def download_btn(assigns) do
+    ~H"""
+    <a href={"data:image/png;base64,#{assigns.src}"} download="cover.png" class="px-3 py-2 md:px-5 md:py-3 text-sm md:text-base text-slate-200 hover:text-slate-300 rounded-full hover:scale-105 bg-pink-500 border-2 border-pink-600 hover:border-gray-200 transition-all duration-200">
+      <%= render_slot(@inner_block) %>
+    </a>
+    """
+  end
+
   def h1(assigns) do
     ~H"""
     <h1 class="text-2xl lg:text-4xl font-bold text-gray-200">

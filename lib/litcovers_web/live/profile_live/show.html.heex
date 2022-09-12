@@ -24,6 +24,14 @@
           <% end %>
         </div>
       </div>
+      <%= if @request.selected_cover do %>
+        <div class="flex flex-col gap-5">
+          <.p class="mt-10">Исходный файл в высоком разрешении</.p>
+          <div>
+            <.download_btn src={get_cover(@request.selected_cover)}>Скачать</.download_btn>
+          </div>
+        </div>
+      <% end %>
     <% else %>
     <div class="pt-10">
       <.h2><span class="animate-pulse">Наши система готовит варианты</span></.h2>

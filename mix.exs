@@ -54,7 +54,8 @@ defmodule Litcovers.MixProject do
       {:ex_aws, "~> 2.1"},
       {:ex_aws_s3, "~> 2.0"},
       {:hackney, "~> 1.15"},
-      {:sweet_xml, "~> 0.6"}
+      {:sweet_xml, "~> 0.6"},
+      {:httpoison, "~> 1.8"}
     ]
   end
 
