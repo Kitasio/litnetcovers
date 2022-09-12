@@ -90,8 +90,8 @@ defmodule LitcoversWeb.UiComponents do
   def request_status(assigns) do
     ~H"""
     <%= if assigns.completed do %>
-      <div class="p-2 absolute top-4 right-4 rounded-full bg-teal-200">
-        <svg class="fill-teal-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"/></svg>
+      <div class="p-2 absolute top-4 right-4 rounded-full bg-cyan-200">
+        <svg class="fill-cyan-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"/></svg>
       </div>
     <% else %>
       <div class="p-2 absolute top-4 right-4 rounded-full bg-orange-200">
