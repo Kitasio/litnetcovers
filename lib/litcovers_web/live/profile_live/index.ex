@@ -21,9 +21,8 @@ defmodule LitcoversWeb.ProfileLive.Index do
     }
   end
 
-  def first_cover_url(covers) do
-    first = covers |> List.first()
-    %{cover_url: url} = first
+  def get_cover(id) do
+    %{cover_url: url} = Media.get_cover!(id)
     url
   end
 end

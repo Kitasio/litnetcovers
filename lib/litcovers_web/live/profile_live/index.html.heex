@@ -12,7 +12,7 @@
       <%= for request <- @requests do %>
         <%= live_redirect to: Routes.live_path(@socket, LitcoversWeb.ProfileLive.Show, request.id) do %>
           <%= if request.selected_cover do %>
-            selected cover
+            <.cover_box src={get_cover(request.selected_cover)} />
           <% else %>
             <.cover_status_box request={request} />
           <% end %>

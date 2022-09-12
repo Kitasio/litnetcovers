@@ -36,16 +36,16 @@ defmodule LitcoversWeb.UiComponents do
   def cover_selector_box(assigns) do
     ~H"""
     <%= if assigns.selected_cover == nil do %>
-      <div phx-click="select_cover" phx-value-cover_id={assigns.cover.id} class="aspect-cover p-2 cursor-pointer rounded border border-zinc-400 hover:border-pink-600">
+      <div phx-click="select_cover" phx-value-cover_id={assigns.cover.id} class="aspect-cover cursor-pointer rounded overflow-hidden border-2 border-zinc-400 hover:border-pink-600">
         <img class="w-full h-full object-cover" src={assigns.cover.cover_url} />
       </div>
     <% else %>
       <%= if assigns.cover.id == assigns.selected_cover do %>
-        <div class="aspect-cover p-2 rounded border border-lime-300">
+        <div class="aspect-cover rounded border-2 overflow-hidden border-lime-300">
           <img class="w-full h-full object-cover" src={assigns.cover.cover_url} />
         </div>
       <% else %>
-        <div class="aspect-cover p-2 rounded border border-zinc-400">
+        <div class="aspect-cover rounded border-2 overflow-hidden border-zinc-400">
           <img class="w-full h-full object-cover" src={assigns.cover.cover_url} />
         </div>
       <% end %>
@@ -56,7 +56,7 @@ defmodule LitcoversWeb.UiComponents do
   def cover_status_box(assigns) do
     ~H"""
     <%= if assigns.request.completed do %>
-      <div class="relative flex items-center justify-center aspect-cover w-full border rounded border-zinc-400 hover:border-pink-500 transition duration-300">
+      <div class="relative flex items-center justify-center aspect-cover w-full border-2 rounded border-zinc-400 hover:border-pink-500 transition duration-300">
         <.request_status completed={assigns.request.completed} />
         <div class="space-y-2">
           <.p class="text-center font-extrabold"><%= assigns.request.title %></.p>
@@ -64,7 +64,7 @@ defmodule LitcoversWeb.UiComponents do
         </div>
       </div>
     <% else %>
-      <div class="p-4 relative flex items-center justify-center aspect-cover w-full border rounded border-zinc-400 hover:border-pink-500 transition duration-300">
+      <div class="p-4 relative flex items-center justify-center aspect-cover w-full border-2 rounded border-zinc-400 hover:border-pink-500 transition duration-300">
         <.request_status completed={assigns.request.completed} />
         <div class="space-y-2">
           <.p class="text-center font-extrabold"><%= assigns.request.title %></.p>
@@ -72,6 +72,14 @@ defmodule LitcoversWeb.UiComponents do
         </div>
       </div>
     <% end %>
+    """
+  end
+
+  def cover_box(assigns) do
+    ~H"""
+    <div class="aspect-cover border-2 border-pink-600 rounded overflow-hidden">
+      <img class="w-full h-full object-cover" src={assigns.src} />
+    </div>
     """
   end
 
