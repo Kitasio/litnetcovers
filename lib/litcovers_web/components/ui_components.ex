@@ -37,7 +37,7 @@ defmodule LitcoversWeb.UiComponents do
     ~H"""
     <%= if assigns.selected_cover == nil do %>
       <div phx-click="select_cover" phx-value-cover_id={assigns.cover.id} class="aspect-cover cursor-pointer rounded overflow-hidden border-2 border-zinc-400 hover:border-pink-600">
-        <img class="w-full h-full object-cover" src={assigns.cover.cover_url} />
+        <img class="w-full h-full object-cover" src={insert_image_watermark(assigns.cover.cover_url)} />
       </div>
     <% else %>
       <%= if assigns.cover.id == assigns.selected_cover do %>
@@ -46,7 +46,7 @@ defmodule LitcoversWeb.UiComponents do
         </div>
       <% else %>
         <div class="aspect-cover rounded border-2 overflow-hidden border-zinc-400">
-          <img class="w-full h-full object-cover" src={assigns.cover.cover_url} />
+          <img class="w-full h-full object-cover" src={insert_image_watermark(assigns.cover.cover_url)} />
         </div>
       <% end %>
     <% end %>
@@ -95,6 +95,23 @@ defmodule LitcoversWeb.UiComponents do
       </div>
     <% end %>
     """
+  end
+
+  def insert_image_watermark(link) do
+    uri = link |> URI.parse()
+    %URI{host: host, path: path} = uri
+
+    {filename, list} = path |> String.split("/") |> List.pop_at(-1)
+    bucket = list |> List.last()
+    transformation = "tr:ot-LITCOVERS,otc-FFFFFF55,ots-45"
+
+    case host do
+      "ik.imagekit.io" ->
+        Path.join(["https://", host, bucket, transformation, filename])
+
+      _ ->
+        link
+    end
   end
 
   def button(assigns) do

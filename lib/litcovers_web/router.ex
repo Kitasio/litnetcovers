@@ -84,13 +84,14 @@ defmodule LitcoversWeb.Router do
   scope "/", LitcoversWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    live "/profile", ProfileLive.Index
-    live "/profile/:request_id", ProfileLive.Show
     resources "/requests", RequestController
 
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
+
+    live "/profile", ProfileLive.Index
+    live "/profile/:request_id", ProfileLive.Show
   end
 
   scope "/", LitcoversWeb do
