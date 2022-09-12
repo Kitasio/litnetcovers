@@ -51,25 +51,16 @@ select[multiple] {
 
 /* Alerts and form errors used by phx.new */
 .alert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid transparent;
-  border-radius: 4px;
+  @apply absolute top-4 right-4 p-4 rounded shadow-md max-w-sm;
 }
 .alert-info {
-  color: #31708f;
-  background-color: #d9edf7;
-  border-color: #bce8f1;
+  @apply text-cyan-800 bg-cyan-200;
 }
 .alert-warning {
-  color: #8a6d3b;
-  background-color: #fcf8e3;
-  border-color: #faebcc;
+  @apply text-orange-800 bg-orange-200;
 }
 .alert-danger {
-  color: #a94442;
-  background-color: #f2dede;
-  border-color: #ebccd1;
+  @apply text-rose-800 bg-rose-200;
 }
 .alert p {
   margin-bottom: 0;
