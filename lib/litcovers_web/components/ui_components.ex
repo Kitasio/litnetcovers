@@ -56,19 +56,19 @@ defmodule LitcoversWeb.UiComponents do
   def cover_status_box(assigns) do
     ~H"""
     <%= if assigns.request.completed do %>
-      <div class="relative flex items-center justify-center aspect-cover w-full border-2 hover:bg-zinc-800 rounded border-zinc-400 hover:border-pink-500 transition duration-300">
+      <div class="relative flex items-center justify-center aspect-cover w-full border-2 bg-zinc-800 hover:bg-zinc-900 rounded border-zinc-400 hover:border-pink-500 transition duration-300">
         <.request_status completed={assigns.request.completed} />
         <div class="space-y-2">
-          <.p class="text-center font-extrabold"><%= assigns.request.title %></.p>
-          <.p class="text-center text-teal-400">Обложки готовы</.p>
+          <.p class="text-center font-extrabold group-hover:text-zinc-50"><%= assigns.request.title %></.p>
+          <.p class="text-center text-teal-400 group-hover:text-zinc-50">Обложки готовы</.p>
         </div>
       </div>
     <% else %>
-      <div class="p-4 relative flex items-center group justify-center aspect-cover w-full border-2 hover:bg-pink-600 rounded border-zinc-400 hover:border-pink-500 transition duration-300">
+      <div class="p-4 relative flex items-center group justify-center aspect-cover w-full border-2 bg-zinc-800 hover:bg-zinc-900 rounded border-zinc-400 hover:border-pink-500 transition duration-300">
         <.request_status completed={assigns.request.completed} />
         <div class="space-y-2">
-          <.p class="text-center font-extrabold group-hover:text-zinc-900"><%= assigns.request.title %></.p>
-          <.p class="text-center text-orange-400 group-hover:text-zinc-900">Обложки готовятся</.p>
+          <.p class="text-center font-extrabold group-hover:text-zinc-50"><%= assigns.request.title %></.p>
+          <.p class="text-center text-orange-400 group-hover:text-zinc-50">Обложки готовятся</.p>
         </div>
       </div>
     <% end %>
@@ -77,7 +77,7 @@ defmodule LitcoversWeb.UiComponents do
 
   def cover_box(assigns) do
     ~H"""
-    <div class="aspect-cover border-2 border-pink-600 rounded overflow-hidden">
+    <div class="aspect-cover border-2 border-zinc-400 hover:border-pink-600 transition duration-300 rounded overflow-hidden">
       <img class="w-full h-full object-cover" src={assigns.src} />
     </div>
     """
