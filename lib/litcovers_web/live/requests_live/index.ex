@@ -1,8 +1,6 @@
 defmodule LitcoversWeb.RequestsLive.Index do
   use LitcoversWeb, :live_view
 
-  import LitcoversWeb.UiComponents
-
   alias Litcovers.Accounts
   alias Litcovers.Media
   alias Litcovers.Media.Request
