@@ -2,7 +2,7 @@
   <.h1><%= @title %></.h1>
 
   <%= if Enum.empty?(@requests) do %>
-    <%= live_redirect to: Routes.request_path(@socket, :new) do %>
+    <%= live_redirect to: Routes.live_path(@socket, LitcoversWeb.RequestsLive.Index) do %>
       <div class="mt-10 flex items-center justify-center w-full h-96 rounded border border-zinc-400 hover:border-pink-500 transition duration-300">
         <.p class="text-center">Сейчас тут ничего нет,<br> пора это исправить по нажатию кнопки</.p>
       </div>
