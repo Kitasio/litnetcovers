@@ -8,7 +8,7 @@ defmodule Litcovers.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"Litcovers", "contact@example.com"})
+      |> from({"Litcovers", "kit@litcovers.com"})
       |> subject(subject)
       |> text_body(body)
 
