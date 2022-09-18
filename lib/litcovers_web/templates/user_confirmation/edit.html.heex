@@ -1,12 +1,7 @@
-<h1>Confirm account</h1>
+<h1 class="mt-5">Подтверждение аккаунта</h1>
 
 <.form let={_f} for={:user} action={Routes.user_confirmation_path(@conn, :update, @token)}>
   <div>
-    <%= submit "Confirm my account" %>
+    <%= submit "Подтвердить", class: "btn mt-3" %>
   </div>
 </.form>
-
-<p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
-</p>
