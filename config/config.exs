@@ -24,14 +24,14 @@ config :litcovers, LitcoversWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-# config :litcovers, Litcovers.Mailer, adapter: Swoosh.Adapters.Local
-config :litcovers, Litcovers.Mailer,
-  adapter: Swoosh.Adapters.Postmark,
-  api_key: System.get_env("POSTMARK_API_KEY")
+config :litcovers, Litcovers.Mailer, adapter: Swoosh.Adapters.Local
+# config :litcovers, Litcovers.Mailer,
+#  adapter: Swoosh.Adapters.Postmark,
+#  api_key: System.get_env("POSTMARK_API_KEY")
 
 # Swoosh API client is needed for adapters other than SMTP.
-# config :swoosh, :api_client, false
-config :swoosh, :api_client, Swoosh.ApiClient.Hackney
+config :swoosh, :api_client, false
+# config :swoosh, :api_client, Swoosh.ApiClient.Hackney
 
 # Configure esbuild (the version is required)
 config :esbuild,

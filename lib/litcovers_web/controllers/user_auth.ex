@@ -129,7 +129,15 @@ defmodule LitcoversWeb.UserAuth do
   """
   def require_authenticated_user(conn, _opts) do
     if conn.assigns[:current_user] do
-      conn
+      if conn.assigns[:current_user].confirmed_at do
+        conn
+      else
+        conn
+        |> put_flash(:error, "Вы должны подтвердить ваш Email перейдя по ссылке которую мы отправили")
+        |> maybe_store_return_to()
+        |> redirect(to: Routes.user_confirmation_path(conn, :new))
+        |> halt()
+      end
     else
       conn
       |> put_flash(:error, "You must log in to access this page.")
@@ -165,5 +173,5 @@ defmodule LitcoversWeb.UserAuth do
 
   defp maybe_store_return_to(conn), do: conn
 
-  defp signed_in_path(_conn), do: "/profile"
+  defp signed_in_path(_conn), do: "/"
 end

@@ -393,10 +393,6 @@ defmodule Litcovers.Accounts do
     |> Repo.all()
   end
 
-  def order_by_id_query(query) do
-    from(t in query, order_by: [desc: t.id])
-  end
-
   @doc """
   Gets a single token.
 
