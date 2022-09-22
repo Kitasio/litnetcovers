@@ -25,13 +25,24 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import Alpine from "../vendor/alpinejs"
+import * as Vibrant from '../vendor/node-vibrant/dist/vibrant.min.js'
 
 window.Alpine = Alpine
 Alpine.start()
 
+let Hooks = {}
+Hooks.ExtractColors = {
+  mounted() {
+    let image_url = this.el.src
+    Vibrant.from(image_url).getPalette()
+      .then((p) => this.pushEvent("set-colors", p.Vibrant.getHex()))
+  }
+}
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   params: {_csrf_token: csrfToken},
+  hooks: Hooks,
   dom: {
     onBeforeElUpdated(from, to) {
       if (from._x_dataStack) {
