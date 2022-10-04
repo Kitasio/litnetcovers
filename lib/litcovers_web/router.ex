@@ -93,6 +93,7 @@ defmodule LitcoversWeb.Router do
 
     live "/profile", ProfileLive.Index
     live "/profile/:request_id", ProfileLive.Show
+    live "/profile/:request_id/:cover_id", ProfileLive.ShowCover
   end
 
   scope "/", LitcoversWeb do
