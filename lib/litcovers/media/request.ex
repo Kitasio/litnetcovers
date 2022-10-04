@@ -33,4 +33,9 @@ defmodule Litcovers.Media.Request do
     request
     |> cast(attrs, [:status, :author, :title, :vibe, :description, :genre, :completed, :selected_cover])
   end
+
+  def ai_changeset(request, attrs) do
+    request
+    |> cast(attrs, [:completed])
+  end
 end

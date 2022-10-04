@@ -117,6 +117,12 @@ defmodule Litcovers.Media do
     |> Repo.update()
   end
 
+  def ai_update_request(%Request{} = request, attrs) do
+    request
+    |> Request.ai_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a request.
 

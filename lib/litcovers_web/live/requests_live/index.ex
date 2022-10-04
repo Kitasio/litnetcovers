@@ -34,7 +34,14 @@ defmodule LitcoversWeb.RequestsLive.Index do
       Media.user_requests_amount(socket.assigns.current_user) <
           socket.assigns.current_user.max_requests ->
         case Media.create_request(socket.assigns.current_user, request_params) do
-          {:ok, _request} ->
+          {:ok, request} ->
+            img_urls = gen_covers(request.description, request)
+
+            for url <- img_urls do
+              image_params = %{"cover_url" => url}
+              Media.create_cover(request, image_params)
+            end
+
             {:noreply,
              socket
              |> put_flash(:info, "Ваша заявка подана.")
@@ -51,6 +58,26 @@ defmodule LitcoversWeb.RequestsLive.Index do
          |> put_flash(:error, "Вы уже подали максимальное количество заявок")
          |> redirect(to: Routes.live_path(socket, LitcoversWeb.ProfileLive.Index))}
     end
+  end
+
+  def gen_covers(prompt, request) do
+    oai_res =
+      prompt
+      |> BookCoverGenerator.description_to_cover_idea(System.get_env("OAI_TOKEN"))
+
+    sd_res =
+      oai_res
+      |> BookCoverGenerator.diffuse(1, System.get_env("REPLICATE_TOKEN"))
+
+    # artefacts =  Jason.encode!(sd_res) ++ book.sd_artefacts
+    # AI.update_book_cover(book, %{sd_artefacts: artefacts})
+
+    %{"output" => image_list} = sd_res
+    img_urls = image_list |> BookCoverGenerator.save_to_spaces()
+
+    Media.ai_update_request(request, %{completed: true})
+
+    img_urls
   end
 
   def placeholder_or_empty(nil),
@@ -103,7 +130,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
       "Скандальный",
       "Утонченный",
       "Злой",
-      "Шокирующий",
+      "Шокирующий"
     ]
   end
 
