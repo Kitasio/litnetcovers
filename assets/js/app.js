@@ -35,7 +35,7 @@ Hooks.ExtractColors = {
   mounted() {
     let image_url = this.el.src
     Vibrant.from(image_url).getPalette()
-      .then((p) => this.pushEvent("set-colors", p.Vibrant.getHex()))
+      .then((p) => this.pushEvent("set-colors", { vibrant: p.Vibrant.getHex(), muted: p.Muted.getHex() }))
   }
 }
 
