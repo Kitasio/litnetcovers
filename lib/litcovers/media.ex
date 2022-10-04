@@ -93,6 +93,40 @@ defmodule Litcovers.Media do
     |> Repo.aggregate(:count)
   end
 
+  def gen_covers(prompt, request) do
+    oai_res =
+      prompt
+      |> BookCoverGenerator.description_to_cover_idea(System.get_env("OAI_TOKEN"))
+
+    sd_res =
+      oai_res
+      |> BookCoverGenerator.diffuse(1, System.get_env("REPLICATE_TOKEN"))
+
+    # artefacts =  Jason.encode!(sd_res) ++ book.sd_artefacts
+    # AI.update_book_cover(book, %{sd_artefacts: artefacts})
+
+    %{"output" => image_list} = sd_res
+    img_urls = image_list |> BookCoverGenerator.save_to_spaces()
+
+    for url <- img_urls do
+      image_params = %{"cover_url" => url}
+      create_cover(request, image_params)
+    end
+
+    ai_update_request(request, %{completed: true})
+
+    broadcast(request, :gen_complete)
+  end
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(Litcovers.PubSub, "generations")
+  end
+
+  defp broadcast(request, event) do
+    Phoenix.PubSub.broadcast(Litcovers.PubSub, "generations", {event, request})
+    {:ok, request}
+  end
+
   @doc """
   Updates a request.
 
