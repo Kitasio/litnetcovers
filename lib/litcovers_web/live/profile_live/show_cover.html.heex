@@ -1,0 +1,10 @@
+<div>
+  <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
+    <div class="aspect-cover border-2 border-zinc-400 hover:border-pink-600 transition duration-300 rounded overflow-hidden">
+      <img id={"cover-#{@cover.id}"} class="w-full h-full object-cover" src={@cover.cover_url} phx-hook="ExtractColors" />
+    </div>
+    <%= for {_name, cover_url} <- transformations(@cover.cover_url, @request.author, @request.title, @vibrant_color, @muted_color) do %>
+      <.cover_box src={cover_url} />
+    <% end %>
+  </div>
+</div>
