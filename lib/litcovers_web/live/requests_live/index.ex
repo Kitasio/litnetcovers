@@ -35,12 +35,9 @@ defmodule LitcoversWeb.RequestsLive.Index do
           socket.assigns.current_user.max_requests ->
         case Media.create_request(socket.assigns.current_user, request_params) do
           {:ok, request} ->
-            img_urls = gen_covers(request.description, request)
-
-            for url <- img_urls do
-              image_params = %{"cover_url" => url}
-              Media.create_cover(request, image_params)
-            end
+            Task.start(fn ->
+              gen_covers(request.description, request)
+            end)
 
             {:noreply,
              socket
@@ -75,9 +72,12 @@ defmodule LitcoversWeb.RequestsLive.Index do
     %{"output" => image_list} = sd_res
     img_urls = image_list |> BookCoverGenerator.save_to_spaces()
 
-    Media.ai_update_request(request, %{completed: true})
+    for url <- img_urls do
+      image_params = %{"cover_url" => url}
+      Media.create_cover(request, image_params)
+    end
 
-    img_urls
+    Media.ai_update_request(request, %{completed: true})
   end
 
   def placeholder_or_empty(nil),
