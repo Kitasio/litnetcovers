@@ -23,10 +23,12 @@ defmodule LitcoversWeb.ProfileLive.Show do
   def handle_event("select_cover", %{"cover_id" => cover_id}, socket) do
     params = %{selected_cover: cover_id}
     Media.update_request(socket.assigns.request, params)
-    {:noreply, assign(
-      socket,
-      request: Media.get_request_and_covers!(socket.assigns.request.id)
-    )}
+
+    {:noreply,
+     assign(
+       socket,
+       request: Media.get_request_and_covers!(socket.assigns.request.id)
+     )}
   end
 
   def insert_image_high_res(link) do
