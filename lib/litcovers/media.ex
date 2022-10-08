@@ -113,7 +113,7 @@ defmodule Litcovers.Media do
       create_cover(request, image_params)
     end
 
-    ai_update_request(request, %{completed: true})
+    request = ai_update_request(request, %{completed: true})
 
     broadcast(request, :gen_complete)
   end

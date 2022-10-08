@@ -6,6 +6,7 @@ defmodule LitcoversWeb.ProfileLive.Show do
   alias Litcovers.Media
 
   def mount(params, session, socket) do
+    if connected?(socket), do: Media.subscribe()
     %{"request_id" => request_id} = params
     request = Media.get_request_and_covers!(request_id)
 
@@ -29,6 +30,10 @@ defmodule LitcoversWeb.ProfileLive.Show do
        socket,
        request: Media.get_request_and_covers!(socket.assigns.request.id)
      )}
+  end
+
+  def handle_info({:gen_complete, request}, socket) do
+    {:noreply, socket |> assign(request: request)}
   end
 
   def insert_image_high_res(link) do
