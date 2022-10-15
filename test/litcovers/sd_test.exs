@@ -164,4 +164,68 @@ defmodule Litcovers.SdTest do
       assert %Ecto.Changeset{} = Sd.change_type(type)
     end
   end
+
+  describe "prompts" do
+    alias Litcovers.Sd.Prompt
+
+    import Litcovers.SdFixtures
+
+    @invalid_attrs %{final_prompt: nil, name: nil, realm: nil, sentiment: nil, style_prompt: nil, type: nil}
+
+    test "list_prompts/0 returns all prompts" do
+      prompt = prompt_fixture()
+      assert Sd.list_prompts() == [prompt]
+    end
+
+    test "get_prompt!/1 returns the prompt with given id" do
+      prompt = prompt_fixture()
+      assert Sd.get_prompt!(prompt.id) == prompt
+    end
+
+    test "create_prompt/1 with valid data creates a prompt" do
+      valid_attrs = %{final_prompt: "some final_prompt", name: "some name", realm: :fantasy, sentiment: :positive, style_prompt: "some style_prompt", type: :object}
+
+      assert {:ok, %Prompt{} = prompt} = Sd.create_prompt(valid_attrs)
+      assert prompt.final_prompt == "some final_prompt"
+      assert prompt.name == "some name"
+      assert prompt.realm == :fantasy
+      assert prompt.sentiment == :positive
+      assert prompt.style_prompt == "some style_prompt"
+      assert prompt.type == :object
+    end
+
+    test "create_prompt/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Sd.create_prompt(@invalid_attrs)
+    end
+
+    test "update_prompt/2 with valid data updates the prompt" do
+      prompt = prompt_fixture()
+      update_attrs = %{final_prompt: "some updated final_prompt", name: "some updated name", realm: :realism, sentiment: :neutral, style_prompt: "some updated style_prompt", type: :subject}
+
+      assert {:ok, %Prompt{} = prompt} = Sd.update_prompt(prompt, update_attrs)
+      assert prompt.final_prompt == "some updated final_prompt"
+      assert prompt.name == "some updated name"
+      assert prompt.realm == :realism
+      assert prompt.sentiment == :neutral
+      assert prompt.style_prompt == "some updated style_prompt"
+      assert prompt.type == :subject
+    end
+
+    test "update_prompt/2 with invalid data returns error changeset" do
+      prompt = prompt_fixture()
+      assert {:error, %Ecto.Changeset{}} = Sd.update_prompt(prompt, @invalid_attrs)
+      assert prompt == Sd.get_prompt!(prompt.id)
+    end
+
+    test "delete_prompt/1 deletes the prompt" do
+      prompt = prompt_fixture()
+      assert {:ok, %Prompt{}} = Sd.delete_prompt(prompt)
+      assert_raise Ecto.NoResultsError, fn -> Sd.get_prompt!(prompt.id) end
+    end
+
+    test "change_prompt/1 returns a prompt changeset" do
+      prompt = prompt_fixture()
+      assert %Ecto.Changeset{} = Sd.change_prompt(prompt)
+    end
+  end
 end

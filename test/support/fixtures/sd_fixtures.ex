@@ -45,4 +45,23 @@ defmodule Litcovers.SdFixtures do
 
     type
   end
+
+  @doc """
+  Generate a prompt.
+  """
+  def prompt_fixture(attrs \\ %{}) do
+    {:ok, prompt} =
+      attrs
+      |> Enum.into(%{
+        final_prompt: "some final_prompt",
+        name: "some name",
+        realm: :fantasy,
+        sentiment: :positive,
+        style_prompt: "some style_prompt",
+        type: :object
+      })
+      |> Litcovers.Sd.create_prompt()
+
+    prompt
+  end
 end

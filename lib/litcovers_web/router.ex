@@ -66,6 +66,13 @@ defmodule LitcoversWeb.Router do
 
     live "/", AdminLive.Index
 
+    live "/prompts", PromptLive.Index, :index
+    live "/prompts/new", PromptLive.Index, :new
+    live "/prompts/:id/edit", PromptLive.Index, :edit
+
+    live "/prompts/:id", PromptLive.Show, :show
+    live "/prompts/:id/show/edit", PromptLive.Show, :edit
+
     live "/:request_id", AdminLive.Show
   end
 
