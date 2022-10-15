@@ -1,0 +1,36 @@
+<h1>Show Celeb</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.celeb_show_path(@socket, :show, @celeb)}>
+    <.live_component
+      module={LitcoversWeb.CelebLive.FormComponent}
+      id={@celeb.id}
+      title={@page_title}
+      action={@live_action}
+      celeb={@celeb}
+      return_to={Routes.celeb_show_path(@socket, :show, @celeb)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Famous:</strong>
+    <%= @celeb.famous %>
+  </li>
+
+  <li>
+    <strong>Gender:</strong>
+    <%= @celeb.gender %>
+  </li>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @celeb.name %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.celeb_show_path(@socket, :edit, @celeb), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.celeb_index_path(@socket, :index) %></span>

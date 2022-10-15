@@ -73,6 +73,27 @@ defmodule LitcoversWeb.Router do
     live "/prompts/:id", PromptLive.Show, :show
     live "/prompts/:id/show/edit", PromptLive.Show, :edit
 
+    live "/eyes", EyeLive.Index, :index
+    live "/eyes/new", EyeLive.Index, :new
+    live "/eyes/:id/edit", EyeLive.Index, :edit
+
+    live "/eyes/:id", EyeLive.Show, :show
+    live "/eyes/:id/show/edit", EyeLive.Show, :edit
+
+    live "/hair", HairLive.Index, :index
+    live "/hair/new", HairLive.Index, :new
+    live "/hair/:id/edit", HairLive.Index, :edit
+
+    live "/hair/:id", HairLive.Show, :show
+    live "/hair/:id/show/edit", HairLive.Show, :edit
+
+    live "/celebs", CelebLive.Index, :index
+    live "/celebs/new", CelebLive.Index, :new
+    live "/celebs/:id/edit", CelebLive.Index, :edit
+
+    live "/celebs/:id", CelebLive.Show, :show
+    live "/celebs/:id/show/edit", CelebLive.Show, :edit
+
     live "/:request_id", AdminLive.Show
   end
 

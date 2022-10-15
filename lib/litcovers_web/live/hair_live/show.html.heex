@@ -1,0 +1,31 @@
+<h1>Show Hair</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.hair_show_path(@socket, :show, @hair)}>
+    <.live_component
+      module={LitcoversWeb.HairLive.FormComponent}
+      id={@hair.id}
+      title={@page_title}
+      action={@live_action}
+      hair={@hair}
+      return_to={Routes.hair_show_path(@socket, :show, @hair)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @hair.name %>
+  </li>
+
+  <li>
+    <strong>Prompt:</strong>
+    <%= @hair.prompt %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.hair_show_path(@socket, :edit, @hair), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.hair_index_path(@socket, :index) %></span>

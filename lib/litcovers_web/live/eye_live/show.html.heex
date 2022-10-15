@@ -1,0 +1,31 @@
+<h1>Show Eye</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.eye_show_path(@socket, :show, @eye)}>
+    <.live_component
+      module={LitcoversWeb.EyeLive.FormComponent}
+      id={@eye.id}
+      title={@page_title}
+      action={@live_action}
+      eye={@eye}
+      return_to={Routes.eye_show_path(@socket, :show, @eye)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Color:</strong>
+    <%= @eye.color %>
+  </li>
+
+  <li>
+    <strong>Prompt:</strong>
+    <%= @eye.prompt %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.eye_show_path(@socket, :edit, @eye), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.eye_index_path(@socket, :index) %></span>
