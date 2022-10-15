@@ -1,0 +1,39 @@
+<h1>Listing Types</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <.modal return_to={Routes.type_index_path(@socket, :index)}>
+    <.live_component
+      module={LitcoversWeb.TypeLive.FormComponent}
+      id={@type.id || :new}
+      title={@page_title}
+      action={@live_action}
+      type={@type}
+      return_to={Routes.type_index_path(@socket, :index)}
+    />
+  </.modal>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="types">
+    <%= for type <- @types do %>
+      <tr id={"type-#{type.id}"}>
+        <td><%= type.title %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.type_show_path(@socket, :show, type) %></span>
+          <span><%= live_patch "Edit", to: Routes.type_index_path(@socket, :edit, type) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: type.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Type", to: Routes.type_index_path(@socket, :new) %></span>

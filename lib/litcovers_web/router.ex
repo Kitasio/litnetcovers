@@ -80,6 +80,13 @@ defmodule LitcoversWeb.Router do
     live "/realms/:id", RealmLive.Show, :show
     live "/realms/:id/show/edit", RealmLive.Show, :edit
 
+    live "/types", TypeLive.Index, :index
+    live "/types/new", TypeLive.Index, :new
+    live "/types/:id/edit", TypeLive.Index, :edit
+
+    live "/types/:id", TypeLive.Show, :show
+    live "/types/:id/show/edit", TypeLive.Show, :edit
+
     live "/:request_id", AdminLive.Show
   end
 

@@ -110,4 +110,58 @@ defmodule Litcovers.SdTest do
       assert %Ecto.Changeset{} = Sd.change_realm(realm)
     end
   end
+
+  describe "types" do
+    alias Litcovers.Sd.Type
+
+    import Litcovers.SdFixtures
+
+    @invalid_attrs %{title: nil}
+
+    test "list_types/0 returns all types" do
+      type = type_fixture()
+      assert Sd.list_types() == [type]
+    end
+
+    test "get_type!/1 returns the type with given id" do
+      type = type_fixture()
+      assert Sd.get_type!(type.id) == type
+    end
+
+    test "create_type/1 with valid data creates a type" do
+      valid_attrs = %{title: "some title"}
+
+      assert {:ok, %Type{} = type} = Sd.create_type(valid_attrs)
+      assert type.title == "some title"
+    end
+
+    test "create_type/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Sd.create_type(@invalid_attrs)
+    end
+
+    test "update_type/2 with valid data updates the type" do
+      type = type_fixture()
+      update_attrs = %{title: "some updated title"}
+
+      assert {:ok, %Type{} = type} = Sd.update_type(type, update_attrs)
+      assert type.title == "some updated title"
+    end
+
+    test "update_type/2 with invalid data returns error changeset" do
+      type = type_fixture()
+      assert {:error, %Ecto.Changeset{}} = Sd.update_type(type, @invalid_attrs)
+      assert type == Sd.get_type!(type.id)
+    end
+
+    test "delete_type/1 deletes the type" do
+      type = type_fixture()
+      assert {:ok, %Type{}} = Sd.delete_type(type)
+      assert_raise Ecto.NoResultsError, fn -> Sd.get_type!(type.id) end
+    end
+
+    test "change_type/1 returns a type changeset" do
+      type = type_fixture()
+      assert %Ecto.Changeset{} = Sd.change_type(type)
+    end
+  end
 end

@@ -31,4 +31,18 @@ defmodule Litcovers.SdFixtures do
 
     realm
   end
+
+  @doc """
+  Generate a type.
+  """
+  def type_fixture(attrs \\ %{}) do
+    {:ok, type} =
+      attrs
+      |> Enum.into(%{
+        title: "some title"
+      })
+      |> Litcovers.Sd.create_type()
+
+    type
+  end
 end

@@ -1,0 +1,26 @@
+<h1>Show Type</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.type_show_path(@socket, :show, @type)}>
+    <.live_component
+      module={LitcoversWeb.TypeLive.FormComponent}
+      id={@type.id}
+      title={@page_title}
+      action={@live_action}
+      type={@type}
+      return_to={Routes.type_show_path(@socket, :show, @type)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @type.title %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.type_show_path(@socket, :edit, @type), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.type_index_path(@socket, :index) %></span>
