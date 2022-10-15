@@ -8,6 +8,8 @@ defmodule Litcovers.Media.Request do
     field :title, :string
     field :completed, :boolean
     field :selected_cover, :integer
+    field :style_prompt, :string
+    field :final_prompt, :string
     
     belongs_to :user, Litcovers.Accounts.User
     has_many :covers, Litcovers.Media.Cover
