@@ -65,6 +65,21 @@ defmodule LitcoversWeb.Router do
     resources "/placeholders", PlaceholderController
 
     live "/", AdminLive.Index
+
+    live "/sentiments", SentimentLive.Index, :index
+    live "/sentiments/new", SentimentLive.Index, :new
+    live "/sentiments/:id/edit", SentimentLive.Index, :edit
+
+    live "/sentiments/:id", SentimentLive.Show, :show
+    live "/sentiments/:id/show/edit", SentimentLive.Show, :edit
+
+    live "/realms", RealmLive.Index, :index
+    live "/realms/new", RealmLive.Index, :new
+    live "/realms/:id/edit", RealmLive.Index, :edit
+
+    live "/realms/:id", RealmLive.Show, :show
+    live "/realms/:id/show/edit", RealmLive.Show, :edit
+
     live "/:request_id", AdminLive.Show
   end
 

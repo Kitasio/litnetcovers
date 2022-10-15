@@ -1,0 +1,26 @@
+<h1>Show Realm</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.realm_show_path(@socket, :show, @realm)}>
+    <.live_component
+      module={LitcoversWeb.RealmLive.FormComponent}
+      id={@realm.id}
+      title={@page_title}
+      action={@live_action}
+      realm={@realm}
+      return_to={Routes.realm_show_path(@socket, :show, @realm)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @realm.title %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.realm_show_path(@socket, :edit, @realm), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.realm_index_path(@socket, :index) %></span>
