@@ -66,27 +66,6 @@ defmodule LitcoversWeb.Router do
 
     live "/", AdminLive.Index
 
-    live "/sentiments", SentimentLive.Index, :index
-    live "/sentiments/new", SentimentLive.Index, :new
-    live "/sentiments/:id/edit", SentimentLive.Index, :edit
-
-    live "/sentiments/:id", SentimentLive.Show, :show
-    live "/sentiments/:id/show/edit", SentimentLive.Show, :edit
-
-    live "/realms", RealmLive.Index, :index
-    live "/realms/new", RealmLive.Index, :new
-    live "/realms/:id/edit", RealmLive.Index, :edit
-
-    live "/realms/:id", RealmLive.Show, :show
-    live "/realms/:id/show/edit", RealmLive.Show, :edit
-
-    live "/types", TypeLive.Index, :index
-    live "/types/new", TypeLive.Index, :new
-    live "/types/:id/edit", TypeLive.Index, :edit
-
-    live "/types/:id", TypeLive.Show, :show
-    live "/types/:id/show/edit", TypeLive.Show, :edit
-
     live "/:request_id", AdminLive.Show
   end
 
