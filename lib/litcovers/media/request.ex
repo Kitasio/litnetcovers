@@ -10,7 +10,8 @@ defmodule Litcovers.Media.Request do
     field :selected_cover, :integer
     field :style_prompt, :string
     field :final_prompt, :string
-    
+    field :type, Ecto.Enum, values: [:object, :subject, :third_person]
+
     belongs_to :user, Litcovers.Accounts.User
     has_many :covers, Litcovers.Media.Cover
 
