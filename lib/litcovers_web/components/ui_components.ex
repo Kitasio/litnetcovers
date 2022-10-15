@@ -13,14 +13,6 @@ defmodule LitcoversWeb.UiComponents do
         <.p><%= assigns.request.title %></.p>
       </div>
       <div>
-        <.h2>Жанр</.h2>
-        <.p><%= assigns.request.genre %></.p>
-      </div>
-      <div>
-        <.h2>Настроения</.h2>
-        <.p><%= assigns.request.vibe %></.p>
-      </div>
-      <div>
         <.h2>Описание</.h2>
         <.p><%= assigns.request.description %></.p>
       </div>

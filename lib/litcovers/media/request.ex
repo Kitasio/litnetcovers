@@ -5,10 +5,7 @@ defmodule Litcovers.Media.Request do
   schema "requests" do
     field :author, :string
     field :description, :string
-    field :genre, :string
-    field :status, :string
     field :title, :string
-    field :vibe, :string
     field :completed, :boolean
     field :selected_cover, :integer
     
@@ -21,17 +18,16 @@ defmodule Litcovers.Media.Request do
   @doc false
   def changeset(request, attrs) do
     request
-    |> cast(attrs, [:author, :title, :vibe, :description, :genre, :selected_cover])
-    |> validate_required([:author, :title, :vibe, :description, :genre])
+    |> cast(attrs, [:author, :title, :description, :selected_cover])
+    |> validate_required([:author, :title, :description])
     |> validate_length(:author, max: 30)
     |> validate_length(:title, max: 40)
-    |> validate_length(:vibe, max: 50)
     |> validate_length(:description, max: 600)
   end
 
   def admin_changeset(request, attrs) do
     request
-    |> cast(attrs, [:status, :author, :title, :vibe, :description, :genre, :completed, :selected_cover])
+    |> cast(attrs, [:author, :title, :description, :completed, :selected_cover])
   end
 
   def ai_changeset(request, attrs) do
