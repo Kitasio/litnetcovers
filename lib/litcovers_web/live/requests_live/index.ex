@@ -63,6 +63,10 @@ defmodule LitcoversWeb.RequestsLive.Index do
     {:noreply, assign(socket, gender: gender)}
   end
 
+  def handle_event("select_sentiment", %{"sentiment" => sentiment}, socket) do
+    {:noreply, assign(socket, sentiment: sentiment)}
+  end
+
   def handle_event("validate", %{"request" => params}, socket) do
     changeset =
       %Request{}

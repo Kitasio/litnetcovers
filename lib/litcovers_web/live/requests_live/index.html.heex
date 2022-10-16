@@ -61,6 +61,21 @@
   </div>
 
   <div x-show="stage == 2" x-transition.duration.500ms>
+    <div class="font-light mt-7">Какое настроение больше подходит к вашей книге?</div>
+
+    <div class="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
+      <%= for s <- @sentiments do %>
+        <div phx-click="select_sentiment" phx-value-sentiment={s} :class={"'#{s}' == '#{@sentiment}' ? 'border-green-500 hover:border-green-500': 'brightness-50'"} class="aspect-cover transition duration-300 hover:brightness-100 cursor-pointer rounded overflow-hidden border-2 border-zinc-400 hover:border-pink-600">
+          <img class="w-full h-full object-cover" src="https://picsum.photos/id/240/200/200" />
+        </div>
+      <% end %>
+    </div>
+
+    <button x-on:click="stage = stage - 1" class="btn mt-5">Назад</button>
+    <button x-on:click="stage = stage + 1" class="btn mt-5">Далее</button>
+  </div>
+
+  <div x-show="stage == 3" x-transition.duration.500ms>
     <.form let={f} for={@changeset} phx-change="validate" phx-submit="save">
       <%= label f, "1. Автор", class: "capitalize text-2xl" %>
       <p class="font-light">Будет отображаться на самой обложке</p>
