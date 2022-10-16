@@ -5,6 +5,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
   alias Litcovers.Media
   alias Litcovers.Media.Request
   alias Litcovers.Character
+  alias Litcovers.Sd
 
   def mount(_params, session, socket) do
     current_user = Accounts.get_user_by_session_token(session["user_token"])
@@ -20,6 +21,10 @@ defmodule LitcoversWeb.RequestsLive.Index do
     h = hair |> List.first()
     hair_prompt = h.prompt
 
+    style_prompts = Sd.list_all_where(:fantasy, :positive, :object)
+    prompt = style_prompts |> List.first()
+    style_prompt = prompt.style_prompt
+
     {
       :ok,
       socket
@@ -32,12 +37,14 @@ defmodule LitcoversWeb.RequestsLive.Index do
         types: types,
         type: :object,
         sentiments: sentiments,
-        sentiment: :neutral,
+        sentiment: :positive,
         eyes: eyes,
         eye_prompt: eye_prompt,
         hair: hair,
         hair_prompt: hair_prompt,
         gender: :male,
+        style_prompts: style_prompts,
+        style_prompt: style_prompt,
         title: "Мои обложки"
       )
     }
@@ -65,6 +72,10 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
   def handle_event("select_sentiment", %{"sentiment" => sentiment}, socket) do
     {:noreply, assign(socket, sentiment: sentiment)}
+  end
+
+  def handle_event("select_prompt", %{"prompt" => prompt}, socket) do
+    {:noreply, assign(socket, style_prompt: prompt)}
   end
 
   def handle_event("validate", %{"request" => params}, socket) do

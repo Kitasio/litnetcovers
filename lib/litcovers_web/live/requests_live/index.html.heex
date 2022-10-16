@@ -76,6 +76,15 @@
   </div>
 
   <div x-show="stage == 3" x-transition.duration.500ms>
+      <div class="font-light mt-7">Выберите слово</div>
+      <div class="flex gap-5">
+        <%= for prompt <- @style_prompts do %>
+          <span phx-click="select_prompt" phx-value-prompt={prompt.style_prompt} :class={"'#{prompt.style_prompt}' == '#{@style_prompt}' ? 'text-pink-600 underline' : ''"} class="capitalize cursor-pointer hover:text-pink-600 hover:underline"><%= prompt.name %></span>
+        <% end %>
+      </div>
+  </div>
+  
+  <div x-show="stage == 4" x-transition.duration.500ms>
     <.form let={f} for={@changeset} phx-change="validate" phx-submit="save">
       <%= label f, "1. Автор", class: "capitalize text-2xl" %>
       <p class="font-light">Будет отображаться на самой обложке</p>

@@ -21,6 +21,26 @@ defmodule Litcovers.Sd do
     Repo.all(Prompt)
   end
 
+  def list_all_where(realm, sentiment, type) do
+    Prompt
+    |> where_realm_query(realm)
+    |> where_sentiment_query(sentiment)
+    |> where_type_query(type)
+    |> Repo.all()
+  end
+
+  defp where_realm_query(query, realm) do
+    from(p in query, where: p.realm == ^realm)
+  end
+
+  defp where_sentiment_query(query, sentiment) do
+    from(p in query, where: p.sentiment == ^sentiment)
+  end
+
+  defp where_type_query(query, type) do
+    from(p in query, where: p.type == ^type)
+  end
+
   @doc """
   Gets a single prompt.
 
