@@ -4,10 +4,21 @@ defmodule LitcoversWeb.RequestsLive.Index do
   alias Litcovers.Accounts
   alias Litcovers.Media
   alias Litcovers.Media.Request
+  alias Litcovers.Character
 
   def mount(_params, session, socket) do
     current_user = Accounts.get_user_by_session_token(session["user_token"])
     realms = [:fantasy, :realism, :futurism]
+    types = [:object, :subject, :third_person]
+    sentiments = [:positive, :neutral, :negative]
+
+    eyes = Character.list_eyes()
+    eye = eyes |> List.first()
+    eye_prompt = eye.prompt
+
+    hair = Character.list_hair()
+    h = hair |> List.first()
+    hair_prompt = h.prompt
 
     {
       :ok,
@@ -17,14 +28,39 @@ defmodule LitcoversWeb.RequestsLive.Index do
         changeset: Media.change_request(%Request{}),
         placeholder: placeholder_or_empty(Media.get_random_placeholder() |> List.first()),
         realms: realms,
-        realm: :realism,
+        realm: :fantasy,
+        types: types,
+        type: :object,
+        sentiments: sentiments,
+        sentiment: :neutral,
+        eyes: eyes,
+        eye_prompt: eye_prompt,
+        hair: hair,
+        hair_prompt: hair_prompt,
+        gender: :male,
         title: "Мои обложки"
       )
     }
   end
 
+  def handle_event("select_type", %{"type" => type}, socket) do
+    {:noreply, assign(socket, type: type)}
+  end
+
   def handle_event("select_realm", %{"realm" => realm}, socket) do
     {:noreply, assign(socket, realm: realm)}
+  end
+
+  def handle_event("select_eye", %{"eye" => eye}, socket) do
+    {:noreply, assign(socket, eye_prompt: eye)}
+  end
+
+  def handle_event("select_hair", %{"hair" => hair}, socket) do
+    {:noreply, assign(socket, hair_prompt: hair)}
+  end
+
+  def handle_event("select_gender", %{"gender" => gender}, socket) do
+    {:noreply, assign(socket, gender: gender)}
   end
 
   def handle_event("validate", %{"request" => params}, socket) do
