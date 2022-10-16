@@ -50,12 +50,35 @@ defmodule LitcoversWeb.RequestsLive.Index do
     }
   end
 
+  def list_prompts(realm, sentiment, type) do
+    style_prompts = Sd.list_all_where(realm, sentiment, type)
+    if Enum.empty?(style_prompts) do
+      {:error, "No prompts found"}
+    else
+      prompt = style_prompts |> List.first()
+      style_prompt = prompt.style_prompt
+      {:ok, style_prompts, style_prompt}
+    end
+  end
+
   def handle_event("select_type", %{"type" => type}, socket) do
-    {:noreply, assign(socket, type: type)}
+    case list_prompts(socket.assigns.realm, socket.assigns.sentiment, type) do
+      {:ok, style_prompts, style_prompt} -> 
+        {:noreply, assign(socket, type: type, style_prompt: style_prompt, style_prompts: style_prompts)}
+
+      {:error, _} ->
+        {:noreply, assign(socket, type: type)}
+    end
   end
 
   def handle_event("select_realm", %{"realm" => realm}, socket) do
-    {:noreply, assign(socket, realm: realm)}
+    case list_prompts(realm, socket.assigns.sentiment, socket.assigns.type) do
+      {:ok, style_prompts, style_prompt} -> 
+        {:noreply, assign(socket, realm: realm, style_prompt: style_prompt, style_prompts: style_prompts)}
+
+      {:error, _} ->
+        {:noreply, assign(socket, realm: realm)}
+    end
   end
 
   def handle_event("select_eye", %{"eye" => eye}, socket) do
@@ -71,7 +94,13 @@ defmodule LitcoversWeb.RequestsLive.Index do
   end
 
   def handle_event("select_sentiment", %{"sentiment" => sentiment}, socket) do
-    {:noreply, assign(socket, sentiment: sentiment)}
+    case list_prompts(socket.assigns.realm, sentiment, socket.assigns.type) do
+      {:ok, style_prompts, style_prompt} -> 
+        {:noreply, assign(socket, sentiment: sentiment, style_prompt: style_prompt, style_prompts: style_prompts)}
+
+      {:error, _} ->
+        {:noreply, assign(socket, sentiment: sentiment)}
+    end
   end
 
   def handle_event("select_prompt", %{"prompt" => prompt}, socket) do
