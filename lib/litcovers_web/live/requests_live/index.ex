@@ -7,6 +7,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
   def mount(_params, session, socket) do
     current_user = Accounts.get_user_by_session_token(session["user_token"])
+    realms = [:fantasy, :realism, :futurism]
 
     {
       :ok,
@@ -15,9 +16,15 @@ defmodule LitcoversWeb.RequestsLive.Index do
         current_user: current_user,
         changeset: Media.change_request(%Request{}),
         placeholder: placeholder_or_empty(Media.get_random_placeholder() |> List.first()),
+        realms: realms,
+        realm: :realism,
         title: "Мои обложки"
       )
     }
+  end
+
+  def handle_event("select_realm", %{"realm" => realm}, socket) do
+    {:noreply, assign(socket, realm: realm)}
   end
 
   def handle_event("validate", %{"request" => params}, socket) do
