@@ -5,7 +5,7 @@ defmodule SDParams do
       input: %{
         prompt: "multicolor hyperspace",
         width: 512,
-        height: 704,
+        height: 768,
         num_outputs: 1
       }
   ]

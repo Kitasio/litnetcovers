@@ -5,7 +5,7 @@ defmodule BookCoverGenerator do
   def description_to_cover_idea(_prompt, nil),
     do: raise("OAI_TOKEN was not set\nVisit https://beta.openai.com/account/api-keys to get it")
 
-  def description_to_cover_idea(prompt, oai_token) do
+  def description_to_cover_idea(prompt, style_prompt, oai_token) do
     IO.puts("Starting cover idea generation...")
     # Set Open AI endpoint
     endpoint = "https://api.openai.com/v1/completions"
@@ -30,8 +30,8 @@ defmodule BookCoverGenerator do
     %Response{body: res_body} = HTTPoison.post!(endpoint, body, headers, options)
 
     # Parse the response body
-    res_body
-    |> oai_response_text()
+    res = res_body |> oai_response_text()
+    "#{res}, #{style_prompt}"
   end
 
   # Returns a list of image links
@@ -41,7 +41,7 @@ defmodule BookCoverGenerator do
   def diffuse(prompt, amount, replicate_token) do
     IO.puts("Starting stable diffusion...")
 
-    sd_params = %SDParams{input: %{prompt: prompt, num_outputs: amount}}
+    sd_params = %SDParams{input: %{prompt: prompt, num_outputs: amount, height: 768}}
 
     body = Jason.encode!(sd_params)
     headers = [Authorization: "Token #{replicate_token}", "Content-Type": "application/json"]
@@ -147,34 +147,15 @@ defmodule BookCoverGenerator do
   end
 
   defp preamble(input) do
-    "Suggest a book cover idea (avoid faces)
+    "Suggest a book cover idea, use objects and landscapes to describe the idea (avoid depicting people)
 
-    styles: medieval, Banksy, Polish poster, Hajime Sorayama,  90’s blacklight poster, poster, high-tech, cyberpunk, vaporwave, alien, modern, ancient, futuristic, retro, realistic, dreamlike, funk art, abstract, pop art, impressionism, minimalism, noir, photorealism, octane render, unreal engine 5, holographic, graffiti, watercolor painting
+    Description: The speaker goes to the urologist, but is so distracted by the beauty of the therapist that he doesn't realize he's in the wrong room. He falls in love with her at first sight, but discovers that she doesn't like rich, domineering men. He decides to become a bioenergotherapist himself in order to win her over.
+    Book cover: A red high heel shoe
 
-    example: The Hunger Games; Dystopian, science fiction, drama, action; Mockingjay is about Katniss fighting in the rebellion against the Capitol, while also trying to save Peeta from being brainwashed. Gale becomes more ruthless and Katniss starts to doubt her feelings for him. Prim is killed in a bombing, Katniss kills Coin, and she and Peeta eventually have children.
-    1. The overall vibe of the text is dark and serious.
-    2. It is a novel about a young girl who is fighting in a rebellion against her government, and also trying to save her love from being brainwashed.
+    Description: Katya is a simple girl from a dysfunctional family who falls in love with a wealthy and powerful man. However, he is married and she has principles, so she is torn about what to do. The boss is not willing to let her go and she is not willing to submit, so the situation is fraught with tension.
+    Book cover: A tie and wedding ring
 
-    output: a burning golden pin of a jay bird catching an arrow on a black background, photorealism
-
-    example: Twilight; fantasy, melodrama, romance; Bella Swan turns 18, breaks up with Edward Cullen, and becomes depressed. She is then saved by Jacob Black and the Quileute werewolves and decides to become a vampire.
-    1. The text has a dark and depressing tone.
-    2. It is a vampire novel.
-
-    output: a red ink watercolour with a howling wolf on a vinous round background, in a minimalist style
-
-    example: The Game of Thrones; Political fiction, fantasy, magic; The novels take place in a fictional world with magic and dragons and in which seasons last for years and end unpredictably. The principal story chronicles the power struggle for the Iron Throne among the great Houses of Westeros.
-    1. The text has a dark, medieval feel to it.
-    2. It is a novel about a power struggle for the Iron Throne, and it is in the fantasy genre.
-
-    output: an iron throne made of a thousand swords standing in a majestic throne room forged by the flames of the ancient dragon, in a medieval style
-
-    example: Dune; science fiction, adventure, planetary; House Atreides is assigned to govern the planet Arrakis, which is the only source of the valuable spice substance. The Atreides are betrayed by their physician and killed, but Paul, their son, escapes into the desert and is accepted by the Fremen who believe him to be a messianic figure. Paul establishes himself as the new leader of Arrakis and wrests control of the Empire from the Emperor.
-    1. The overall vibe of the text is one of hope and determination. 
-    2. It belongs to the science fiction genre.
-
-    output: a man walking in a distance on an endless dune with two suns above his head, one bigger than the other, minimalist flat illustration
-
-    example: #{input}"
+    Description: #{input}
+    Book cover:"
   end
 end
