@@ -106,6 +106,7 @@
       <%= error_tag f, :description %>
 
       <%= hidden_input f, :style_prompt, value: @style_prompt %>
+      <%= hidden_input f, :type, value: @type %>
 
       <div class="mt-7 flex w-full items-center justify-center">
         <%= submit "Отправить", class: "btn" %>
