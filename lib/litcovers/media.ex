@@ -96,11 +96,13 @@ defmodule Litcovers.Media do
   def gen_covers(prompt, request) do
     oai_res =
       prompt
-      |> BookCoverGenerator.description_to_cover_idea(System.get_env("OAI_TOKEN"))
+      |> BookCoverGenerator.description_to_cover_idea(request.style_prompt, System.get_env("OAI_TOKEN"))
+
+    ai_update_request(request, %{final_prompt: oai_res})
 
     sd_res =
       oai_res
-      |> BookCoverGenerator.diffuse(1, System.get_env("REPLICATE_TOKEN"))
+      |> BookCoverGenerator.diffuse(4, System.get_env("REPLICATE_TOKEN"))
 
     # artefacts =  Jason.encode!(sd_res) ++ book.sd_artefacts
     # AI.update_book_cover(book, %{sd_artefacts: artefacts})
