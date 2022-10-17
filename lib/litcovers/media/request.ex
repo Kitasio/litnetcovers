@@ -21,7 +21,7 @@ defmodule Litcovers.Media.Request do
   @doc false
   def changeset(request, attrs) do
     request
-    |> cast(attrs, [:author, :title, :description, :selected_cover])
+    |> cast(attrs, [:author, :title, :description, :selected_cover, :style_prompt])
     |> validate_required([:author, :title, :description])
     |> validate_length(:author, max: 30)
     |> validate_length(:title, max: 40)
@@ -35,6 +35,6 @@ defmodule Litcovers.Media.Request do
 
   def ai_changeset(request, attrs) do
     request
-    |> cast(attrs, [:completed])
+    |> cast(attrs, [:completed, :final_prompt])
   end
 end
