@@ -11,6 +11,9 @@ defmodule Litcovers.Media.Request do
     field :style_prompt, :string
     field :final_prompt, :string
     field :type, Ecto.Enum, values: [:object, :subject, :third_person]
+    field :eye_prompt, :string
+    field :hair_prompt, :string
+    field :gender, Ecto.Enum, values: [:male, :female]
 
     belongs_to :user, Litcovers.Accounts.User
     has_many :covers, Litcovers.Media.Cover
@@ -21,7 +24,7 @@ defmodule Litcovers.Media.Request do
   @doc false
   def changeset(request, attrs) do
     request
-    |> cast(attrs, [:author, :title, :description, :selected_cover, :style_prompt, :type])
+    |> cast(attrs, [:author, :title, :description, :selected_cover, :style_prompt, :type, :eye_prompt, :hair_prompt, :gender])
     |> validate_required([:author, :title, :description])
     |> validate_length(:author, max: 30)
     |> validate_length(:title, max: 40)

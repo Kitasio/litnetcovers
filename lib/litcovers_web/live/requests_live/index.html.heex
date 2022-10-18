@@ -107,6 +107,9 @@
 
       <%= hidden_input f, :style_prompt, value: @style_prompt %>
       <%= hidden_input f, :type, value: @type %>
+      <%= hidden_input f, :eye_prompt, value: @eye_prompt %>
+      <%= hidden_input f, :hair_prompt, value: @hair_prompt %>
+      <%= hidden_input f, :gender, value: @gender %>
 
       <div class="mt-7 flex w-full items-center justify-center">
         <%= submit "Отправить", class: "btn" %>
