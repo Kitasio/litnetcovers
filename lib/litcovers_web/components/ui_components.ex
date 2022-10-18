@@ -148,6 +148,7 @@ defmodule LitcoversWeb.UiComponents do
 
   def p(assigns) do
     assigns = assign_new(assigns, :class, fn -> nil end)
+
     ~H"""
     <p class={"lg:text-lg font-light text-gray-400 #{assigns.class}"}>
       <%= render_slot(@inner_block) %>
