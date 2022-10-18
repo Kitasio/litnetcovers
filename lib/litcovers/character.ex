@@ -229,6 +229,31 @@ defmodule Litcovers.Character do
   """
   def get_celeb!(id), do: Repo.get!(Celeb, id)
 
+  def get_random_celeb(gender, is_famous) do
+    Celeb
+    |> gender_query(gender)
+    |> is_famous_query(is_famous)
+    |> random_order_query()
+    |> limit_query(1)
+    |> Repo.one()
+  end
+
+  defp limit_query(query, amount) do
+    from(c in query, limit: ^amount)
+  end
+
+  defp random_order_query(query) do
+    from(c in query, order_by: fragment("RANDOM()"))
+  end
+
+  defp gender_query(query, gender) do
+    from(c in query, where: c.gender == ^gender)
+  end
+
+  defp is_famous_query(query, is_famous) do
+    from(c in query, where: c.famous == ^is_famous)
+  end
+
   @doc """
   Creates a celeb.
 
