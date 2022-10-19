@@ -53,9 +53,19 @@ defmodule LitcoversWeb.RequestsLive.Index do
     }
   end
 
+  def get_celeb_name(gender, is_famous) do
+    case Character.get_random_celeb(gender, is_famous) do
+      nil ->
+        ""
+
+      celeb ->
+        celeb.name
+    end
+  end
+
   def get_character_prompt(gender, eye_prompt, hair_prompt) do
-    famous_celeb = Character.get_random_celeb(gender, true)
-    not_famous_celeb = Character.get_random_celeb(gender, false)
+    famous_celeb = get_celeb_name(gender, true)
+    not_famous_celeb = get_celeb_name(gender, false)
 
     "#{not_famous_celeb} as #{famous_celeb}, #{eye_prompt}, #{hair_prompt}"
   end
@@ -95,15 +105,42 @@ defmodule LitcoversWeb.RequestsLive.Index do
   end
 
   def handle_event("select_eye", %{"eye" => eye}, socket) do
-    {:noreply, assign(socket, eye_prompt: eye)}
+    {:noreply,
+     assign(socket,
+       eye_prompt: eye,
+       character_prompt:
+         get_character_prompt(
+           socket.assigns.gender,
+           eye,
+           socket.assigns.hair_prompt
+         )
+     )}
   end
 
   def handle_event("select_hair", %{"hair" => hair}, socket) do
-    {:noreply, assign(socket, hair_prompt: hair)}
+    {:noreply,
+     assign(socket,
+       hair_prompt: hair,
+       character_prompt:
+         get_character_prompt(
+           socket.assigns.gender,
+           socket.assigns.eye_prompt,
+           hair
+         )
+     )}
   end
 
   def handle_event("select_gender", %{"gender" => gender}, socket) do
-    {:noreply, assign(socket, gender: gender)}
+    {:noreply,
+     assign(socket,
+       gender: gender,
+       character_prompt:
+         get_character_prompt(
+           gender,
+           socket.assigns.eye_prompt,
+           socket.assigns.hair_prompt
+         )
+     )}
   end
 
   def handle_event("select_sentiment", %{"sentiment" => sentiment}, socket) do
