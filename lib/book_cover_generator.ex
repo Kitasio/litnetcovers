@@ -1,12 +1,12 @@
 defmodule BookCoverGenerator do
   alias HTTPoison.Response
+  require Elixir.Logger
 
   # Returns a prompt for stable diffusion
   def description_to_cover_idea(_description, _cover_type, nil),
     do: raise("OAI_TOKEN was not set\nVisit https://beta.openai.com/account/api-keys to get it")
 
   def description_to_cover_idea(description, cover_type, oai_token) do
-    IO.puts("Starting cover idea generation...")
     # Set Open AI endpoint
     endpoint = "https://api.openai.com/v1/completions"
 
@@ -21,6 +21,7 @@ defmodule BookCoverGenerator do
     oai_params = %OAIParams{prompt: prompt}
     body = Jason.encode!(oai_params)
 
+    Logger.info("Generatig idea with Open AI")
     # Send the post request
     case HTTPoison.post(endpoint, body, headers, options) do
       {:ok, %Response{body: res_body}} ->
@@ -28,7 +29,7 @@ defmodule BookCoverGenerator do
         {:ok, idea}
 
       {:error, reason} ->
-        IO.inspect(reason, label: "TODO: log the reason")
+        Logger.error("Open AI gen idea failed, reason: #{reason}")
         {:error, :oai_failed}
     end
   end
@@ -38,8 +39,6 @@ defmodule BookCoverGenerator do
     do: raise("REPLICATE_TOKEN was not set\nVisit https://replicate.com/account to get it")
 
   def diffuse(prompt, amount, replicate_token) do
-    IO.puts("Starting stable diffusion...")
-
     sd_params = %SDParams{input: %{prompt: prompt, num_outputs: amount, height: 768}}
 
     body = Jason.encode!(sd_params)
@@ -47,6 +46,8 @@ defmodule BookCoverGenerator do
     options = [timeout: 50_000, recv_timeout: 50_000]
 
     endpoint = "https://api.replicate.com/v1/predictions"
+
+    Logger.info("Generating images with SD")
 
     case HTTPoison.post(endpoint, body, headers, options) do
       {:ok, %Response{body: res_body}} ->
@@ -57,46 +58,46 @@ defmodule BookCoverGenerator do
             {:ok, image_links}
 
           {:error, reason} ->
+            Logger.error("Stable diffusion image fetch failed, reason: #{reason}")
             {:error, reason}
         end
 
       {:error, reason} ->
+        Logger.error("Stable diffusion post request failed, reason: #{reason}")
         {:error, reason}
     end
   end
 
-  def upscale(_image, nil),
-    do: raise("REPLICATE_TOKEN was not set\nVisit https://replicate.com/account to get it")
-
-  def upscale(image, replicate_token) do
-    IO.puts("Starting the upscale...")
-
-    sd_params = %{
-      version: "9d91795e944f3a585fa83f749617fc75821bea8b323348f39cf84f8fd0cbc2f7",
-      input: %{image: image}
-    }
-
-    body = Jason.encode!(sd_params)
-    headers = [Authorization: "Token #{replicate_token}", "Content-Type": "application/json"]
-    options = [timeout: 50_000, recv_timeout: 50_000]
-
-    endpoint = "https://api.replicate.com/v1/predictions"
-
-    case HTTPoison.post(endpoint, body, headers, options) do
-      {:ok, %Response{body: res_body}} ->
-        %{"urls" => %{"get" => generation_url}} = res_body |> Jason.decode!()
-        check_for_output(generation_url, headers, options, 20)
-
-      {:error, _reason} ->
-        {:error, :upscale_failed}
-    end
-  end
+  # def upscale(_image, nil),
+  #   do: raise("REPLICATE_TOKEN was not set\nVisit https://replicate.com/account to get it")
+  #
+  # def upscale(image, replicate_token) do
+  #   sd_params = %{
+  #     version: "9d91795e944f3a585fa83f749617fc75821bea8b323348f39cf84f8fd0cbc2f7",
+  #     input: %{image: image}
+  #   }
+  #
+  #   body = Jason.encode!(sd_params)
+  #   headers = [Authorization: "Token #{replicate_token}", "Content-Type": "application/json"]
+  #   options = [timeout: 50_000, recv_timeout: 50_000]
+  #
+  #   endpoint = "https://api.replicate.com/v1/predictions"
+  #
+  #   case HTTPoison.post(endpoint, body, headers, options) do
+  #     {:ok, %Response{body: res_body}} ->
+  #       %{"urls" => %{"get" => generation_url}} = res_body |> Jason.decode!()
+  #       check_for_output(generation_url, headers, options, 20)
+  #
+  #     {:error, _reason} ->
+  #       {:error, :upscale_failed}
+  #   end
+  # end
 
   # Takes a list of image urls and saves them to DO spaces returning an imagekit url
   def save_to_spaces([]), do: []
 
   def save_to_spaces([url | img_list]) do
-    IO.puts("Saving #{url} to spaces...")
+    Logger.info("Saving to spaces: #{url}")
     options = [timeout: 50_000, recv_timeout: 50_000]
 
     imagekit_url = Application.get_env(:litcovers, :imagekit_url)
@@ -126,7 +127,6 @@ defmodule BookCoverGenerator do
       headers = [Authorization: "Bearer #{oai_token}", "Content-Type": "application/json"]
       options = [timeout: 50_000, recv_timeout: 50_000]
 
-      IO.puts("Translating text...")
       oai_params = %OAIParams{prompt: "Translate this to English:\n#{prompt}"}
       body = Jason.encode!(oai_params)
 
@@ -136,6 +136,7 @@ defmodule BookCoverGenerator do
           {:ok, translation}
 
         {:error, reason} ->
+          Logger.error("Failed to translate, reason: #{reason}")
           {:error, reason}
       end
     end
@@ -150,10 +151,9 @@ defmodule BookCoverGenerator do
   end
 
   defp check_for_output(generation_url, headers, options, num_of_tries) do
+    Logger.debug("Checking images, remaining tries: #{num_of_tries}")
     %Response{body: res} = HTTPoison.get!(generation_url, headers, options)
-    # %{"output" => image_list} = res |> Jason.decode!()
     res = res |> Jason.decode!()
-    IO.inspect(res["output"])
 
     case check_image(res["output"], num_of_tries) do
       {:error, :out_of_tries} ->

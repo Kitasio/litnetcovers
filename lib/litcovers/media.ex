@@ -94,8 +94,6 @@ defmodule Litcovers.Media do
   end
 
   def gen_covers(request) do
-    IO.puts("the description: #{request.description}")
-
     with {:ok, english_desc} <-
            BookCoverGenerator.translate_to_english(
              request.description,
