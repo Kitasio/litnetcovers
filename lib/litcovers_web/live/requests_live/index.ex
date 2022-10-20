@@ -178,7 +178,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
         case Media.create_request(socket.assigns.current_user, request_params) do
           {:ok, request} ->
             Task.start(fn ->
-              Media.gen_covers(request.description, request)
+              Media.gen_covers(request)
             end)
 
             {:noreply,

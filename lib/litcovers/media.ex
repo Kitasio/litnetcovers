@@ -93,31 +93,42 @@ defmodule Litcovers.Media do
     |> Repo.aggregate(:count)
   end
 
-  def gen_covers(prompt, request) do
-    oai_res =
-      prompt
-      |> BookCoverGenerator.description_to_cover_idea(request.style_prompt, System.get_env("OAI_TOKEN"))
+  def gen_covers(request) do
+    IO.puts("the description: #{request.description}")
 
-    ai_update_request(request, %{final_prompt: oai_res})
+    with {:ok, english_desc} <-
+           BookCoverGenerator.translate_to_english(
+             request.description,
+             System.get_env("OAI_TOKEN")
+           ),
+         {:ok, idea} <-
+           BookCoverGenerator.description_to_cover_idea(
+             english_desc,
+             request.type,
+             System.get_env("OAI_TOKEN")
+           ),
+         # change final_prompt to idea
+         _ <- ai_update_request(request, %{final_prompt: idea}),
+         prompt <- BookCoverGenerator.create_prompt(idea, request.style_prompt, request.type),
+         {:ok, sd_res} <-
+           BookCoverGenerator.diffuse(prompt, 4, System.get_env("REPLICATE_TOKEN")) do
+      %{"output" => image_list} = sd_res
 
-    sd_res =
-      oai_res
-      |> BookCoverGenerator.diffuse(4, System.get_env("REPLICATE_TOKEN"))
+      case BookCoverGenerator.save_to_spaces(image_list) do
+        {:error, reason} ->
+          IO.inspect(reason)
 
-    # artefacts =  Jason.encode!(sd_res) ++ book.sd_artefacts
-    # AI.update_book_cover(book, %{sd_artefacts: artefacts})
+        img_urls ->
+          for url <- img_urls do
+            image_params = %{"cover_url" => url}
+            create_cover(request, image_params)
+          end
 
-    %{"output" => image_list} = sd_res
-    img_urls = image_list |> BookCoverGenerator.save_to_spaces()
+          request = ai_update_request(request, %{completed: true})
 
-    for url <- img_urls do
-      image_params = %{"cover_url" => url}
-      create_cover(request, image_params)
+          broadcast(request, :gen_complete)
+      end
     end
-
-    request = ai_update_request(request, %{completed: true})
-
-    broadcast(request, :gen_complete)
   end
 
   def subscribe do

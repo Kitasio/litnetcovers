@@ -2,10 +2,10 @@ defmodule BookCoverGenerator do
   alias HTTPoison.Response
 
   # Returns a prompt for stable diffusion
-  def description_to_cover_idea(_prompt, nil),
+  def description_to_cover_idea(_description, _cover_type, nil),
     do: raise("OAI_TOKEN was not set\nVisit https://beta.openai.com/account/api-keys to get it")
 
-  def description_to_cover_idea(prompt, style_prompt, oai_token) do
+  def description_to_cover_idea(description, cover_type, oai_token) do
     IO.puts("Starting cover idea generation...")
     # Set Open AI endpoint
     endpoint = "https://api.openai.com/v1/completions"
@@ -14,24 +14,23 @@ defmodule BookCoverGenerator do
     headers = [Authorization: "Bearer #{oai_token}", "Content-Type": "application/json"]
     options = [timeout: 50_000, recv_timeout: 50_000]
 
-    # Translates to English if needed
-    prompt = prompt |> translate_to_english(endpoint, headers, options)
-
-    # IO.puts("Translated text\n#{prompt}")
-
-    # Append prompt to preamble
-    prompt = prompt |> preamble()
+    # Append description to preamble
+    prompt = description |> preamble(cover_type)
 
     # Prepare params for Open AI
     oai_params = %OAIParams{prompt: prompt}
     body = Jason.encode!(oai_params)
 
     # Send the post request
-    %Response{body: res_body} = HTTPoison.post!(endpoint, body, headers, options)
+    case HTTPoison.post(endpoint, body, headers, options) do
+      {:ok, %Response{body: res_body}} ->
+        idea = oai_response_text(res_body)
+        {:ok, idea}
 
-    # Parse the response body
-    res = res_body |> oai_response_text()
-    "#{res}, #{style_prompt}"
+      {:error, reason} ->
+        IO.inspect(reason, label: "TODO: log the reason")
+        {:error, :oai_failed}
+    end
   end
 
   # Returns a list of image links
@@ -49,10 +48,21 @@ defmodule BookCoverGenerator do
 
     endpoint = "https://api.replicate.com/v1/predictions"
 
-    %Response{body: res_body} = HTTPoison.post!(endpoint, body, headers, options)
-    %{"urls" => %{"get" => generation_url}} = res_body |> Jason.decode!()
+    case HTTPoison.post(endpoint, body, headers, options) do
+      {:ok, %Response{body: res_body}} ->
+        %{"urls" => %{"get" => generation_url}} = Jason.decode!(res_body)
 
-    check_for_output(generation_url, headers, options, 20)
+        case check_for_output(generation_url, headers, options, 25) do
+          {:ok, image_links} ->
+            {:ok, image_links}
+
+          {:error, reason} ->
+            {:error, reason}
+        end
+
+      {:error, reason} ->
+        {:error, reason}
+    end
   end
 
   def upscale(_image, nil),
@@ -72,10 +82,14 @@ defmodule BookCoverGenerator do
 
     endpoint = "https://api.replicate.com/v1/predictions"
 
-    %Response{body: res_body} = HTTPoison.post!(endpoint, body, headers, options)
-    %{"urls" => %{"get" => generation_url}} = res_body |> Jason.decode!()
+    case HTTPoison.post(endpoint, body, headers, options) do
+      {:ok, %Response{body: res_body}} ->
+        %{"urls" => %{"get" => generation_url}} = res_body |> Jason.decode!()
+        check_for_output(generation_url, headers, options, 20)
 
-    check_for_output(generation_url, headers, options, 20)
+      {:error, _reason} ->
+        {:error, :upscale_failed}
+    end
   end
 
   # Takes a list of image urls and saves them to DO spaces returning an imagekit url
@@ -87,30 +101,51 @@ defmodule BookCoverGenerator do
 
     imagekit_url = Application.get_env(:litcovers, :imagekit_url)
     bucket = Application.get_env(:litcovers, :bucket)
-
-    %HTTPoison.Response{body: image_bytes} = HTTPoison.get!(url, [], options)
     filename = "#{Ecto.UUID.generate()}.png"
 
-    ExAws.S3.put_object(bucket, filename, image_bytes)
-    |> ExAws.request!()
+    case HTTPoison.get(url, [], options) do
+      {:error, reason} ->
+        {:error, reason}
 
-    image_url = Path.join(imagekit_url, filename)
-    [image_url | save_to_spaces(img_list)]
-  end
+      {:ok, %HTTPoison.Response{body: image_bytes}} ->
+        ExAws.S3.put_object(bucket, filename, image_bytes) |> ExAws.request!()
 
-  defp translate_to_english(prompt, endpoint, headers, options) do
-    if is_english?(prompt) do
-      prompt
-    else
-      IO.puts("Translating text...")
-      oai_params = %OAIParams{prompt: "Translate this to English: \n#{prompt}"}
-      body = Jason.encode!(oai_params)
-      %Response{body: res_body} = HTTPoison.post!(endpoint, body, headers, options)
-      res_body
+        image_url = Path.join(imagekit_url, filename)
+        [image_url | save_to_spaces(img_list)]
     end
   end
 
-  def is_english?(input) do
+  def translate_to_english(prompt, oai_token) do
+    if is_english?(prompt) do
+      {:ok, prompt}
+    else
+      # Set Open AI endpoint
+      endpoint = "https://api.openai.com/v1/completions"
+
+      # Set headers and options
+      headers = [Authorization: "Bearer #{oai_token}", "Content-Type": "application/json"]
+      options = [timeout: 50_000, recv_timeout: 50_000]
+
+      IO.puts("Translating text...")
+      oai_params = %OAIParams{prompt: "Translate this to English:\n#{prompt}"}
+      body = Jason.encode!(oai_params)
+
+      case HTTPoison.post(endpoint, body, headers, options) do
+        {:ok, %Response{body: res}} ->
+          translation = oai_response_text(res)
+          {:ok, translation}
+
+        {:error, reason} ->
+          {:error, reason}
+      end
+    end
+  end
+
+  def create_prompt(idea_prompt, style_prompt, :object) do
+    "#{idea_prompt}, #{style_prompt}"
+  end
+
+  defp is_english?(input) do
     input |> String.graphemes() |> List.first() |> byte_size() < 2
   end
 
@@ -120,25 +155,22 @@ defmodule BookCoverGenerator do
     res = res |> Jason.decode!()
     IO.inspect(res["output"])
 
-    case image_ready?(res["output"], num_of_tries) do
-      false ->
+    case check_image(res["output"], num_of_tries) do
+      {:error, :out_of_tries} ->
+        {:error, :out_of_tries}
+
+      {:error, :not_ready} ->
         :timer.sleep(2000)
         check_for_output(generation_url, headers, options, num_of_tries - 1)
 
-      true ->
-        res
+      {:ok, :ready} ->
+        {:ok, res}
     end
   end
 
-  defp image_ready?(image_list, num_of_tries) do
-    cond do
-      image_list == nil and num_of_tries > 0 ->
-        false
-
-      true ->
-        true
-    end
-  end
+  defp check_image(_image_list, num_of_tries) when num_of_tries <= 0, do: {:error, :out_of_tries}
+  defp check_image(nil, _num_of_tries), do: {:error, :not_ready}
+  defp check_image(_image_list, _num_of_tries), do: {:ok, :ready}
 
   defp oai_response_text(oai_res_body) do
     %{"choices" => choices_list} = Jason.decode!(oai_res_body)
@@ -146,7 +178,7 @@ defmodule BookCoverGenerator do
     text |> String.split("output:") |> List.last() |> String.trim()
   end
 
-  defp preamble(input) do
+  defp preamble(input, :object) do
     "Suggest a book cover idea, use objects and landscapes to describe the idea (avoid depicting people)
 
     Description: The speaker goes to the urologist, but is so distracted by the beauty of the therapist that he doesn't realize he's in the wrong room. He falls in love with her at first sight, but discovers that she doesn't like rich, domineering men. He decides to become a bioenergotherapist himself in order to win her over.
@@ -157,5 +189,9 @@ defmodule BookCoverGenerator do
 
     Description: #{input}
     Book cover:"
+  end
+
+  defp preamble(input, _) do
+    input
   end
 end
