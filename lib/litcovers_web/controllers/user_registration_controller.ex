@@ -20,7 +20,7 @@ defmodule LitcoversWeb.UserRegistrationController do
           )
 
         conn
-        |> put_flash(:info, "Перейдите по ссылке которую мы послали на ваш Email")
+        # |> put_flash(:info, "Перейдите по ссылке которую мы послали на ваш Email")
         |> UserAuth.log_in_user(user)
 
       {:error, %Ecto.Changeset{} = changeset} ->
