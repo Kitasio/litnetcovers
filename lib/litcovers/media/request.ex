@@ -2,6 +2,7 @@ defmodule Litcovers.Media.Request do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, only: [:author, :title, :description]}
   schema "requests" do
     field :author, :string
     field :description, :string
@@ -24,7 +25,17 @@ defmodule Litcovers.Media.Request do
   @doc false
   def changeset(request, attrs) do
     request
-    |> cast(attrs, [:author, :title, :description, :selected_cover, :style_prompt, :type, :eye_prompt, :hair_prompt, :gender])
+    |> cast(attrs, [
+      :author,
+      :title,
+      :description,
+      :selected_cover,
+      :style_prompt,
+      :type,
+      :eye_prompt,
+      :hair_prompt,
+      :gender
+    ])
     |> validate_required([:author, :title, :description])
     |> validate_length(:author, max: 30)
     |> validate_length(:title, max: 40)
