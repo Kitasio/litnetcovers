@@ -70,8 +70,7 @@ if config_env() == :prod do
   # are not using SMTP. Here is an example of the configuration:
   #
   config :litcovers, Litcovers.Mailer,
-    adapter: Swoosh.Adapters.Postmark,
-    api_key: System.get_env("POSTMARK_API_KEY")
+    adapter: Swoosh.Adapters.Local,
   #
   # For this example you need include a HTTP client required by Swoosh API client.
   # Swoosh supports Hackney and Finch out of the box:
