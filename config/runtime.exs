@@ -69,8 +69,7 @@ if config_env() == :prod do
   # Also, you may need to configure the Swoosh API client of your choice if you
   # are not using SMTP. Here is an example of the configuration:
   #
-  config :litcovers, Litcovers.Mailer,
-    adapter: Swoosh.Adapters.Local,
+  config :litcovers, Litcovers.Mailer, adapter: Swoosh.Adapters.Local
   #
   # For this example you need include a HTTP client required by Swoosh API client.
   # Swoosh supports Hackney and Finch out of the box:
