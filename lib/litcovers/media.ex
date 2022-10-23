@@ -34,8 +34,13 @@ defmodule Litcovers.Media do
   def list_user_requests(%Accounts.User{} = user) do
     Request
     |> user_requests_query(user)
+    |> order_by_date_insert()
     |> Repo.all()
     |> Repo.preload(:covers)
+  end
+
+  defp order_by_date_insert(query) do
+    from(r in query, order_by: [desc: r.inserted_at])
   end
 
   defp uncompleted_query(query) do

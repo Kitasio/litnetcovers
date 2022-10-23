@@ -52,14 +52,24 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 # Tailwind
-config :tailwind, version: "3.1.8", default: [
-  args: ~w(
+config :tailwind,
+  version: "3.1.8",
+  default: [
+    args: ~w(
     --config=tailwind.config.js
     --input=css/app.css
     --output=../priv/static/assets/app.css
   ),
-  cd: Path.expand("../assets", __DIR__)
-]
+    cd: Path.expand("../assets", __DIR__)
+  ]
+
+config :litcovers, Litcovers.Guardian,
+  issuer: "litcovers",
+  secret_key: "l87pJ/atZm0CsHkgKUQPU1MIeK4PpfP4y49cMMMz9VVG8caAugJVnMBEDOmcFHxS"
+
+config :litcovers, Litcovers.ApiAuthPipeline,
+  error_handler: Litcovers.ApiAuthErrorHandler,
+  module: Litcovers.Guardian
 
 config :litcovers,
   imagekit_url: "https://ik.imagekit.io/soulgenesis",
@@ -70,7 +80,6 @@ config :ex_aws,
   json_codec: Jason,
   access_key_id: {:system, "SPACES_ACCESS_KEY_ID"},
   secret_access_key: {:system, "SPACES_SECRET_ACCESS_KEY"}
-
 
 config :ex_aws, :s3,
   scheme: "https://",

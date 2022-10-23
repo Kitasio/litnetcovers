@@ -44,6 +44,14 @@ defmodule LitcoversWeb.UserAuth do
     conn
   end
 
+  @doc """
+  Fetch user info linked to JWT .
+  """
+  def fetch_current_user_api(conn, _opts) do
+    user = conn.private.guardian_default_resource
+    assign(conn, :current_user, user)
+  end
+
   # This function renews the session ID and erases the whole
   # session to avoid fixation attacks. If there is any data
   # in the session you may want to preserve after log in/log out,

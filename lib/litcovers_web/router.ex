@@ -17,6 +17,11 @@ defmodule LitcoversWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :api_authenticated do
+    plug Litcovers.ApiAuthPipeline
+    plug :fetch_current_user_api
+  end
+
   scope "/", LitcoversWeb do
     pipe_through :browser
 
@@ -26,6 +31,14 @@ defmodule LitcoversWeb.Router do
   # Other scopes may use custom stacks.
   scope "/api", LitcoversWeb do
     pipe_through :api
+
+    scope "/v1", V1, as: :v1 do
+      post "/sign_in", SessionController, :create
+    end
+  end
+
+  scope "/api", LitcoversWeb do
+    pipe_through [:api, :api_authenticated]
 
     scope "/v1", V1, as: :v1 do
       resources "/requests", RequestController
@@ -117,7 +130,6 @@ defmodule LitcoversWeb.Router do
   scope "/", LitcoversWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    resources "/requests", RequestController
     live "/request", RequestsLive.Index
 
     get "/users/settings", UserSettingsController, :edit

@@ -57,7 +57,8 @@ defmodule Litcovers.MixProject do
       {:sweet_xml, "~> 0.6"},
       {:httpoison, "~> 1.8"},
       {:font_metrics, "~> 0.5"},
-      {:truetype_metrics, "~> 0.6.1"}
+      {:truetype_metrics, "~> 0.6.1"},
+      {:guardian, "~> 2.0"}
     ]
   end
 

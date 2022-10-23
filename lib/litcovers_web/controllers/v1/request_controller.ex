@@ -6,7 +6,7 @@ defmodule LitcoversWeb.V1.RequestController do
 
   def index(conn, _params) do
     requests = Media.list_user_requests(conn.assigns.current_user)
-    render(conn, "index.html", requests: requests)
+    render(conn, :index, requests: requests)
   end
 
   def new(conn, _params) do
@@ -19,20 +19,19 @@ defmodule LitcoversWeb.V1.RequestController do
       Media.user_requests_amount(conn.assigns.current_user) <
           conn.assigns.current_user.max_requests ->
         case Media.create_request(conn.assigns.current_user, request_params) do
-          {:ok, _request} ->
+          {:ok, request} ->
+            request = Media.get_request_and_covers!(request.id)
+
             conn
-            |> put_flash(:info, "Request created successfully.")
-            |> redirect(to: Routes.live_path(conn, LitcoversWeb.ProfileLive.Index))
+            |> render(:show, request: request)
 
           {:error, %Ecto.Changeset{} = changeset} ->
-            placeholder = Media.get_random_placeholder() |> List.first()
-            render(conn, "new.html", changeset: changeset, placeholder: placeholder)
+            render(conn, :error, errors: changeset)
         end
 
       true ->
         conn
-        |> put_flash(:error, "Вы уже подали максимальное количество заявок")
-        |> redirect(to: Routes.live_path(conn, LitcoversWeb.ProfileLive.Index))
+        |> render(:error, errors: "max requests reached")
     end
   end
 
