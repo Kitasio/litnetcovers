@@ -39,6 +39,7 @@ defmodule LitcoversWeb.ProfileLive.ShowCover do
 
   def get_text_max_w(text, font_size, image_width, font_metrics) do
     width = FontMetrics.width(text, font_size, font_metrics)
+
     if width < image_width do
       get_text_max_w(text, font_size + 1, image_width, font_metrics)
     else
@@ -56,6 +57,7 @@ defmodule LitcoversWeb.ProfileLive.ShowCover do
     title = String.upcase(title)
 
     font_metrics = TruetypeMetrics.load!("priv/static/fonts/AttackType-Heavy.ttf")
+
     transformation =
       "tr:w-512,h-704,oi-vin.png,ow-512,oh-704:ot-#{author},ots-#{get_text_max_w(author, 12, 500, font_metrics)},ofo-top,otc-fafafa,otf-AttackType-Heavy.ttf:ot-ПРИВЕТИКУС,ots-#{get_text_max_w("ПРИВЕТИКУС", 12, 498, font_metrics)},ofo-bottom,otc-fafafa,otf-AttackType-Heavy.ttf,otp-0_0_35_0:ot-БОЛЬШАЯ ТАКАЯ АКУЛА,otc-fafafa,ofo-bottom,otf-AttackType-Heavy.ttf,ots-#{get_text_max_w("БОЛЬШАЯ ТАКАЯ АКУЛА", 12, 498, font_metrics)}"
 

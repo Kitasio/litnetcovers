@@ -27,7 +27,9 @@ defmodule LitcoversWeb.Router do
   scope "/api", LitcoversWeb do
     pipe_through :api
 
-    resources "/requests", RequestController
+    scope "/v1", V1, as: :v1 do
+      resources "/requests", RequestController
+    end
   end
 
   # Enables LiveDashboard only for development

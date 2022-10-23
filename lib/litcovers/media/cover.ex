@@ -2,6 +2,7 @@ defmodule Litcovers.Media.Cover do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, only: [:id, :cover_url]}
   schema "covers" do
     field :cover_url, :string
 

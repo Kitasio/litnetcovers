@@ -2,7 +2,7 @@ defmodule Litcovers.Media.Request do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Jason.Encoder, only: [:author, :title, :description]}
+  @derive {Jason.Encoder, only: [:id, :author, :title, :description, :completed, :covers]}
   schema "requests" do
     field :author, :string
     field :description, :string
