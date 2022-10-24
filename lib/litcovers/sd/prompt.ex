@@ -10,6 +10,8 @@ defmodule Litcovers.Sd.Prompt do
     field :style_prompt, :string
     field :type, Ecto.Enum, values: [:object, :subject, :third_person]
 
+    has_many :requests, Litcovers.Media.Request
+
     timestamps()
   end
 

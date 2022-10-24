@@ -2,7 +2,6 @@ defmodule LitcoversWeb.V1.RequestController do
   use LitcoversWeb, :controller
 
   alias Litcovers.Media
-  alias Litcovers.Media.Request
 
   def index(conn, _params) do
     requests = Media.list_user_requests(conn.assigns.current_user)
@@ -27,7 +26,7 @@ defmodule LitcoversWeb.V1.RequestController do
         case Media.create_request(conn.assigns.current_user, prompt, request_params) do
           {:ok, request} ->
             request = Media.get_request_and_covers!(request.id)
-            Task.start(fn -> Media.gen_covers(request, prompt, amount) end)
+            Task.start(fn -> Media.gen_covers(request, amount) end)
 
             conn
             |> render(:show, request: request)

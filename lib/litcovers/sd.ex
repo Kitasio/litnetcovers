@@ -18,7 +18,8 @@ defmodule Litcovers.Sd do
 
   """
   def list_prompts do
-    Repo.all(Prompt)
+    Prompt
+    |> Repo.all()
   end
 
   def list_all_where(realm, sentiment, type) do

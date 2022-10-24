@@ -100,7 +100,7 @@ defmodule Litcovers.Media do
     |> Repo.aggregate(:count)
   end
 
-  def gen_covers(request, prompt, amount) do
+  def gen_covers(request, amount) do
     with {:ok, english_desc} <-
            BookCoverGenerator.translate_to_english(
              request.description,
@@ -109,15 +109,15 @@ defmodule Litcovers.Media do
          {:ok, idea} <-
            BookCoverGenerator.description_to_cover_idea(
              english_desc,
-             prompt.type,
+             request.prompt.type,
              System.get_env("OAI_TOKEN")
            ),
          _ <- ai_update_request(request, %{cover_idea: idea}),
          prompt <-
            BookCoverGenerator.create_prompt(
              idea,
-             prompt.style_prompt,
-             prompt.type
+             request.prompt.style_prompt,
+             request.prompt.type
            ),
          {:ok, sd_res} <-
            BookCoverGenerator.diffuse(prompt, amount, System.get_env("REPLICATE_TOKEN")) do
