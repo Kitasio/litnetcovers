@@ -30,13 +30,19 @@ defmodule Litcovers.Sd do
     |> Repo.all()
   end
 
+  defp where_realm_query(query, nil), do: query
+
   defp where_realm_query(query, realm) do
     from(p in query, where: p.realm == ^realm)
   end
 
+  defp where_sentiment_query(query, nil), do: query
+
   defp where_sentiment_query(query, sentiment) do
     from(p in query, where: p.sentiment == ^sentiment)
   end
+
+  defp where_type_query(query, nil), do: query
 
   defp where_type_query(query, type) do
     from(p in query, where: p.type == ^type)
