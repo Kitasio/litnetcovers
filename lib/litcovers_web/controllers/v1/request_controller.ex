@@ -9,11 +9,6 @@ defmodule LitcoversWeb.V1.RequestController do
     render(conn, :index, requests: requests)
   end
 
-  def new(conn, _params) do
-    changeset = Media.change_request(%Request{})
-    render(conn, "new.html", changeset: changeset)
-  end
-
   def create(conn, %{"request" => request_params})
       when not is_map_key(request_params, "prompt_id"),
       do: render(conn, :error, errors: "prompt_id was not specified")
@@ -51,12 +46,6 @@ defmodule LitcoversWeb.V1.RequestController do
   def show(conn, %{"id" => id}) do
     request = Media.get_request_and_covers!(id)
     render(conn, :show, request: request)
-  end
-
-  def edit(conn, %{"id" => id}) do
-    request = Media.get_request!(id)
-    changeset = Media.change_request(request)
-    render(conn, "edit.html", request: request, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "request" => request_params}) do

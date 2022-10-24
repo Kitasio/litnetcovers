@@ -3,17 +3,17 @@ defmodule Litcovers.Media.Request do
   import Ecto.Changeset
 
   @derive {Jason.Encoder,
-           only: [:id, :author, :title, :description, :completed, :covers, :prompt]}
+           only: [:id, :author, :title, :description, :completed, :covers, :cover_idea]}
   schema "requests" do
     field :author, :string
     field :description, :string
     field :title, :string
     field :completed, :boolean
     field :selected_cover, :integer
+    field :cover_idea, :string
 
     belongs_to :user, Litcovers.Accounts.User
     has_many :covers, Litcovers.Media.Cover
-    has_one :prompt, Litcovers.Sd.Prompt
 
     timestamps()
   end
@@ -40,6 +40,6 @@ defmodule Litcovers.Media.Request do
 
   def ai_changeset(request, attrs) do
     request
-    |> cast(attrs, [:completed])
+    |> cast(attrs, [:completed, :cover_idea])
   end
 end

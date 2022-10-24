@@ -42,6 +42,7 @@ defmodule LitcoversWeb.Router do
 
     scope "/v1", V1, as: :v1 do
       resources "/requests", RequestController
+      get "/prompts", PromptController, :index
     end
   end
 

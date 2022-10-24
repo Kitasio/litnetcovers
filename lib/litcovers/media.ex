@@ -112,7 +112,7 @@ defmodule Litcovers.Media do
              prompt.type,
              System.get_env("OAI_TOKEN")
            ),
-         _ <- Sd.ai_update_prompt(prompt, %{oai_idea: idea}),
+         _ <- ai_update_request(request, %{cover_idea: idea}),
          prompt <-
            BookCoverGenerator.create_prompt(
              idea,
