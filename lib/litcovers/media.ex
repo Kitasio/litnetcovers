@@ -8,6 +8,7 @@ defmodule Litcovers.Media do
 
   alias Litcovers.Media.Request
   alias Litcovers.Accounts
+  alias Litcovers.Sd
 
   @doc """
   Returns the list of requests.
@@ -70,7 +71,7 @@ defmodule Litcovers.Media do
   def get_request_and_covers!(id) do
     Request
     |> Repo.get!(id)
-    |> Repo.preload([:user, :covers])
+    |> Repo.preload([:user, :covers, :prompt])
   end
 
   @doc """
@@ -85,10 +86,11 @@ defmodule Litcovers.Media do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_request(%Accounts.User{} = user, attrs \\ %{}) do
+  def create_request(%Accounts.User{} = user, %Sd.Prompt{} = prompt, attrs \\ %{}) do
     %Request{}
     |> Request.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:user, user)
+    |> Ecto.Changeset.put_assoc(:prompt, prompt)
     |> Repo.insert()
   end
 
@@ -98,7 +100,7 @@ defmodule Litcovers.Media do
     |> Repo.aggregate(:count)
   end
 
-  def gen_covers(request) do
+  def gen_covers(request, prompt, amount) do
     with {:ok, english_desc} <-
            BookCoverGenerator.translate_to_english(
              request.description,
@@ -107,14 +109,18 @@ defmodule Litcovers.Media do
          {:ok, idea} <-
            BookCoverGenerator.description_to_cover_idea(
              english_desc,
-             request.type,
+             prompt.type,
              System.get_env("OAI_TOKEN")
            ),
-         # change final_prompt to idea
-         _ <- ai_update_request(request, %{final_prompt: idea}),
-         prompt <- BookCoverGenerator.create_prompt(idea, request.style_prompt, request.type),
+         _ <- Sd.ai_update_prompt(prompt, %{oai_idea: idea}),
+         prompt <-
+           BookCoverGenerator.create_prompt(
+             idea,
+             prompt.style_prompt,
+             prompt.type
+           ),
          {:ok, sd_res} <-
-           BookCoverGenerator.diffuse(prompt, 4, System.get_env("REPLICATE_TOKEN")) do
+           BookCoverGenerator.diffuse(prompt, amount, System.get_env("REPLICATE_TOKEN")) do
       %{"output" => image_list} = sd_res
 
       case BookCoverGenerator.save_to_spaces(image_list) do

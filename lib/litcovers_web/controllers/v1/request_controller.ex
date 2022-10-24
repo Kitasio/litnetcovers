@@ -14,19 +14,32 @@ defmodule LitcoversWeb.V1.RequestController do
     render(conn, "new.html", changeset: changeset)
   end
 
+  def create(conn, %{"request" => request_params})
+      when not is_map_key(request_params, "prompt_id"),
+      do: render(conn, :error, errors: "prompt_id was not specified")
+
+  def create(conn, %{"request" => request_params})
+      when not is_map_key(request_params, "amount"),
+      do: render(conn, :error, errors: "amount was not specified")
+
   def create(conn, %{"request" => request_params}) do
+    %{"prompt_id" => prompt_id, "amount" => amount} = request_params
+    prompt = Litcovers.Sd.get_prompt!(prompt_id)
+
     cond do
       Media.user_requests_amount(conn.assigns.current_user) <
           conn.assigns.current_user.max_requests ->
-        case Media.create_request(conn.assigns.current_user, request_params) do
+        case Media.create_request(conn.assigns.current_user, prompt, request_params) do
           {:ok, request} ->
             request = Media.get_request_and_covers!(request.id)
+            Task.start(fn -> Media.gen_covers(request, prompt, amount) end)
 
             conn
             |> render(:show, request: request)
 
           {:error, %Ecto.Changeset{} = changeset} ->
-            render(conn, :error, errors: changeset)
+            conn
+            |> render(:error, errors: changeset)
         end
 
       true ->

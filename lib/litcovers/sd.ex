@@ -93,6 +93,12 @@ defmodule Litcovers.Sd do
     |> Repo.update()
   end
 
+  def ai_update_prompt(%Prompt{} = prompt, attrs) do
+    prompt
+    |> Prompt.ai_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a prompt.
 

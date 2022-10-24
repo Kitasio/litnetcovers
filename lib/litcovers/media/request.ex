@@ -2,22 +2,18 @@ defmodule Litcovers.Media.Request do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Jason.Encoder, only: [:id, :author, :title, :description, :completed, :covers]}
+  @derive {Jason.Encoder,
+           only: [:id, :author, :title, :description, :completed, :covers, :prompt]}
   schema "requests" do
     field :author, :string
     field :description, :string
     field :title, :string
     field :completed, :boolean
     field :selected_cover, :integer
-    field :style_prompt, :string
-    field :final_prompt, :string
-    field :type, Ecto.Enum, values: [:object, :subject, :third_person]
-    field :eye_prompt, :string
-    field :hair_prompt, :string
-    field :gender, Ecto.Enum, values: [:male, :female]
 
     belongs_to :user, Litcovers.Accounts.User
     has_many :covers, Litcovers.Media.Cover
+    has_one :prompt, Litcovers.Sd.Prompt
 
     timestamps()
   end
@@ -29,12 +25,7 @@ defmodule Litcovers.Media.Request do
       :author,
       :title,
       :description,
-      :selected_cover,
-      :style_prompt,
-      :type,
-      :eye_prompt,
-      :hair_prompt,
-      :gender
+      :selected_cover
     ])
     |> validate_required([:author, :title, :description])
     |> validate_length(:author, max: 30)
@@ -49,6 +40,6 @@ defmodule Litcovers.Media.Request do
 
   def ai_changeset(request, attrs) do
     request
-    |> cast(attrs, [:completed, :final_prompt])
+    |> cast(attrs, [:completed])
   end
 end
