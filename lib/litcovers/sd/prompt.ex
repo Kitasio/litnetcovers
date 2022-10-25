@@ -2,7 +2,7 @@ defmodule Litcovers.Sd.Prompt do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Jason.Encoder, only: [:name, :realm, :sentiment, :style_prompt, :type]}
+  @derive {Jason.Encoder, only: [:id, :name, :realm, :sentiment, :type]}
   schema "prompts" do
     field :name, :string
     field :realm, Ecto.Enum, values: [:fantasy, :realism, :futurism]
