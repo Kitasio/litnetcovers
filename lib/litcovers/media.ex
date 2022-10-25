@@ -71,7 +71,7 @@ defmodule Litcovers.Media do
   def get_request_and_covers!(id) do
     Request
     |> Repo.get!(id)
-    |> Repo.preload([:user, :covers, :prompt])
+    |> Repo.preload([:user, :prompt, covers: [:overlays]])
   end
 
   @doc """
@@ -130,7 +130,18 @@ defmodule Litcovers.Media do
         img_urls ->
           for url <- img_urls do
             image_params = %{"cover_url" => url}
-            create_cover(request, image_params)
+            {:ok, cover} = create_cover(request, image_params)
+
+            urls =
+              BookCoverGenerator.put_text_on_images(
+                cover.cover_url,
+                request.author,
+                request.title
+              )
+
+            for url <- urls do
+              create_overlay(cover, %{url: url})
+            end
           end
 
           request = ai_update_request(request, %{completed: true})
@@ -331,7 +342,9 @@ defmodule Litcovers.Media do
 
   """
   def list_covers do
-    Repo.all(Cover)
+    %Cover{}
+    |> Repo.preload([:overlays])
+    |> Repo.all()
   end
 
   @doc """
@@ -349,6 +362,16 @@ defmodule Litcovers.Media do
 
   """
   def get_cover!(id), do: Repo.get!(Cover, id)
+
+  def get_cover(id) do
+    case Repo.get(Cover, id) |> Repo.preload(:overlays) do
+      nil ->
+        {:error, :not_found}
+
+      cover ->
+        {:ok, cover}
+    end
+  end
 
   @doc """
   Creates a cover.
@@ -414,5 +437,122 @@ defmodule Litcovers.Media do
   """
   def change_cover(%Cover{} = cover, attrs \\ %{}) do
     Cover.changeset(cover, attrs)
+  end
+
+  alias Litcovers.Media.Overlay
+
+  @doc """
+  Returns the list of overlays.
+
+  ## Examples
+
+      iex> list_overlays()
+      [%Overlay{}, ...]
+
+  """
+  def list_overlays do
+    Repo.all(Overlay)
+  end
+
+  @doc """
+  Gets a single overlay.
+
+  Raises `Ecto.NoResultsError` if the Overlay does not exist.
+
+  ## Examples
+
+      iex> get_overlay!(123)
+      %Overlay{}
+
+      iex> get_overlay!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_overlay!(id), do: Repo.get!(Overlay, id)
+
+  def get_overlay(id) do
+    case Repo.get(Overlay, id) do
+      nil ->
+        {:error, :not_found}
+
+      overlay ->
+        {:ok, overlay}
+    end
+  end
+
+  def get_overlay_of_cover(cover) do
+    Overlay
+    |> where_cover(cover)
+    |> Repo.all()
+  end
+
+  defp where_cover(query, cover) do
+    from(c in query, where: c.cover_id == ^cover.id)
+  end
+
+  @doc """
+  Creates a overlay.
+
+  ## Examples
+
+      iex> create_overlay(%{field: value})
+      {:ok, %Overlay{}}
+
+      iex> create_overlay(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_overlay(%Cover{} = cover, attrs \\ %{}) do
+    %Overlay{}
+    |> Overlay.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:cover, cover)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a overlay.
+
+  ## Examples
+
+      iex> update_overlay(overlay, %{field: new_value})
+      {:ok, %Overlay{}}
+
+      iex> update_overlay(overlay, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_overlay(%Overlay{} = overlay, attrs) do
+    overlay
+    |> Overlay.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a overlay.
+
+  ## Examples
+
+      iex> delete_overlay(overlay)
+      {:ok, %Overlay{}}
+
+      iex> delete_overlay(overlay)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_overlay(%Overlay{} = overlay) do
+    Repo.delete(overlay)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking overlay changes.
+
+  ## Examples
+
+      iex> change_overlay(overlay)
+      %Ecto.Changeset{data: %Overlay{}}
+
+  """
+  def change_overlay(%Overlay{} = overlay, attrs \\ %{}) do
+    Overlay.changeset(overlay, attrs)
   end
 end

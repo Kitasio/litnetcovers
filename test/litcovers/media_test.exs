@@ -182,4 +182,58 @@ defmodule Litcovers.MediaTest do
       assert %Ecto.Changeset{} = Media.change_cover(cover)
     end
   end
+
+  describe "overlays" do
+    alias Litcovers.Media.Overlay
+
+    import Litcovers.MediaFixtures
+
+    @invalid_attrs %{url: nil}
+
+    test "list_overlays/0 returns all overlays" do
+      overlay = overlay_fixture()
+      assert Media.list_overlays() == [overlay]
+    end
+
+    test "get_overlay!/1 returns the overlay with given id" do
+      overlay = overlay_fixture()
+      assert Media.get_overlay!(overlay.id) == overlay
+    end
+
+    test "create_overlay/1 with valid data creates a overlay" do
+      valid_attrs = %{url: "some url"}
+
+      assert {:ok, %Overlay{} = overlay} = Media.create_overlay(valid_attrs)
+      assert overlay.url == "some url"
+    end
+
+    test "create_overlay/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Media.create_overlay(@invalid_attrs)
+    end
+
+    test "update_overlay/2 with valid data updates the overlay" do
+      overlay = overlay_fixture()
+      update_attrs = %{url: "some updated url"}
+
+      assert {:ok, %Overlay{} = overlay} = Media.update_overlay(overlay, update_attrs)
+      assert overlay.url == "some updated url"
+    end
+
+    test "update_overlay/2 with invalid data returns error changeset" do
+      overlay = overlay_fixture()
+      assert {:error, %Ecto.Changeset{}} = Media.update_overlay(overlay, @invalid_attrs)
+      assert overlay == Media.get_overlay!(overlay.id)
+    end
+
+    test "delete_overlay/1 deletes the overlay" do
+      overlay = overlay_fixture()
+      assert {:ok, %Overlay{}} = Media.delete_overlay(overlay)
+      assert_raise Ecto.NoResultsError, fn -> Media.get_overlay!(overlay.id) end
+    end
+
+    test "change_overlay/1 returns a overlay changeset" do
+      overlay = overlay_fixture()
+      assert %Ecto.Changeset{} = Media.change_overlay(overlay)
+    end
+  end
 end

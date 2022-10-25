@@ -54,4 +54,18 @@ defmodule Litcovers.MediaFixtures do
 
     cover
   end
+
+  @doc """
+  Generate a overlay.
+  """
+  def overlay_fixture(attrs \\ %{}) do
+    {:ok, overlay} =
+      attrs
+      |> Enum.into(%{
+        url: "some url"
+      })
+      |> Litcovers.Media.create_overlay()
+
+    overlay
+  end
 end

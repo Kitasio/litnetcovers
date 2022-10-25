@@ -194,4 +194,44 @@ defmodule BookCoverGenerator do
   defp preamble(input, _) do
     input
   end
+
+  def insert_author_title(link, author, title) do
+    uri = link |> URI.parse()
+    %URI{host: host, path: path} = uri
+
+    {filename, list} = path |> String.split("/") |> List.pop_at(-1)
+    bucket = list |> List.last()
+
+    title = String.upcase(title)
+
+    font_metrics = TruetypeMetrics.load!("priv/static/fonts/AttackType-Heavy.ttf")
+
+    transformation =
+      "tr:w-512,h-704,oi-vin.png,ow-512,oh-704:ot-#{author},ots-#{get_text_max_w(author, 12, 500, font_metrics)},ofo-top,otc-fafafa,otf-AttackType-Heavy.ttf:ot-#{title},ots-#{get_text_max_w(title, 12, 498, font_metrics)},ofo-bottom,otc-fafafa,otf-AttackType-Heavy.ttf"
+
+    case host do
+      "ik.imagekit.io" ->
+        Path.join(["https://", host, bucket, transformation, filename])
+
+      _ ->
+        link
+    end
+  end
+
+  def get_text_max_w(text, font_size, image_width, font_metrics) do
+    width = FontMetrics.width(text, font_size, font_metrics)
+
+    if width < image_width do
+      get_text_max_w(text, font_size + 1, image_width, font_metrics)
+    else
+      trunc(font_size)
+    end
+  end
+
+  def put_text_on_images(img_url, author, title) do
+    [
+      img_url,
+      insert_author_title(img_url, author, title)
+    ]
+  end
 end

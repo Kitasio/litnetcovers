@@ -41,8 +41,10 @@ defmodule LitcoversWeb.Router do
     pipe_through [:api, :api_authenticated]
 
     scope "/v1", V1, as: :v1 do
+      resources "/overlays", OverlayController, except: [:new, :edit]
       resources "/requests", RequestController
       post "/prompts", PromptController, :index
+      get "/covers/:id", CoverController, :show
     end
   end
 

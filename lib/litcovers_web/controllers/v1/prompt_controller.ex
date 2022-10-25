@@ -17,8 +17,6 @@ defmodule LitcoversWeb.V1.PromptController do
 
   defp get_enum_value(value, field) do
     mappings = Prompt |> Ecto.Enum.mappings(field)
-    IO.inspect(mappings)
-    IO.inspect(value |> String.to_atom())
 
     case Enum.find(mappings, fn x -> x == {String.to_atom(value), value} end) do
       nil ->
