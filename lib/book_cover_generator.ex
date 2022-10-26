@@ -18,7 +18,7 @@ defmodule BookCoverGenerator do
     prompt = description |> preamble(cover_type)
 
     # Prepare params for Open AI
-    oai_params = %OAIParams{prompt: prompt}
+    oai_params = %OAIParams{prompt: prompt, temperature: 0}
     body = Jason.encode!(oai_params)
 
     Logger.info("Generatig idea with Open AI")
@@ -172,20 +172,27 @@ defmodule BookCoverGenerator do
   defp check_image(nil, _num_of_tries), do: {:error, :not_ready}
   defp check_image(_image_list, _num_of_tries), do: {:ok, :ready}
 
-  defp oai_response_text(oai_res_body) do
+  def oai_response_text(oai_res_body) do
     %{"choices" => choices_list} = Jason.decode!(oai_res_body)
     [%{"text" => text} | _] = choices_list
-    text |> String.split("output:") |> List.last() |> String.trim()
+
+    text
+    |> String.split("output:")
+    |> List.last()
+    |> String.trim()
+    |> String.split("\n")
+    |> List.first()
+    |> String.split(",")
   end
 
   defp preamble(input, :object) do
-    "Suggest a book cover idea, use objects and landscapes to describe the idea (avoid depicting people)
+    "Suggest a 4 book cover ideas, use objects and landscapes to describe the idea (avoid depicting people)
 
     Description: The speaker goes to the urologist, but is so distracted by the beauty of the therapist that he doesn't realize he's in the wrong room. He falls in love with her at first sight, but discovers that she doesn't like rich, domineering men. He decides to become a bioenergotherapist himself in order to win her over.
-    Book cover: A red high heel shoe
+    Book cover ideas: A red high heel shoe, Doctors chair, An office door, Red lipstick
 
     Description: Katya is a simple girl from a dysfunctional family who falls in love with a wealthy and powerful man. However, he is married and she has principles, so she is torn about what to do. The boss is not willing to let her go and she is not willing to submit, so the situation is fraught with tension.
-    Book cover: A tie and wedding ring
+    Book cover ideas: A tie and wedding ring, Cash falling from the sky, A tight corset, A golden ring with a diamond
 
     Description: #{input}
     Book cover:"
