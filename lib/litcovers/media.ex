@@ -37,7 +37,7 @@ defmodule Litcovers.Media do
     |> user_requests_query(user)
     |> order_by_date_insert()
     |> Repo.all()
-    |> Repo.preload([:user, :prompt, :ideas, covers: [:overlays]])
+    |> Repo.preload([:user, :prompt, :ideas, :title_splits, covers: [:overlays]])
   end
 
   defp order_by_date_insert(query) do
@@ -71,7 +71,7 @@ defmodule Litcovers.Media do
   def get_request_and_covers!(id) do
     Request
     |> Repo.get!(id)
-    |> Repo.preload([:user, :prompt, :ideas, covers: [:overlays]])
+    |> Repo.preload([:user, :prompt, :ideas, :title_splits, covers: [:overlays]])
   end
 
   @doc """
@@ -106,6 +106,12 @@ defmodule Litcovers.Media do
     end
   end
 
+  def save_splits(splits_list, request) do
+    for split <- splits_list do
+      create_title_split(request, %{split: split |> String.trim()})
+    end
+  end
+
   def gen_covers(request, amount) do
     with {:ok, english_desc} <-
            BookCoverGenerator.translate_to_english(
@@ -119,6 +125,8 @@ defmodule Litcovers.Media do
              System.get_env("OAI_TOKEN")
            ),
          _ <- save_ideas(ideas_list, request),
+         {:ok, splits} <- BookCoverGenerator.title_splits_list(request.title),
+         _ <- save_splits(splits, request),
          prompt <-
            BookCoverGenerator.create_prompt(
              ideas_list |> Enum.random(),
@@ -657,5 +665,102 @@ defmodule Litcovers.Media do
   """
   def change_idea(%Idea{} = idea, attrs \\ %{}) do
     Idea.changeset(idea, attrs)
+  end
+
+  alias Litcovers.Media.TitleSplit
+
+  @doc """
+  Returns the list of title_splits.
+
+  ## Examples
+
+      iex> list_title_splits()
+      [%TitleSplit{}, ...]
+
+  """
+  def list_title_splits do
+    Repo.all(TitleSplit)
+  end
+
+  @doc """
+  Gets a single title_split.
+
+  Raises `Ecto.NoResultsError` if the Title split does not exist.
+
+  ## Examples
+
+      iex> get_title_split!(123)
+      %TitleSplit{}
+
+      iex> get_title_split!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_title_split!(id), do: Repo.get!(TitleSplit, id)
+
+  @doc """
+  Creates a title_split.
+
+  ## Examples
+
+      iex> create_title_split(%{field: value})
+      {:ok, %TitleSplit{}}
+
+      iex> create_title_split(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_title_split(%Request{} = request, attrs \\ %{}) do
+    %TitleSplit{}
+    |> TitleSplit.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:request, request)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a title_split.
+
+  ## Examples
+
+      iex> update_title_split(title_split, %{field: new_value})
+      {:ok, %TitleSplit{}}
+
+      iex> update_title_split(title_split, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_title_split(%TitleSplit{} = title_split, attrs) do
+    title_split
+    |> TitleSplit.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a title_split.
+
+  ## Examples
+
+      iex> delete_title_split(title_split)
+      {:ok, %TitleSplit{}}
+
+      iex> delete_title_split(title_split)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_title_split(%TitleSplit{} = title_split) do
+    Repo.delete(title_split)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking title_split changes.
+
+  ## Examples
+
+      iex> change_title_split(title_split)
+      %Ecto.Changeset{data: %TitleSplit{}}
+
+  """
+  def change_title_split(%TitleSplit{} = title_split, attrs \\ %{}) do
+    TitleSplit.changeset(title_split, attrs)
   end
 end

@@ -11,6 +11,7 @@ defmodule Litcovers.Media.Request do
              :description,
              :prompt,
              :ideas,
+             :title_splits,
              :covers,
              :user
            ]}
@@ -25,6 +26,7 @@ defmodule Litcovers.Media.Request do
     belongs_to :prompt, Litcovers.Sd.Prompt
     has_many :covers, Litcovers.Media.Cover
     has_many :ideas, Litcovers.Media.Idea
+    has_many :title_splits, Litcovers.Media.TitleSplit
 
     timestamps()
   end

@@ -82,4 +82,18 @@ defmodule Litcovers.MediaFixtures do
 
     idea
   end
+
+  @doc """
+  Generate a title_split.
+  """
+  def title_split_fixture(attrs \\ %{}) do
+    {:ok, title_split} =
+      attrs
+      |> Enum.into(%{
+        split: "some split"
+      })
+      |> Litcovers.Media.create_title_split()
+
+    title_split
+  end
 end

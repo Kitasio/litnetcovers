@@ -172,7 +172,7 @@ defmodule BookCoverGenerator do
   defp check_image(nil, _num_of_tries), do: {:error, :not_ready}
   defp check_image(_image_list, _num_of_tries), do: {:ok, :ready}
 
-  def oai_response_text(oai_res_body) do
+  defp oai_response_text(oai_res_body) do
     %{"choices" => choices_list} = Jason.decode!(oai_res_body)
     [%{"text" => text} | _] = choices_list
 
@@ -243,5 +243,100 @@ defmodule BookCoverGenerator do
       img_url,
       insert_author_title(img_url, author, title)
     ]
+  end
+
+  defp whitespaces_num(str) do
+    str |> String.graphemes() |> Enum.count(&(&1 == " "))
+  end
+
+  def title_splits_list(title) do
+    title = String.replace(title, ",", "")
+
+    cond do
+      whitespaces_num(title) == 0 ->
+        {:ok, [title]}
+
+      whitespaces_num(title) == 1 ->
+        {:ok, [title, title |> String.split(" ") |> Enum.join("\n")]}
+
+      true ->
+        case split_title(title, System.get_env("OAI_TOKEN")) do
+          {:ok, splits} ->
+            {:ok, splits}
+
+          {:error, :oai_failed} ->
+            {:error, :oai_failed}
+        end
+    end
+  end
+
+  # Returns a list of title splits
+  def split_title(_title, nil),
+    do: raise("OAI_TOKEN was not set\nVisit https://beta.openai.com/account/api-keys to get it")
+
+  def split_title(title, oai_token) do
+    # Removing commas
+    title = String.replace(title, ",", "")
+
+    # Set Open AI endpoint
+    endpoint = "https://api.openai.com/v1/completions"
+
+    # Set headers and options
+    headers = [Authorization: "Bearer #{oai_token}", "Content-Type": "application/json"]
+    options = [timeout: 50_000, recv_timeout: 50_000]
+
+    # Append title to preamble
+    prompt = title_split_preamble(title)
+
+    # Prepare params for Open AI
+    oai_params = %OAIParams{prompt: prompt, temperature: 0.3}
+    body = Jason.encode!(oai_params)
+
+    Logger.info("Splitting the title with Open AI")
+    # Send the post request
+    case HTTPoison.post(endpoint, body, headers, options) do
+      {:ok, %Response{body: res_body}} ->
+        splits = oai_split_res(res_body)
+        {:ok, splits}
+
+      {:error, reason} ->
+        Logger.error("Open AI split title failed, reason: #{reason}")
+        {:error, :oai_failed}
+    end
+  end
+
+  defp oai_split_res(oai_res_body) do
+    %{"choices" => choices_list} = Jason.decode!(oai_res_body)
+    [%{"text" => text} | _] = choices_list
+
+    text
+    |> String.split("output:")
+    |> List.last()
+    |> String.trim()
+    |> String.split(",")
+  end
+
+  defp title_split_preamble(title) do
+    "break the book title if it makes sense:
+
+    example: Harry Potter and the Goblet of Fire
+
+    output: Harry Potter\nand the Goblet of Fire
+
+    example: Нищенка в королевской академии магии
+
+    output: Нищенка\nв королевской академии магии, Нищенка\nв королевской академии\nмагии
+
+    example: Animal farm
+
+    output: Animal farm, Animal\nfarm
+
+    example: История Бессмертного-1 Поврежденный мир
+
+    output: История Бессмертного-1\nПоврежденный мир, История Бессмертного-1\nПоврежденный\nмир, История\nБессмертного-1\nПоврежденный мир
+
+    #{title}
+
+    output:"
   end
 end

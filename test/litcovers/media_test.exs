@@ -290,4 +290,58 @@ defmodule Litcovers.MediaTest do
       assert %Ecto.Changeset{} = Media.change_idea(idea)
     end
   end
+
+  describe "title_splits" do
+    alias Litcovers.Media.TitleSplit
+
+    import Litcovers.MediaFixtures
+
+    @invalid_attrs %{split: nil}
+
+    test "list_title_splits/0 returns all title_splits" do
+      title_split = title_split_fixture()
+      assert Media.list_title_splits() == [title_split]
+    end
+
+    test "get_title_split!/1 returns the title_split with given id" do
+      title_split = title_split_fixture()
+      assert Media.get_title_split!(title_split.id) == title_split
+    end
+
+    test "create_title_split/1 with valid data creates a title_split" do
+      valid_attrs = %{split: "some split"}
+
+      assert {:ok, %TitleSplit{} = title_split} = Media.create_title_split(valid_attrs)
+      assert title_split.split == "some split"
+    end
+
+    test "create_title_split/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Media.create_title_split(@invalid_attrs)
+    end
+
+    test "update_title_split/2 with valid data updates the title_split" do
+      title_split = title_split_fixture()
+      update_attrs = %{split: "some updated split"}
+
+      assert {:ok, %TitleSplit{} = title_split} = Media.update_title_split(title_split, update_attrs)
+      assert title_split.split == "some updated split"
+    end
+
+    test "update_title_split/2 with invalid data returns error changeset" do
+      title_split = title_split_fixture()
+      assert {:error, %Ecto.Changeset{}} = Media.update_title_split(title_split, @invalid_attrs)
+      assert title_split == Media.get_title_split!(title_split.id)
+    end
+
+    test "delete_title_split/1 deletes the title_split" do
+      title_split = title_split_fixture()
+      assert {:ok, %TitleSplit{}} = Media.delete_title_split(title_split)
+      assert_raise Ecto.NoResultsError, fn -> Media.get_title_split!(title_split.id) end
+    end
+
+    test "change_title_split/1 returns a title_split changeset" do
+      title_split = title_split_fixture()
+      assert %Ecto.Changeset{} = Media.change_title_split(title_split)
+    end
+  end
 end
