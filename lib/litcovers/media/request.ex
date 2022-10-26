@@ -10,7 +10,6 @@ defmodule Litcovers.Media.Request do
              :description,
              :completed,
              :covers,
-             :cover_idea,
              :user,
              :prompt
            ]}
@@ -20,7 +19,6 @@ defmodule Litcovers.Media.Request do
     field :title, :string
     field :completed, :boolean
     field :selected_cover, :integer
-    field :cover_idea, :string
 
     belongs_to :user, Litcovers.Accounts.User
     belongs_to :prompt, Litcovers.Sd.Prompt
@@ -51,6 +49,6 @@ defmodule Litcovers.Media.Request do
 
   def ai_changeset(request, attrs) do
     request
-    |> cast(attrs, [:completed, :cover_idea])
+    |> cast(attrs, [:completed])
   end
 end

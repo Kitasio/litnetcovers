@@ -37,7 +37,7 @@ defmodule Litcovers.Media do
     |> user_requests_query(user)
     |> order_by_date_insert()
     |> Repo.all()
-    |> Repo.preload(:covers)
+    |> Repo.preload([:user, :prompt, covers: [:overlays]])
   end
 
   defp order_by_date_insert(query) do
