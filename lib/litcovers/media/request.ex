@@ -5,13 +5,14 @@ defmodule Litcovers.Media.Request do
   @derive {Jason.Encoder,
            only: [
              :id,
+             :completed,
              :author,
              :title,
              :description,
-             :completed,
+             :prompt,
+             :ideas,
              :covers,
-             :user,
-             :prompt
+             :user
            ]}
   schema "requests" do
     field :author, :string
@@ -23,6 +24,7 @@ defmodule Litcovers.Media.Request do
     belongs_to :user, Litcovers.Accounts.User
     belongs_to :prompt, Litcovers.Sd.Prompt
     has_many :covers, Litcovers.Media.Cover
+    has_many :ideas, Litcovers.Media.Idea
 
     timestamps()
   end

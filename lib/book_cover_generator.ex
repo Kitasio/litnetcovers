@@ -25,8 +25,8 @@ defmodule BookCoverGenerator do
     # Send the post request
     case HTTPoison.post(endpoint, body, headers, options) do
       {:ok, %Response{body: res_body}} ->
-        idea = oai_response_text(res_body)
-        {:ok, idea}
+        ideas = oai_response_text(res_body)
+        {:ok, ideas}
 
       {:error, reason} ->
         Logger.error("Open AI gen idea failed, reason: #{reason}")
@@ -186,13 +186,16 @@ defmodule BookCoverGenerator do
   end
 
   defp preamble(input, :object) do
-    "Suggest a 4 book cover ideas, use objects and landscapes to describe the idea (avoid depicting people)
+    "Suggest a 4 book cover ideas, use objects and landscapes to describe the idea (avoid depicting people and animals)
 
-    Description: The speaker goes to the urologist, but is so distracted by the beauty of the therapist that he doesn't realize he's in the wrong room. He falls in love with her at first sight, but discovers that she doesn't like rich, domineering men. He decides to become a bioenergotherapist himself in order to win her over.
-    Book cover ideas: A red high heel shoe, Doctors chair, An office door, Red lipstick
+    Description: Old scientist with crazy sunglasses creates a time machine in a form of a car and travels back in time with his student, they try to change the future
+    Book cover ideas: A synthwave car from 70's, Distorted watch, A map of a future city, An old vintage lightbulb
 
     Description: Katya is a simple girl from a dysfunctional family who falls in love with a wealthy and powerful man. However, he is married and she has principles, so she is torn about what to do. The boss is not willing to let her go and she is not willing to submit, so the situation is fraught with tension.
-    Book cover ideas: A tie and wedding ring, Cash falling from the sky, A tight corset, A golden ring with a diamond
+    Book cover ideas: A tie and wedding ring, Cash falling from the sky in a big city, A tight corset, A golden ring with a diamond
+
+    Description: The story of a vampire king from Transylvania, he ruled his kingdom for days, and drank people's blood at night
+    Book cover ideas: A castle in the mountains, A throne made of bones, A goblet of blood, A cape blowing in the wind
 
     Description: #{input}
     Book cover:"
