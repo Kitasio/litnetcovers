@@ -311,7 +311,7 @@ defmodule BookCoverGenerator do
 
   def create_title_overlay([split | title_splits], font, pb) do
     %{name: font_name, metrics: font_metrics} = font
-    split = String.upcase(split)
+    split = String.upcase(split) |> String.trim()
     size = get_text_max_w(split, 12, 450, font_metrics)
 
     overlay = "ot-#{split},ots-#{size},ofo-bottom,otc-fafafa,otp-0_0_#{pb}_0,otf-#{font_name}.ttf"
