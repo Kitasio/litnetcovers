@@ -9,7 +9,9 @@ defmodule LitcoversWeb.V1.RequestController do
   end
 
   defp get_female_or(nil), do: "female"
-  defp get_female_or(value), do: value
+  defp get_female_or("female"), do: "female"
+  defp get_female_or("male"), do: "male"
+  defp get_female_or(_any), do: "female"
 
   def create(conn, %{"request" => request_params})
       when not is_map_key(request_params, "prompt_id"),
