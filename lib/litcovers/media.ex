@@ -119,14 +119,14 @@ defmodule Litcovers.Media do
     [split | get_splits(title_splits)]
   end
 
-  def gen_more(request, gender) do
+  def gen_more(request) do
     %{idea: idea} = request.ideas |> Enum.random()
 
     with prompt <-
            BookCoverGenerator.create_prompt(
              idea,
              request.prompt.style_prompt,
-             gender,
+             request.character_gender,
              request.prompt.type
            ),
          {:ok, sd_res} <- BookCoverGenerator.diffuse(prompt, 1, System.get_env("REPLICATE_TOKEN")) do
@@ -157,7 +157,7 @@ defmodule Litcovers.Media do
     end
   end
 
-  def gen_covers(request, gender) do
+  def gen_covers(request) do
     with {:ok, english_desc} <-
            BookCoverGenerator.translate_to_english(
              request.description,
@@ -167,7 +167,7 @@ defmodule Litcovers.Media do
            BookCoverGenerator.description_to_cover_idea(
              english_desc,
              request.prompt.type,
-             gender,
+             request.character_gender,
              System.get_env("OAI_TOKEN")
            ),
          _ <- save_ideas(ideas_list, request),
@@ -177,7 +177,7 @@ defmodule Litcovers.Media do
            BookCoverGenerator.create_prompt(
              ideas_list |> Enum.random(),
              request.prompt.style_prompt,
-             gender,
+             request.character_gender,
              request.prompt.type
            ),
          {:ok, sd_res} <-

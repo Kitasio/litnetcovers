@@ -13,6 +13,7 @@ defmodule Litcovers.Media.Request do
              :ideas,
              :title_splits,
              :covers,
+             :character_gender,
              :user
            ]}
   schema "requests" do
@@ -21,6 +22,7 @@ defmodule Litcovers.Media.Request do
     field :title, :string
     field :completed, :boolean
     field :selected_cover, :integer
+    field :character_gender, :string
 
     belongs_to :user, Litcovers.Accounts.User
     belongs_to :prompt, Litcovers.Sd.Prompt
@@ -38,7 +40,8 @@ defmodule Litcovers.Media.Request do
       :author,
       :title,
       :description,
-      :selected_cover
+      :selected_cover,
+      :character_gender
     ])
     |> validate_required([:author, :title, :description])
     |> validate_length(:author, max: 30)

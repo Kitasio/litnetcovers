@@ -20,7 +20,6 @@ defmodule LitcoversWeb.V1.RequestController do
   def create(conn, %{"request" => request_params}) do
     %{"prompt_id" => prompt_id} = request_params
     prompt = Litcovers.Sd.get_prompt!(prompt_id)
-    gender = Map.get(request_params, "gender") |> get_female_or()
 
     cond do
       Media.user_requests_amount(conn.assigns.current_user) <
@@ -28,7 +27,7 @@ defmodule LitcoversWeb.V1.RequestController do
         case Media.create_request(conn.assigns.current_user, prompt, request_params) do
           {:ok, request} ->
             request = Media.get_request_and_covers!(request.id)
-            Task.start(fn -> Media.gen_covers(request, gender) end)
+            Task.start(fn -> Media.gen_covers(request) end)
 
             conn
             |> render(:show, request: request)
@@ -49,14 +48,12 @@ defmodule LitcoversWeb.V1.RequestController do
     render(conn, :show, request: request)
   end
 
-  def update(conn, %{"id" => id, "request" => request_params}) do
-    gender = Map.get(request_params, "gender") |> get_female_or()
-
+  def update(conn, %{"id" => id}) do
     cond do
       Media.user_requests_amount(conn.assigns.current_user) <
           conn.assigns.current_user.max_requests ->
         request = Media.get_request_and_covers!(id)
-        Task.start(fn -> Media.gen_more(request, gender) end)
+        Task.start(fn -> Media.gen_more(request) end)
 
         conn
         |> render(:show, request: request)
