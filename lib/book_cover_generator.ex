@@ -20,7 +20,7 @@ defmodule BookCoverGenerator do
     prompt = description |> preamble(gender, cover_type)
 
     # Prepare params for Open AI
-    oai_params = %OAIParams{prompt: prompt, temperature: 0}
+    oai_params = %OAIParams{prompt: prompt, temperature: 0.3}
     body = Jason.encode!(oai_params)
 
     Logger.info("Generatig idea with Open AI")
