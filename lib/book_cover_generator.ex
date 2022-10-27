@@ -316,7 +316,10 @@ defmodule BookCoverGenerator do
 
     overlay = "ot-#{split},ots-#{size},ofo-bottom,otc-fafafa,otp-0_0_#{pb}_0,otf-#{font_name}.ttf"
 
-    [overlay | create_title_overlay(title_splits, font, pb + size + String.length(split))]
+    %{units_per_em: units_per_em, max_box: {_, _, _, y_max}} = font_metrics
+    new_padding = (size * (y_max / units_per_em) + 5) |> ceil()
+
+    [overlay | create_title_overlay(title_splits, font, pb + new_padding)]
   end
 
   def get_text_max_w(text, font_size, image_width, font_metrics) do
