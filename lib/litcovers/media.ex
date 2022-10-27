@@ -148,9 +148,10 @@ defmodule Litcovers.Media do
 
             urls =
               BookCoverGenerator.put_text_on_images(
+                splits,
                 cover.cover_url,
                 request.author,
-                request.title
+                request.prompt.realm |> to_string()
               )
 
             for url <- urls do

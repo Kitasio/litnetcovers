@@ -205,19 +205,19 @@ defmodule BookCoverGenerator do
     input
   end
 
-  def insert_author_title(link, author, title) do
+  def insert_author_title(link, author, title, prompt_realm) do
     uri = link |> URI.parse()
     %URI{host: host, path: path} = uri
 
     {filename, list} = path |> String.split("/") |> List.pop_at(-1)
     bucket = list |> List.last()
 
-    title = String.upcase(title)
+    fonts = %{
+      author_font: get_rand_type(prompt_realm, "author"),
+      title_font: get_rand_type(prompt_realm, "title")
+    }
 
-    font_metrics = TruetypeMetrics.load!("priv/static/fonts/AttackType-Heavy.ttf")
-
-    transformation =
-      "tr:w-512,h-704,oi-vin.png,ow-512,oh-704:ot-#{author},ots-#{get_text_max_w(author, 12, 500, font_metrics)},ofo-top,otc-fafafa,otf-AttackType-Heavy.ttf:ot-#{title},ots-#{get_text_max_w(title, 12, 498, font_metrics)},ofo-bottom,otc-fafafa,otf-AttackType-Heavy.ttf"
+    transformation = transformer(author, title, fonts)
 
     case host do
       "ik.imagekit.io" ->
@@ -226,6 +226,38 @@ defmodule BookCoverGenerator do
       _ ->
         link
     end
+  end
+
+  def get_rand_type(prompt_realm, font_type) do
+    %{^prompt_realm => %{^font_type => types}} = font_types()
+    types |> Enum.random()
+  end
+
+  def transformer(author, title, fonts) do
+    %{author_font: author_font, title_font: title_font} = fonts
+    vinyetta = "tr:w-512,h-704,oi-vin.png,ow-512,oh-704"
+    author_overlay = "ot-#{author},ots-24,otp-25_5_0_5,ofo-top,otc-fafafa,otf-#{author_font}.ttf"
+    splits = title |> String.split("\n") |> Enum.reverse()
+
+    font = %{
+      name: title_font,
+      metrics: TruetypeMetrics.load!("priv/static/fonts/#{title_font}.ttf")
+    }
+
+    title_overlay = create_title_overlay(splits, font, 10) |> Enum.join(":")
+    Enum.join([vinyetta, author_overlay, title_overlay], ":")
+  end
+
+  def create_title_overlay([], _title_font, _pb), do: []
+
+  def create_title_overlay([split | title_splits], font, pb) do
+    %{name: font_name, metrics: font_metrics} = font
+    split = String.upcase(split)
+    size = get_text_max_w(split, 12, 450, font_metrics)
+
+    overlay = "ot-#{split},ots-#{size},ofo-bottom,otc-fafafa,otp-0_0_#{pb}_0,otf-#{font_name}.ttf"
+
+    [overlay | create_title_overlay(title_splits, font, pb + size + String.length(split))]
   end
 
   def get_text_max_w(text, font_size, image_width, font_metrics) do
@@ -238,10 +270,12 @@ defmodule BookCoverGenerator do
     end
   end
 
-  def put_text_on_images(img_url, author, title) do
+  def put_text_on_images([], _img_url, _author, _prompt_realm), do: []
+
+  def put_text_on_images([title | splits_list], img_url, author, prompt_realm) do
     [
-      img_url,
-      insert_author_title(img_url, author, title)
+      insert_author_title(img_url, author, title, prompt_realm)
+      | put_text_on_images(splits_list, img_url, author, prompt_realm)
     ]
   end
 
@@ -338,5 +372,95 @@ defmodule BookCoverGenerator do
     #{title}
 
     output:"
+  end
+
+  def font_types do
+    %{
+      "fantasy" => %{
+        "author" => [
+          "AttackType-Heavy",
+          "BalkaraFreeCondensed-npoekmu.me",
+          "DwarvenStonecraftCyr",
+          "GarciaMarquez",
+          "OrelegaOne-Regular",
+          "Underdog-Regular"
+        ],
+        "title" => [
+          "Ambidexter_Regular",
+          "AttackType-Heavy",
+          "BalkaraFreeCondensed-npoekmu.me",
+          "Belozersk_Font",
+          "DRUZHOK",
+          "DwarvenStonecraftCyr",
+          "FemmeFatale-Regular",
+          "GarciaMarquez",
+          "Germanica",
+          "kurbanistika",
+          "Mirra",
+          "Ramp",
+          "ST-Nizhegorodsky",
+          "StalinistOne-Regular",
+          "Stig",
+          "Tsarevich_old",
+          "Underdog-Regular"
+        ]
+      },
+      "realism" => %{
+        "author" => [
+          "Comic_CAT",
+          "DelaGothicOne-Regular",
+          "Felidae",
+          "Garet-Heavy",
+          "Izax",
+          "Sloval",
+          "TT2020StyleB-Regular"
+        ],
+        "title" => [
+          "Angry",
+          "Comic_CAT",
+          "DelaGothicOne-Regular",
+          "Eleventh-Square",
+          "Felidae",
+          "Garet-Heavy",
+          "Izax",
+          "le-murmure",
+          "Miratrix-Normal",
+          "Molot",
+          "NovitoNova-Regular",
+          "Ouroboros-Regular",
+          "Sloval",
+          "tangak",
+          "TT2020StyleB-Regular"
+        ]
+      },
+      "futurism" => %{
+        "author" => [
+          "Aronder",
+          "EBENYA",
+          "Hellenica",
+          "MoscowMetro",
+          "Practice-font-Mono",
+          "Radiotechnika"
+        ],
+        "title" => [
+          "Aronder",
+          "EBENYA",
+          "forward",
+          "Greybeard-22px-Bold",
+          "Hellenica",
+          "Kontanter-Bold",
+          "MonHugo-in",
+          "MoscowMetro",
+          "Obrazec-2.0",
+          "Polonium-Bold",
+          "Practice-font-Mono",
+          "Radiotechnika",
+          "shinners-regular",
+          "Snowstorm-Bold",
+          "Yulong",
+          "Zyablik-Regular"
+        ]
+      }
+    }
   end
 end
