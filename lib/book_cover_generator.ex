@@ -200,6 +200,9 @@ defmodule BookCoverGenerator do
     Description: The story starts in nowadays London and than continues into majestic medieval fantasy hidden world of magic and wizarding, into the giant gothic castle with hundreds of secrets to be discovered.
     Book cover ideas: A giant magical gothic castle in the woods, A beautiful night castle with a lot of high towers hidden in the mist, A fantasy world with a giant castle made of stone, A giant hall of a medieval magical castle
 
+    Description: The future world of high technologies isn’t bright - it’s cruel and ruthless. The story starts in the night club located in the heart of the futuristic megapolis.
+    Book cover ideas: The night streets of a futuristic city, Cyberpunk night club party, Dirty high-tech night club interior, Abandoned bar inside a scyscrapper
+
     Description: #{input}
     Book cover ideas:"
   end
