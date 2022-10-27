@@ -112,6 +112,51 @@ defmodule Litcovers.Media do
     end
   end
 
+  def get_splits([]), do: []
+
+  def get_splits([title_split | title_splits]) do
+    %{split: split} = title_split
+    [split | get_splits(title_splits)]
+  end
+
+  def gen_more(request, gender) do
+    %{idea: idea} = request.ideas |> Enum.random()
+
+    with prompt <-
+           BookCoverGenerator.create_prompt(
+             idea,
+             request.prompt.style_prompt,
+             gender,
+             request.prompt.type
+           ),
+         {:ok, sd_res} <- BookCoverGenerator.diffuse(prompt, 1, System.get_env("REPLICATE_TOKEN")) do
+      %{"output" => image_list} = sd_res
+
+      case BookCoverGenerator.save_to_spaces(image_list) do
+        {:error, reason} ->
+          IO.inspect(reason)
+
+        img_urls ->
+          for url <- img_urls do
+            image_params = %{"cover_url" => url}
+            {:ok, cover} = create_cover(request, image_params)
+
+            urls =
+              BookCoverGenerator.put_text_on_images(
+                request.title_splits |> get_splits(),
+                cover.cover_url,
+                request.author,
+                request.prompt.realm |> to_string()
+              )
+
+            for url <- urls do
+              create_overlay(cover, %{url: url})
+            end
+          end
+      end
+    end
+  end
+
   def gen_covers(request, gender) do
     with {:ok, english_desc} <-
            BookCoverGenerator.translate_to_english(

@@ -50,16 +50,20 @@ defmodule LitcoversWeb.V1.RequestController do
   end
 
   def update(conn, %{"id" => id, "request" => request_params}) do
-    request = Media.get_request!(id)
+    gender = Map.get(request_params, "gender") |> get_female_or()
 
-    case Media.update_request(request, request_params) do
-      {:ok, request} ->
+    cond do
+      Media.user_requests_amount(conn.assigns.current_user) <
+          conn.assigns.current_user.max_requests ->
+        request = Media.get_request_and_covers!(id)
+        Task.start(fn -> Media.gen_more(request, gender) end)
+
         conn
-        |> put_flash(:info, "Request updated successfully.")
-        |> redirect(to: Routes.request_path(conn, :show, request))
+        |> render(:show, request: request)
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", request: request, changeset: changeset)
+      true ->
+        conn
+        |> render(:error, errors: "max requests reached")
     end
   end
 
