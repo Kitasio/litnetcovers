@@ -239,9 +239,16 @@ defmodule BookCoverGenerator do
     author_overlay = "ot-#{author},ots-24,otp-25_5_0_5,ofo-top,otc-fafafa,otf-#{author_font}.ttf"
     splits = title |> String.split("\n") |> Enum.reverse()
 
+    font_path =
+      if System.get_env("MIX_ENV") == "prod" do
+        [Application.app_dir(:litcovers), "priv/static/fonts/#{title_font}.ttf"] |> Path.join()
+      else
+        "priv/static/fonts/#{title_font}.ttf"
+      end
+
     font = %{
       name: title_font,
-      metrics: TruetypeMetrics.load!("priv/static/fonts/#{title_font}.ttf")
+      metrics: TruetypeMetrics.load!(font_path)
     }
 
     title_overlay = create_title_overlay(splits, font, 10) |> Enum.join(":")
