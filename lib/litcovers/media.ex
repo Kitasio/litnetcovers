@@ -112,7 +112,7 @@ defmodule Litcovers.Media do
     end
   end
 
-  def gen_covers(request, amount, gender) do
+  def gen_covers(request, gender) do
     with {:ok, english_desc} <-
            BookCoverGenerator.translate_to_english(
              request.description,
@@ -136,7 +136,7 @@ defmodule Litcovers.Media do
              request.prompt.type
            ),
          {:ok, sd_res} <-
-           BookCoverGenerator.diffuse(prompt, amount, System.get_env("REPLICATE_TOKEN")) do
+           BookCoverGenerator.diffuse(prompt, 1, System.get_env("REPLICATE_TOKEN")) do
       %{"output" => image_list} = sd_res
 
       case BookCoverGenerator.save_to_spaces(image_list) do
