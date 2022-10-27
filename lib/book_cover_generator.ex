@@ -192,16 +192,13 @@ defmodule BookCoverGenerator do
   end
 
   defp preamble(input, _gender, :object) do
-    "Suggest a 4 book cover ideas, use objects and landscapes to describe the idea (avoid depicting people and animals)
+    "Suggest a 4 book cover ideas, use objects and landscapes to describe it, separate ideas with commas
 
-    Description: Old scientist with crazy sunglasses creates a time machine in a form of a car and travels back in time with his student, they try to change the future
-    Book cover ideas: A synthwave car from 70's, Distorted watch, A map of a future city, An old vintage lightbulb
+    Description: Time machine in the shape of a car accidentally sends our heroes from our modern world into the times of the wild west, into a small dusty cowboy town in the middle of the desert.
+    Book cover ideas: Dusty wild west city of cowboys with a modern car in the middle of the street, bright white beams of light coming from the inside of a wild west saloon in the desert, a car tracks on the ground inside a wild west town street, A giant canyon with the old wild west city inside of it.
 
-    Description: Katya is a simple girl from a dysfunctional family who falls in love with a wealthy and powerful man. However, he is married and she has principles, so she is torn about what to do. The boss is not willing to let her go and she is not willing to submit, so the situation is fraught with tension.
-    Book cover ideas: A tie and wedding ring, Cash falling from the sky in a big city, A tight corset, A golden ring with a diamond
-
-    Description: The story of a vampire king from Transylvania, he ruled his kingdom for days, and drank people's blood at night
-    Book cover ideas: A castle in the mountains, A throne made of bones, A goblet of blood, A cape blowing in the wind
+    Description: The story starts in nowadays London and than continues into majestic medieval fantasy hidden world of magic and wizarding, into the giant gothic castle with hundreds of secrets to be discovered.
+    Book cover ideas: A giant magical gothic castle in the woods, A beautiful night castle with a lot of high towers hidden in the mist, A fantasy world with a giant castle made of stone, A giant hall of a medieval magical castle
 
     Description: #{input}
     Book cover ideas:"
