@@ -65,7 +65,7 @@ config :tailwind,
 
 config :litcovers, Litcovers.Guardian,
   issuer: "litcovers",
-  secret_key: "l87pJ/atZm0CsHkgKUQPU1MIeK4PpfP4y49cMMMz9VVG8caAugJVnMBEDOmcFHxS"
+  secret_key: System.get_env("GUARDIAN_SECRET_KEY")
 
 config :litcovers, Litcovers.ApiAuthPipeline,
   error_handler: Litcovers.ApiAuthErrorHandler,
