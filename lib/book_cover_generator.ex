@@ -2,11 +2,13 @@ defmodule BookCoverGenerator do
   alias HTTPoison.Response
   require Elixir.Logger
 
+  alias Litcovers.Character
+
   # Returns a prompt for stable diffusion
-  def description_to_cover_idea(_description, _cover_type, nil),
+  def description_to_cover_idea(_description, _cover_type, _gender, nil),
     do: raise("OAI_TOKEN was not set\nVisit https://beta.openai.com/account/api-keys to get it")
 
-  def description_to_cover_idea(description, cover_type, oai_token) do
+  def description_to_cover_idea(description, cover_type, gender, oai_token) do
     # Set Open AI endpoint
     endpoint = "https://api.openai.com/v1/completions"
 
@@ -15,7 +17,7 @@ defmodule BookCoverGenerator do
     options = [timeout: 50_000, recv_timeout: 50_000]
 
     # Append description to preamble
-    prompt = description |> preamble(cover_type)
+    prompt = description |> preamble(gender, cover_type)
 
     # Prepare params for Open AI
     oai_params = %OAIParams{prompt: prompt, temperature: 0}
@@ -142,7 +144,11 @@ defmodule BookCoverGenerator do
     end
   end
 
-  def create_prompt(idea_prompt, style_prompt, :object) do
+  def create_prompt(idea_prompt, style_prompt, gender, :subject) do
+    "Side profile portrait, #{idea_prompt}, #{get_character_prompt(gender)}, #{style_prompt}"
+  end
+
+  def create_prompt(idea_prompt, style_prompt, _gender, :object) do
     "#{idea_prompt}, #{style_prompt}"
   end
 
@@ -185,7 +191,7 @@ defmodule BookCoverGenerator do
     |> String.split(",")
   end
 
-  defp preamble(input, :object) do
+  defp preamble(input, _gender, :object) do
     "Suggest a 4 book cover ideas, use objects and landscapes to describe the idea (avoid depicting people and animals)
 
     Description: Old scientist with crazy sunglasses creates a time machine in a form of a car and travels back in time with his student, they try to change the future
@@ -198,11 +204,57 @@ defmodule BookCoverGenerator do
     Book cover ideas: A castle in the mountains, A throne made of bones, A goblet of blood, A cape blowing in the wind
 
     Description: #{input}
-    Book cover:"
+    Book cover ideas:"
   end
 
-  defp preamble(input, _) do
+  defp preamble(input, "male", :subject) do
+    "Suggest 4 book cover ideas, every idea depicts a man on some kind of background
+
+    Description: Old scientist with crazy sunglasses creates a time machine in a form of a car and travels back in time with his student, they try to change the future
+    Book cover ideas: A guy in a scientists coat on gray background, A handsome man wearing crazy glasses on a dark blue night city background, A mad scientist and vivid blue electricity sparks in the background, An attractive student on a cyan abstract background
+
+    Description: The story of a vampire king from Transylvania, he ruled his kingdom for days, and drank people's blood at night
+    Book cover ideas: A dark and handsome man with long black hair on a dark red background, A strong pale man wearing a long coat on a black background, A man with long dark hair with a deep forest in the background, A guy with long dark hair and red eyes on an abstract red background
+
+    Description: #{input}
+    Book cover ideas:"
+  end
+
+  defp preamble(input, "female", :subject) do
+    "Suggest 4 book cover ideas, every idea depicts a woman on some kind of background, separated by a comma
+
+    Description: A student teenage girl moves into a new city and finds her life turned upside-down when she falls in love with a beautiful young vampire.
+    Book cover ideas: Beautiful student on a dark grey forest background , A girl with red glowing eyes on a dark apartment background, Romantic girl with pale skin on a red abstract background, Girl with her eyes closed on a dark misty background
+
+    Description: A girl-archer living in a poor district of the future city is selected by lottery to compete in a televised battle royale to the death.
+    Book cover ideas: A serious girl with a dirty face on a green forest background, A strong young girl with scratches on her face with the exlosion on the background, Girl with bright blue eyes on the night forest background, A girl with a bow on a dark city background
+
+    Description: A ship got wrecked and only two people survived on a rock island, soon they fall in love
+    Book cover ideas: A girl with long wet hair on a dark beach background, A girl with a flower on a light blue background, A girl with a fish on a light green background, A girl with a starfish on a purple background
+
+    Description: #{input}
+    Book cover ideas:"
+  end
+
+  defp preamble(input, _, _) do
     input
+  end
+
+  def get_celeb_name(gender, is_famous) do
+    case Character.get_random_celeb(gender, is_famous) do
+      nil ->
+        ""
+
+      celeb ->
+        celeb.name
+    end
+  end
+
+  def get_character_prompt(gender) do
+    famous_celeb = get_celeb_name(gender, true)
+    not_famous_celeb = get_celeb_name(gender, false)
+
+    "#{not_famous_celeb} as #{famous_celeb}"
   end
 
   def insert_author_title(link, author, title, prompt_realm) do

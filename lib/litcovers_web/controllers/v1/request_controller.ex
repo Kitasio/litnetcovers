@@ -8,6 +8,9 @@ defmodule LitcoversWeb.V1.RequestController do
     render(conn, :index, requests: requests)
   end
 
+  defp get_female_or(nil), do: "female"
+  defp get_female_or(value), do: value
+
   def create(conn, %{"request" => request_params})
       when not is_map_key(request_params, "prompt_id"),
       do: render(conn, :error, errors: "prompt_id was not specified")
@@ -19,6 +22,7 @@ defmodule LitcoversWeb.V1.RequestController do
   def create(conn, %{"request" => request_params}) do
     %{"prompt_id" => prompt_id, "amount" => amount} = request_params
     prompt = Litcovers.Sd.get_prompt!(prompt_id)
+    gender = Map.get(request_params, "gender") |> get_female_or()
 
     cond do
       Media.user_requests_amount(conn.assigns.current_user) <
@@ -26,7 +30,7 @@ defmodule LitcoversWeb.V1.RequestController do
         case Media.create_request(conn.assigns.current_user, prompt, request_params) do
           {:ok, request} ->
             request = Media.get_request_and_covers!(request.id)
-            Task.start(fn -> Media.gen_covers(request, amount) end)
+            Task.start(fn -> Media.gen_covers(request, amount, gender) end)
 
             conn
             |> render(:show, request: request)
