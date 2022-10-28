@@ -4,4 +4,8 @@ defmodule LitcoversWeb.PageController do
   def index(conn, _params) do
     render(conn, "index.html")
   end
+
+  def docs(conn, _params) do
+    render(conn, "docs.html")
+  end
 end

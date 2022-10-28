@@ -1,0 +1,79 @@
+<div class="prose dark:prose-invert my-10">
+<h2 id="auth">Auth</h2>
+<ul>
+<li>Register an account at <a href="https://litcovers.com/users/register">litcovers</a></li>
+<li>Send a POST request to authenticate and get back a jwt token</li>
+</ul>
+<p><strong>POST</strong> <code>https://litcovers.com/api/v1/sign_in</code></p>
+<p><code>Content-Type: application/json</code></p>
+<pre><code class="lang-JSON">{
+  <span class="hljs-attr">"email"</span>: <span class="hljs-string">"your@mail.com"</span>,
+  <span class="hljs-attr">"password"</span>: <span class="hljs-string">"your_password"</span>
+}
+</code></pre>
+<h2 id="getting-prompts">Getting prompts</h2>
+<p><strong>POST</strong> <code>https://litcovers.com/api/v1/prompts</code></p>
+<p><code>Content-Type: application/json</code></p>
+<p><code>Authorization: Bearer &lt;your jwt token&gt;</code></p>
+<pre><code class="lang-JSON">{
+  <span class="hljs-attr">"params"</span>: {
+    <span class="hljs-attr">"type"</span>: <span class="hljs-string">"object"</span>,
+    <span class="hljs-attr">"realm"</span>: <span class="hljs-string">"realism"</span>,
+    <span class="hljs-attr">"sentiment"</span>: <span class="hljs-string">"negative"</span>
+  }
+}
+</code></pre>
+<p>Possible values:</p>
+<p><code>type</code> -&gt; &quot;object&quot;, &quot;subject&quot;</p>
+<p><code>realm</code> -&gt; &quot;fantasy&quot;, &quot;realism&quot;, &quot;futurism&quot;</p>
+<p><code>sentiment</code> -&gt; &quot;positive&quot;, &quot;neutral&quot;, &quot;negative&quot;</p>
+<p>You can omit any of the params, for example:</p>
+<pre><code class="lang-JSON">{
+  <span class="hljs-string">"params"</span>: {
+    <span class="hljs-string">"type"</span>: <span class="hljs-string">"subject"</span>,
+  }
+}
+
+or even <span class="hljs-keyword">empty</span> <span class="hljs-keyword">to</span> <span class="hljs-keyword">return</span> all
+
+{
+  <span class="hljs-string">"params"</span>: {}
+}
+</code></pre>
+<p><em>Pick the prompt that suits the book best, and save it&#39;s <code>id</code> for later use</em></p>
+<h2 id="creating-a-request">Creating a request</h2>
+<p><strong>POST</strong> <code>https://litcovers.com/api/v1/requests</code></p>
+<p><code>Content-Type: application/json</code></p>
+<p><code>Authorization: Bearer &lt;your jwt token&gt;</code></p>
+<pre><code class="lang-JSON">{
+  <span class="hljs-attr">"request"</span>: {
+    <span class="hljs-attr">"author"</span>: <span class="hljs-string">"Сергей Панченко"</span>,
+    <span class="hljs-attr">"title"</span>: <span class="hljs-string">"Черный спектр"</span>,
+    <span class="hljs-attr">"prompt_id"</span>: <span class="hljs-string">"42"</span>,
+    <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Необычное явление, вызывающее в людях панический страх посредством воздействия на психику низкочастотными волнами, приводят к их исчезновению. Куда пропадают люди, умирают они или переносятся, не ясно. Выжившие окрестили явление Черным спектром"</span>,
+    <span class="hljs-attr">"character_gender"</span>: <span class="hljs-string">"male"</span>
+  }
+}
+</code></pre>
+<p>Required fields:</p>
+<ul>
+<li><code>prompt_id</code></li>
+<li><code>author</code> (max length 30)</li>
+<li><code>title</code> (max length 40)</li>
+<li><code>description</code> (max length 600)</li>
+</ul>
+<p>Non required:</p>
+<ul>
+<li><code>character_gender</code> (&quot;male&quot; or &quot;female&quot;, can be omited if selected prompt is of type <code>object</code>)</li>
+</ul>
+<p><em>After submiting, it will take some time to generate, save the request&#39;s <code>id</code> from the response</em></p>
+<h2 id="getting-request-requests">Getting request/requests</h2>
+<p><strong>GET</strong> <code>https://litcovers.com/api/v1/requests</code></p>
+or
+<p><strong>GET</strong> <code>https://litcovers.com/api/v1/requests/:id</code> for a specific request</p>
+<p><code>Authorization: Bearer &lt;your jwt token&gt;</code></p>
+<p><em>If completed, will return a request with links to generated images</em></p>
+<h2 id="updating-the-request-with-new-generations">Updating the request with new generations</h2>
+<p><strong>PATCH</strong> <code>https://litcovers.com/api/v1/requests/:id</code></p>
+<p><code>Authorization: Bearer &lt;your jwt token&gt;</code></p>
+</div>
