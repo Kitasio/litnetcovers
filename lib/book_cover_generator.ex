@@ -20,7 +20,7 @@ defmodule BookCoverGenerator do
     prompt = description |> preamble(gender, cover_type)
 
     # Prepare params for Open AI
-    oai_params = %OAIParams{prompt: prompt, temperature: 0.3}
+    oai_params = %OAIParams{prompt: prompt, temperature: 1}
     body = Jason.encode!(oai_params)
 
     Logger.info("Generatig idea with Open AI")
@@ -129,7 +129,7 @@ defmodule BookCoverGenerator do
       headers = [Authorization: "Bearer #{oai_token}", "Content-Type": "application/json"]
       options = [timeout: 50_000, recv_timeout: 50_000]
 
-      oai_params = %OAIParams{prompt: "Translate this to English:\n#{prompt}"}
+      oai_params = %OAIParams{prompt: "Translate this to English:\n#{prompt}", temperature: 0.3}
       body = Jason.encode!(oai_params)
 
       case HTTPoison.post(endpoint, body, headers, options) do
@@ -179,6 +179,7 @@ defmodule BookCoverGenerator do
   defp check_image(_image_list, _num_of_tries), do: {:ok, :ready}
 
   defp oai_response_text(oai_res_body) do
+    IO.inspect(oai_res_body, label: "OAI res body")
     %{"choices" => choices_list} = Jason.decode!(oai_res_body)
     [%{"text" => text} | _] = choices_list
 
@@ -208,29 +209,26 @@ defmodule BookCoverGenerator do
   end
 
   defp preamble(input, "male", :subject) do
-    "Suggest 4 book cover ideas, every idea depicts a man on some kind of background
+    "Suggest 4 book cover ideas, every idea depicts a man on some kind of background, separated by a comma
 
     Description: Old scientist with crazy sunglasses creates a time machine in a form of a car and travels back in time with his student, they try to change the future
-    Book cover ideas: A guy in a scientists coat on gray background, A handsome man wearing crazy glasses on a dark blue night city background, A mad scientist and vivid blue electricity sparks in the background, An attractive student on a cyan abstract background
+    Book cover ideas: A scientist in a white coat inside of a high-tech mechanism, A handsome man wearing crazy glasses while traveling on a light speed in a cosmos, A mad professor and vivid blue electricity sparks everywhere around him, An attractive student with a dirty face inside of a car
 
     Description: The story of a vampire king from Transylvania, he ruled his kingdom for days, and drank people's blood at night
-    Book cover ideas: A dark and handsome man with long black hair on a dark red background, A strong pale man wearing a long coat on a black background, A man with long dark hair with a deep forest in the background, A guy with long dark hair and red eyes on an abstract red background
+    Book cover ideas: A dark and handsome vampire with long hair in a dark gothic castle, A strong pale man wearing a long coat under the rain in a medieval city, A mysterious unknown in a dark hall of a castle, A dark prince with his face covered in blood on a bright red abstract background
 
     Description: #{input}
     Book cover ideas:"
   end
 
   defp preamble(input, "female", :subject) do
-    "Suggest 4 book cover ideas, every idea depicts a woman on some kind of background, separated by a comma
+    "Suggest 4 book cover ideas, every idea depicts a woman located in some kind of a setting, separated by a comma
 
     Description: A student teenage girl moves into a new city and finds her life turned upside-down when she falls in love with a beautiful young vampire.
-    Book cover ideas: Beautiful student on a dark grey forest background , A girl with red glowing eyes on a dark apartment background, Romantic girl with pale skin on a red abstract background, Girl with her eyes closed on a dark misty background
+    Book cover ideas: Beautiful student in a dark grey forest, A vampire with a red glowing eyes iside a dark apartment, Passionate woman with a pale skin on a red abstract background, beautiful girl with her eyes closed on a dark misty field
 
     Description: A girl-archer living in a poor district of the future city is selected by lottery to compete in a televised battle royale to the death.
-    Book cover ideas: A serious girl with a dirty face on a green forest background, A strong young girl with scratches on her face with the exlosion on the background, Girl with bright blue eyes on the night forest background, A girl with a bow on a dark city background
-
-    Description: A ship got wrecked and only two people survived on a rock island, soon they fall in love
-    Book cover ideas: A girl with long wet hair on a dark beach background, A girl with a flower on a light blue background, A girl with a fish on a light green background, A girl with a starfish on a purple background
+    Book cover ideas: A serious woman with a dirty face in a dark green forest, A strong young hero with scratches on her face with the explosion on the background, Protagonist with bright blue eyes hiding in the mysterious forest at night, A princess with a bow in a ruined city
 
     Description: #{input}
     Book cover ideas:"

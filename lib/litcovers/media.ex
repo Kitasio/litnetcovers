@@ -102,13 +102,15 @@ defmodule Litcovers.Media do
 
   def save_ideas(ideas_list, request) do
     for idea <- ideas_list do
-      create_idea(request, %{idea: idea |> String.trim()})
+      idea = String.trim(idea)
+      create_idea(request, %{idea: idea})
     end
   end
 
   def save_splits(splits_list, request) do
     for split <- splits_list do
-      create_title_split(request, %{split: split |> String.trim()})
+      split = String.trim(split)
+      create_title_split(request, %{split: split})
     end
   end
 
