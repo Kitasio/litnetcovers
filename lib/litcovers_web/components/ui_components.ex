@@ -31,21 +31,24 @@ defmodule LitcoversWeb.UiComponents do
 
   def cover_selector_box(assigns) do
     ~H"""
-    <%= if assigns.selected_cover == nil do %>
-      <div phx-click="select_cover" phx-value-cover_id={assigns.cover.id} class="aspect-cover cursor-pointer rounded overflow-hidden border-2 border-zinc-400 hover:border-pink-600">
-        <img class="w-full h-full object-cover" src={insert_image_watermark(assigns.cover.cover_url)} />
-      </div>
-    <% else %>
-      <%= if assigns.cover.id == assigns.selected_cover do %>
-        <div class="aspect-cover rounded border-2 overflow-hidden border-lime-300">
-          <img class="w-full h-full object-cover" src={assigns.cover.cover_url} />
+    <div class="group relative">
+      <div class="absolute hidden group-hover:inline bottom-0 p-4 text-xs text-zinc-200 font-medium z-20"><%= assigns.cover.prompt %></div>
+      <%= if assigns.selected_cover == nil do %>
+        <div phx-click="select_cover" phx-value-cover_id={assigns.cover.id} class="aspect-cover cursor-pointer rounded overflow-hidden border-2 border-zinc-400 hover:border-pink-600">
+          <img class="w-full h-full object-cover group-hover:brightness-50" src={insert_image_watermark(assigns.cover.cover_url)} />
         </div>
       <% else %>
-        <div class="aspect-cover rounded border-2 brightness-50 overflow-hidden border-zinc-400">
-          <img class="w-full h-full object-cover" src={insert_image_watermark(assigns.cover.cover_url)} />
-        </div>
+        <%= if assigns.cover.id == assigns.selected_cover do %>
+          <div class="aspect-cover rounded border-2 overflow-hidden border-lime-300">
+            <img class="w-full h-full object-cover group-hover:brightness-50" src={assigns.cover.cover_url} />
+          </div>
+        <% else %>
+          <div class="aspect-cover rounded border-2 brightness-50 overflow-hidden border-zinc-400">
+            <img class="w-full h-full object-cover" src={insert_image_watermark(assigns.cover.cover_url)} />
+          </div>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
     """
   end
 
