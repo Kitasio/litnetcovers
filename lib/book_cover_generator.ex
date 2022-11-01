@@ -135,7 +135,6 @@ defmodule BookCoverGenerator do
       case HTTPoison.post(endpoint, body, headers, options) do
         {:ok, %Response{body: res}} ->
           translation = oai_response_translation(res)
-          IO.inspect(translation, label: "TRANSLATION")
           {:ok, translation}
 
         {:error, reason} ->

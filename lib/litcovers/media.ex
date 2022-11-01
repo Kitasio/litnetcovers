@@ -193,7 +193,7 @@ defmodule Litcovers.Media do
 
         img_urls ->
           for url <- img_urls do
-            image_params = %{"cover_url" => url}
+            image_params = %{"cover_url" => url, "prompt" => prompt}
             {:ok, cover} = create_cover(request, image_params)
 
             urls =
