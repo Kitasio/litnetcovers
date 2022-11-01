@@ -165,6 +165,7 @@ defmodule Litcovers.Media do
              request.description,
              System.get_env("OAI_TOKEN")
            ),
+         _ <- ai_update_request(request, %{final_desc: english_desc}),
          {:ok, ideas_list} <-
            BookCoverGenerator.description_to_cover_idea(
              english_desc,

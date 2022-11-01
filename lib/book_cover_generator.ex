@@ -134,7 +134,8 @@ defmodule BookCoverGenerator do
 
       case HTTPoison.post(endpoint, body, headers, options) do
         {:ok, %Response{body: res}} ->
-          translation = oai_response_text(res)
+          translation = oai_response_translation(res)
+          IO.inspect(translation, label: "TRANSLATION")
           {:ok, translation}
 
         {:error, reason} ->
@@ -178,8 +179,17 @@ defmodule BookCoverGenerator do
   defp check_image(nil, _num_of_tries), do: {:error, :not_ready}
   defp check_image(_image_list, _num_of_tries), do: {:ok, :ready}
 
+  defp oai_response_translation(oai_res_body) do
+    %{"choices" => choices_list} = Jason.decode!(oai_res_body)
+    [%{"text" => text} | _] = choices_list
+
+    text
+    |> String.split("output:")
+    |> List.last()
+    |> String.trim()
+  end
+
   defp oai_response_text(oai_res_body) do
-    IO.inspect(oai_res_body, label: "OAI res body")
     %{"choices" => choices_list} = Jason.decode!(oai_res_body)
     [%{"text" => text} | _] = choices_list
 
