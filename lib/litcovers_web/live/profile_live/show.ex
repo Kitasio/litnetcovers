@@ -47,7 +47,11 @@ defmodule LitcoversWeb.ProfileLive.Show do
   end
 
   def handle_info({:gen_complete, request}, socket) do
-    {:noreply, socket |> assign(request: request)}
+    if request.id == socket.assigns.request.id do
+      {:noreply, socket |> assign(request: request)}
+    else
+      {:noreply, socket}
+    end
   end
 
   def insert_image_high_res(link) do
