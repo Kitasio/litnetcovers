@@ -31,7 +31,7 @@ defmodule LitcoversWeb.ProfileLive.Show do
   end
 
   def handle_event("bad_prompt", %{}, socket) do
-    params = %{bad: true}
+    params = %{bad: !socket.assigns.request.prompt.bad}
     Sd.update_prompt(socket.assigns.request.prompt, params)
   end
 
