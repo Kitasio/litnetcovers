@@ -4,6 +4,7 @@ defmodule LitcoversWeb.ProfileLive.Show do
   import LitcoversWeb.UiComponents
   alias Litcovers.Accounts
   alias Litcovers.Media
+  alias Litcovers.Sd
 
   def mount(params, session, socket) do
     if connected?(socket), do: Media.subscribe()
@@ -27,6 +28,11 @@ defmodule LitcoversWeb.ProfileLive.Show do
     end)
 
     {:noreply, socket}
+  end
+
+  def handle_event("bad_prompt", %{}, socket) do
+    params = %{bad: true}
+    Sd.update_prompt(socket.assigns.request.prompt, params)
   end
 
   def handle_event("select_cover", %{"cover_id" => cover_id}, socket) do
