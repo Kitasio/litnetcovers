@@ -21,8 +21,18 @@ defmodule Litcovers.Media do
   """
   def list_requests do
     Request
+    |> order_by_date_insert()
     |> Repo.all()
-    |> Repo.preload(:user)
+    |> Repo.preload([:user, :covers])
+  end
+
+  def list_completed_requests do
+    Request
+    |> order_by_date_insert()
+    |> completed_query()
+    |> with_final_desc()
+    |> Repo.all()
+    |> Repo.preload([:user, :prompt, :covers])
   end
 
   def list_uncompleted_requests do
@@ -42,6 +52,14 @@ defmodule Litcovers.Media do
 
   defp order_by_date_insert(query) do
     from(r in query, order_by: [desc: r.inserted_at])
+  end
+
+  defp with_final_desc(query) do
+    from(r in query, where: not is_nil(r.final_desc))
+  end
+
+  defp completed_query(query) do
+    from(r in query, where: r.completed == true)
   end
 
   defp uncompleted_query(query) do

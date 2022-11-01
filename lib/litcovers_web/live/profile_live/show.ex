@@ -30,11 +30,6 @@ defmodule LitcoversWeb.ProfileLive.Show do
     {:noreply, socket}
   end
 
-  def handle_event("bad_prompt", %{}, socket) do
-    params = %{bad: !socket.assigns.request.prompt.bad}
-    Sd.update_prompt(socket.assigns.request.prompt, params)
-  end
-
   def handle_event("select_cover", %{"cover_id" => cover_id}, socket) do
     params = %{selected_cover: cover_id}
     Media.update_request(socket.assigns.request, params)

@@ -6,13 +6,6 @@
       <.h1>Создание обложек</.h1>
     <% end %>
   </div>
-  <div>
-    <%= if @request.prompt.bad do %>
-      <button class="mt-5 cursor-pointer text-green-600" phx-click="bad_prompt">Mark prompt as good</button>
-    <% else %>
-      <button class="mt-5 cursor-pointer text-pink-600" phx-click="bad_prompt">Mark prompt as bad</button>
-    <% end %>
-  </div>
 
   <div class="mt-3 divide-y divide-zinc-200 flex flex-col gap-10">
     <.request_info request={@request} />
@@ -27,7 +20,7 @@
         <% end %>
         <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
           <%= for cover <- @request.covers do %>
-            <.cover_selector_box selected_cover={@request.selected_cover} cover={cover} />
+            <.cover_selector_box request={@request} cover={cover} />
           <% end %>
         </div>
         <button class="mt-5 btn" phx-click="gen_more">More</button>

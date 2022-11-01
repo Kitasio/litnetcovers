@@ -1,0 +1,23 @@
+<div class="flex flex-col divide-y">
+  <%= for request <- @requests do %>  
+    <div class="mt-10 pt-10">
+      <div class="flex justify-between">
+        <p class="text-xs"><%= request.user.email %> | <%= request.title %></p>
+
+        <div class="text-xs">
+          <%= if request.prompt.bad do %>
+            <button class="cursor-pointer text-green-600" phx-click="bad_prompt" phx-value-request_id={request.id}>Mark as good</button>
+          <% else %>
+            <button class="cursor-pointer text-pink-600" phx-click="bad_prompt" phx-value-request_id={request.id}>Mark as bad</button>
+          <% end %>
+        </div>
+      </div>
+      <p class="mt-2 text-lg font-semibold"><%= request.description %></p>
+      <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <%= for cover <- request.covers do %>  
+          <.cover_selector_box request={request} cover={cover} />
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

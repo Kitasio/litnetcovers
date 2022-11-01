@@ -86,6 +86,7 @@ defmodule LitcoversWeb.Router do
     resources "/placeholders", PlaceholderController
 
     live "/", AdminLive.Index
+    live "/request/all", RequestsLive.All
 
     live "/prompts", PromptLive.Index, :index
     live "/prompts/new", PromptLive.Index, :new
