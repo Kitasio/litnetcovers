@@ -23,6 +23,7 @@
             <.cover_selector_box selected_cover={@request.selected_cover} cover={cover} />
           <% end %>
         </div>
+        <button class="mt-5 btn" phx-click="gen_more">More</button>
       </div>
       <%= if @request.selected_cover do %>
         <div class="flex flex-col gap-5">

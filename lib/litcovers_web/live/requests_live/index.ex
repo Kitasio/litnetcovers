@@ -23,7 +23,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
     style_prompts = Sd.list_all_where(:fantasy, :positive, :object)
     prompt = style_prompts |> List.first()
-    style_prompt = prompt.style_prompt
+    # style_prompt = prompt.style_prompt
 
     character_prompt = get_character_prompt(:male, eye_prompt, hair_prompt)
 
@@ -46,7 +46,8 @@ defmodule LitcoversWeb.RequestsLive.Index do
         hair_prompt: hair_prompt,
         gender: :male,
         style_prompts: style_prompts,
-        style_prompt: style_prompt,
+        style_prompt: prompt.style_prompt,
+        prompt_id: prompt.id,
         character_prompt: character_prompt,
         title: "Мои обложки"
       )
@@ -71,22 +72,26 @@ defmodule LitcoversWeb.RequestsLive.Index do
   end
 
   def list_prompts(realm, sentiment, type) do
-    style_prompts = Sd.list_all_where(realm, sentiment, type)
+    style_prompts = Sd.list_all_where(to_string(realm), to_string(sentiment), to_string(type))
 
     if Enum.empty?(style_prompts) do
       {:error, "No prompts found"}
     else
       prompt = style_prompts |> List.first()
-      style_prompt = prompt.style_prompt
-      {:ok, style_prompts, style_prompt}
+      {:ok, style_prompts, prompt}
     end
   end
 
   def handle_event("select_type", %{"type" => type}, socket) do
     case list_prompts(socket.assigns.realm, socket.assigns.sentiment, type) do
-      {:ok, style_prompts, style_prompt} ->
+      {:ok, style_prompts, prompt} ->
         {:noreply,
-         assign(socket, type: type, style_prompt: style_prompt, style_prompts: style_prompts)}
+         assign(socket,
+           type: type,
+           style_prompt: prompt.style_prompt,
+           prompt_id: prompt.id,
+           style_prompts: style_prompts
+         )}
 
       {:error, _} ->
         {:noreply, assign(socket, type: type)}
@@ -95,12 +100,33 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
   def handle_event("select_realm", %{"realm" => realm}, socket) do
     case list_prompts(realm, socket.assigns.sentiment, socket.assigns.type) do
-      {:ok, style_prompts, style_prompt} ->
+      {:ok, style_prompts, prompt} ->
         {:noreply,
-         assign(socket, realm: realm, style_prompt: style_prompt, style_prompts: style_prompts)}
+         assign(socket,
+           realm: realm,
+           style_prompt: prompt.style_prompt,
+           prompt_id: prompt.id,
+           style_prompts: style_prompts
+         )}
 
       {:error, _} ->
         {:noreply, assign(socket, realm: realm)}
+    end
+  end
+
+  def handle_event("select_sentiment", %{"sentiment" => sentiment}, socket) do
+    case list_prompts(socket.assigns.realm, sentiment, socket.assigns.type) do
+      {:ok, style_prompts, prompt} ->
+        {:noreply,
+         assign(socket,
+           sentiment: sentiment,
+           style_prompt: prompt.style_prompt,
+           prompt_id: prompt.id,
+           style_prompts: style_prompts
+         )}
+
+      {:error, _} ->
+        {:noreply, assign(socket, sentiment: sentiment)}
     end
   end
 
@@ -143,23 +169,8 @@ defmodule LitcoversWeb.RequestsLive.Index do
      )}
   end
 
-  def handle_event("select_sentiment", %{"sentiment" => sentiment}, socket) do
-    case list_prompts(socket.assigns.realm, sentiment, socket.assigns.type) do
-      {:ok, style_prompts, style_prompt} ->
-        {:noreply,
-         assign(socket,
-           sentiment: sentiment,
-           style_prompt: style_prompt,
-           style_prompts: style_prompts
-         )}
-
-      {:error, _} ->
-        {:noreply, assign(socket, sentiment: sentiment)}
-    end
-  end
-
-  def handle_event("select_prompt", %{"prompt" => prompt}, socket) do
-    {:noreply, assign(socket, style_prompt: prompt)}
+  def handle_event("select_prompt", %{"prompt" => prompt, "prompt_id" => prompt_id}, socket) do
+    {:noreply, assign(socket, style_prompt: prompt, prompt_id: prompt_id)}
   end
 
   def handle_event("validate", %{"request" => params}, socket) do
@@ -175,7 +186,10 @@ defmodule LitcoversWeb.RequestsLive.Index do
     cond do
       Media.user_requests_amount(socket.assigns.current_user) <
           socket.assigns.current_user.max_requests ->
-        case Media.create_request(socket.assigns.current_user, request_params) do
+        %{"prompt_id" => prompt_id} = request_params
+        prompt = Litcovers.Sd.get_prompt!(prompt_id)
+
+        case Media.create_request(socket.assigns.current_user, prompt, request_params) do
           {:ok, request} ->
             Task.start(fn ->
               Media.gen_covers(request)

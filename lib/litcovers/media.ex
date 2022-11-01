@@ -155,6 +155,10 @@ defmodule Litcovers.Media do
               create_overlay(cover, %{url: url})
             end
           end
+
+          request = get_request_and_covers!(request.id)
+
+          broadcast(request, :gen_complete)
       end
     end
   end

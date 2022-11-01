@@ -16,10 +16,6 @@ defmodule LitcoversWeb.UiComponents do
         <.h2>Описание</.h2>
         <.p><%= assigns.request.description %></.p>
       </div>
-      <div>
-        <.h2>Final prompt</.h2>
-        <.p><%= assigns.request.final_prompt %></.p>
-      </div>
     </div>
     """
   end
