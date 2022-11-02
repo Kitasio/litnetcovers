@@ -43,7 +43,7 @@ defmodule LitcoversWeb.UiComponents do
             <img class="w-full h-full object-cover group-hover:brightness-50" src={assigns.cover.cover_url} />
           </div>
         <% else %>
-          <div class="aspect-cover rounded border-2 brightness-50 overflow-hidden border-zinc-400">
+          <div phx-click="select_cover" phx-value-cover_id={assigns.cover.id} phx-value-request_id={assigns.request.id} class="aspect-cover cursor-pointer rounded border-2 brightness-50 overflow-hidden border-zinc-400">
             <img class="w-full h-full object-cover" src={insert_image_watermark(assigns.cover.cover_url)} />
           </div>
         <% end %>

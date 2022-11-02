@@ -30,15 +30,11 @@ defmodule LitcoversWeb.ProfileLive.Show do
     {:noreply, socket}
   end
 
-  def handle_event("select_cover", %{"cover_id" => cover_id}, socket) do
-    params = %{selected_cover: cover_id}
-    Media.update_request(socket.assigns.request, params)
+  def handle_event("select_cover", %{"cover_id" => _cover_id}, socket) do
+    # params = %{selected_cover: cover_id}
+    # Media.update_request(socket.assigns.request, params)
 
-    {:noreply,
-     assign(
-       socket,
-       request: Media.get_request_and_covers!(socket.assigns.request.id)
-     )}
+    {:noreply, socket}
   end
 
   def handle_info({:gen_complete, request}, socket) do
