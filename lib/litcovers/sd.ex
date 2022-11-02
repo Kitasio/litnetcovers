@@ -24,10 +24,15 @@ defmodule Litcovers.Sd do
 
   def list_all_where(realm, sentiment, type) do
     Prompt
+    |> not_bad()
     |> where_realm_query(realm)
     |> where_sentiment_query(sentiment)
     |> where_type_query(type)
     |> Repo.all()
+  end
+
+  defp not_bad(query) do
+    from(p in query, where: p.bad == false)
   end
 
   defp where_realm_query(query, nil), do: query

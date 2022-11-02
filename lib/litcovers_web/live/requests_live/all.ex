@@ -8,7 +8,6 @@ defmodule LitcoversWeb.RequestsLive.All do
 
   def mount(_params, _session, socket) do
     requests = Media.list_completed_requests()
-    IO.inspect(requests)
 
     {:ok, socket |> assign(requests: requests, title: "All requests")}
   end
