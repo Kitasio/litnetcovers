@@ -8,7 +8,7 @@
           <%= if request.prompt.bad do %>
             <button class="cursor-pointer text-green-600" phx-click="bad_prompt" phx-value-request_id={request.id}>Mark as good</button>
           <% else %>
-            <button class="cursor-pointer text-pink-600" phx-click="bad_prompt" phx-value-request_id={request.id}>Mark as bad</button>
+            <span><%= request.prompt.type %> | <%= request.prompt.realm %> | <%= request.prompt.sentiment %> | <span class="font-bold"><%= request.prompt.name %></span> | <button class="cursor-pointer text-pink-600" phx-click="bad_prompt" phx-value-request_id={request.id}>Mark as bad</button></span>
           <% end %>
         </div>
       </div>
