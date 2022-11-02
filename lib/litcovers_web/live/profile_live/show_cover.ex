@@ -7,7 +7,7 @@ defmodule LitcoversWeb.ProfileLive.ShowCover do
 
   def mount(params, session, socket) do
     %{"cover_id" => cover_id, "request_id" => request_id} = params
-    cover = Media.get_cover!(cover_id)
+    {:ok, cover} = Media.get_cover(cover_id)
     request = Media.get_request!(request_id)
 
     {

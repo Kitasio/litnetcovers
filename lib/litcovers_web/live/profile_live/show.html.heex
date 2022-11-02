@@ -20,7 +20,10 @@
         <% end %>
         <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
           <%= for cover <- @request.covers do %>
-            <.cover_selector_box request={@request} cover={cover} />
+            <div>
+              <a class="link" href={"/profile/#{@request.id}/#{cover.id}"}>overlays</a>
+              <.cover_selector_box request={@request} cover={cover} />
+            </div>
           <% end %>
         </div>
         <button class="mt-5 btn" phx-click="gen_more">More</button>
