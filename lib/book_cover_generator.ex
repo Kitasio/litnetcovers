@@ -144,8 +144,12 @@ defmodule BookCoverGenerator do
     end
   end
 
+  defp random_portrait do
+    ["Side profile portrait", "Close up portrait", "Symmetrical face portrait"] |> Enum.random()
+  end
+
   def create_prompt(idea_prompt, style_prompt, gender, :subject) do
-    "Side profile portrait, #{idea_prompt}, #{get_character_prompt(gender)}, #{style_prompt}"
+    "#{random_portrait()}, #{idea_prompt}, #{get_character_prompt(gender)}, #{style_prompt}"
   end
 
   def create_prompt(idea_prompt, style_prompt, _gender, :object) do
