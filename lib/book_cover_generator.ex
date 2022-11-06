@@ -45,7 +45,7 @@ defmodule BookCoverGenerator do
 
     body = Jason.encode!(sd_params)
     headers = [Authorization: "Token #{replicate_token}", "Content-Type": "application/json"]
-    options = [timeout: 50_000, recv_timeout: 50_000]
+    options = [timeout: 50_000, recv_timeout: 70_000]
 
     endpoint = "https://api.replicate.com/v1/predictions"
 
@@ -55,7 +55,7 @@ defmodule BookCoverGenerator do
       {:ok, %Response{body: res_body}} ->
         %{"urls" => %{"get" => generation_url}} = Jason.decode!(res_body)
 
-        case check_for_output(generation_url, headers, options, 25) do
+        case check_for_output(generation_url, headers, options, 35) do
           {:ok, image_links} ->
             {:ok, image_links}
 
