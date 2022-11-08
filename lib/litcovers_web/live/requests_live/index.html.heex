@@ -27,20 +27,6 @@
     </div>
 
     <%= if @type == "subject" do %>
-      <div class="font-light mt-7">Выберите цвет глаз</div>
-      <div class="flex gap-5">
-        <%= for eye <- @eyes do %>
-          <span phx-click="select_eye" phx-value-eye={eye.prompt} :class={"'#{eye.prompt}' == '#{@eye_prompt}' ? 'text-pink-600 underline' : ''"} class="capitalize cursor-pointer hover:text-pink-600 hover:underline"><%= eye.color %></span>
-        <% end %>
-      </div>
-
-      <div class="font-light mt-7">Выберите цвет волос</div>
-      <div class="flex gap-5">
-        <%= for h <- @hair do %>
-          <span phx-click="select_hair" phx-value-hair={h.prompt} :class={"'#{h.prompt}' == '#{@hair_prompt}' ? 'text-pink-600 underline' : ''"} class="capitalize cursor-pointer hover:text-pink-600 hover:underline"><%= h.name %></span>
-        <% end %>
-      </div>
-
       <div class="font-light mt-7">Выберите пол персонажа</div>
       <div class="flex gap-5">
         <span phx-click="select_gender" phx-value-gender="male" :class={"'male' == '#{@gender}' ? 'text-pink-600 underline' : ''"} class="capitalize cursor-pointer hover:text-pink-600 hover:underline">Male</span>
