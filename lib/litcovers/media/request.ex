@@ -28,9 +28,9 @@ defmodule Litcovers.Media.Request do
 
     belongs_to :user, Litcovers.Accounts.User
     belongs_to :prompt, Litcovers.Sd.Prompt
-    has_many :covers, Litcovers.Media.Cover
-    has_many :ideas, Litcovers.Media.Idea
-    has_many :title_splits, Litcovers.Media.TitleSplit
+    has_many :covers, Litcovers.Media.Cover, on_delete: :delete_all
+    has_many :ideas, Litcovers.Media.Idea, on_delete: :delete_all
+    has_many :title_splits, Litcovers.Media.TitleSplit, on_delete: :delete_all
 
     timestamps()
   end

@@ -8,7 +8,7 @@ defmodule Litcovers.Media.Cover do
     field :prompt, :string
 
     belongs_to :request, Litcovers.Media.Request
-    has_many :overlays, Litcovers.Media.Overlay
+    has_many :overlays, Litcovers.Media.Overlay, on_delete: :delete_all
 
     timestamps()
   end
