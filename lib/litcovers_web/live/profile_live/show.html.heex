@@ -15,22 +15,20 @@
         <.h2>Варианты по вашему запросу</.h2>
         <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
           <%= for cover <- @request.covers do %>
-            <div>
-              <a class="link" href={"/profile/#{@request.id}/#{cover.id}"}>overlays</a>
-              <.cover_selector_box request={@request} cover={cover} />
-            </div>
+            <%= for overlay <- cover.overlays do %>
+              <%= if overlay.selected do %>
+                <div>
+                  <div class="aspect-cover cursor-pointer rounded overflow-hidden border-2 border-zinc-400 hover:border-pink-600">
+                    <a href={"#{overlay.url}?ik-attachment=true"}>
+                      <img class="w-full h-full object-cover" src={overlay.url} />
+                    </a>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
           <% end %>
         </div>
-        <button class="mt-5 btn" phx-click="gen_more">More</button>
       </div>
-      <%= if @request.selected_cover do %>
-        <div class="flex flex-col gap-5">
-          <.p class="mt-10">Исходный файл в высоком разрешении</.p>
-          <div>
-            <.download_btn src={get_cover(@request.selected_cover)}>Скачать</.download_btn>
-          </div>
-        </div>
-      <% end %>
     <% else %>
     <div class="pt-10">
       <.h2><span class="animate-pulse">Наши система готовит варианты</span></.h2>

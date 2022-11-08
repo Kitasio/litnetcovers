@@ -6,6 +6,7 @@ defmodule LitcoversWeb.AdminLive.Show do
   alias Litcovers.Media
 
   def mount(params, session, socket) do
+    if connected?(socket), do: Media.subscribe()
     %{"request_id" => request_id} = params
     request = Media.get_request_and_covers!(request_id)
 
@@ -26,7 +27,23 @@ defmodule LitcoversWeb.AdminLive.Show do
     }
   end
 
+  def handle_info({:gen_complete, request}, socket) do
+    if request.id == socket.assigns.request.id do
+      {:noreply, socket |> assign(request: request)}
+    else
+      {:noreply, socket}
+    end
+  end
+
   def handle_event("validate", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("gen_more", %{}, socket) do
+    Task.start(fn ->
+      Media.gen_more(socket.assigns.request)
+    end)
+
     {:noreply, socket}
   end
 

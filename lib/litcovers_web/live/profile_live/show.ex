@@ -4,7 +4,6 @@ defmodule LitcoversWeb.ProfileLive.Show do
   import LitcoversWeb.UiComponents
   alias Litcovers.Accounts
   alias Litcovers.Media
-  alias Litcovers.Sd
 
   def mount(params, session, socket) do
     if connected?(socket), do: Media.subscribe()
@@ -22,27 +21,11 @@ defmodule LitcoversWeb.ProfileLive.Show do
     }
   end
 
-  def handle_event("gen_more", %{}, socket) do
-    Task.start(fn ->
-      Media.gen_more(socket.assigns.request)
-    end)
-
-    {:noreply, socket}
-  end
-
   def handle_event("select_cover", %{"cover_id" => _cover_id}, socket) do
     # params = %{selected_cover: cover_id}
     # Media.update_request(socket.assigns.request, params)
 
     {:noreply, socket}
-  end
-
-  def handle_info({:gen_complete, request}, socket) do
-    if request.id == socket.assigns.request.id do
-      {:noreply, socket |> assign(request: request)}
-    else
-      {:noreply, socket}
-    end
   end
 
   def insert_image_high_res(link) do

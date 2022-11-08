@@ -73,11 +73,11 @@
           <% else %>
             <img phx-click="toggle_overlay" phx-value-overlay_id={overlay.id} class="w-full border rounded object-cover cursor-pointer" src={overlay.url} />
           <% end %>
-          <div class="h-5">
-            <button class="hidden group-hover:block"><%= overlay.selected %></button>
-          </div>
         </div>
       <% end %>
     <% end %>
   </div>
+    <div class="flex mt-5">
+      <button phx-click="gen_more" class="btn">More</button>
+    </div>
 </div>

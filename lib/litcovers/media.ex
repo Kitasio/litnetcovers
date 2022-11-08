@@ -231,7 +231,7 @@ defmodule Litcovers.Media do
             end
           end
 
-          request = ai_update_request(request, %{completed: true})
+          # request = ai_update_request(request, %{completed: true})
 
           broadcast(request, :gen_complete)
       end
@@ -539,6 +539,12 @@ defmodule Litcovers.Media do
   """
   def list_overlays do
     Repo.all(Overlay)
+  end
+
+  def list_selected_overlays do
+    Overlay
+    |> where([o], o.selected == true)
+    |> Repo.all()
   end
 
   @doc """
