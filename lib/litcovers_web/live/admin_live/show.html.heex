@@ -68,9 +68,13 @@
     <%= for cover <- @request.covers do %>
       <%= for overlay <- cover.overlays do %>
         <div class="group">
-          <img class="w-full object-cover" src={overlay.url} />
+          <%= if overlay.selected do %>
+            <img phx-click="toggle_overlay" phx-value-overlay_id={overlay.id} class="w-full border rounded object-cover cursor-pointer border-green-500" src={overlay.url} />
+          <% else %>
+            <img phx-click="toggle_overlay" phx-value-overlay_id={overlay.id} class="w-full border rounded object-cover cursor-pointer" src={overlay.url} />
+          <% end %>
           <div class="h-5">
-            <button phx-click="delete" phx-value-cover_id={cover.id} class="hidden group-hover:block">Delete</button>
+            <button class="hidden group-hover:block"><%= overlay.selected %></button>
           </div>
         </div>
       <% end %>

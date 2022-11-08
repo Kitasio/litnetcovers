@@ -69,6 +69,15 @@ defmodule LitcoversWeb.AdminLive.Show do
     {:noreply, assign(socket, request: request)}
   end
 
+  def handle_event("toggle_overlay", %{"overlay_id" => overlay_id}, socket) do
+    overlay = Media.get_overlay!(overlay_id)
+    Media.update_overlay(overlay, %{selected: !overlay.selected})
+
+    request = Media.get_request_and_covers!(socket.assigns.request.id)
+
+    {:noreply, assign(socket, request: request)}
+  end
+
   defp error_to_string(:too_large), do: "Too large"
   defp error_to_string(:too_many_files), do: "You have selected too many files"
   defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
