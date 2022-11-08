@@ -18,7 +18,11 @@ defmodule LitcoversWeb.AdminLive.Show do
         request: request,
         title: "Request page"
       )
-      |> allow_upload(:cover, accept: ~w(.jpg .jpeg .png), max_entries: 5, max_file_size: 16_000_000)
+      |> allow_upload(:cover,
+        accept: ~w(.jpg .jpeg .png),
+        max_entries: 5,
+        max_file_size: 16_000_000
+      )
     }
   end
 
@@ -35,7 +39,8 @@ defmodule LitcoversWeb.AdminLive.Show do
 
     for url <- uploaded_files do
       image_params = %{image_params | "cover_url" => url}
-      save_image(socket, image_params)
+      cover = save_image(socket, image_params)
+      Media.create_overlay(cover, %{url: url})
     end
 
     {:noreply,
@@ -55,7 +60,9 @@ defmodule LitcoversWeb.AdminLive.Show do
   end
 
   def handle_event("toggle_complete", %{}, socket) do
-    Media.admin_update_request(socket.assigns.request, %{completed: !socket.assigns.request.completed})
+    Media.admin_update_request(socket.assigns.request, %{
+      completed: !socket.assigns.request.completed
+    })
 
     request = Media.get_request_and_covers!(socket.assigns.request.id)
 
@@ -68,8 +75,8 @@ defmodule LitcoversWeb.AdminLive.Show do
 
   defp save_image(socket, image_params) do
     case Media.create_cover(socket.assigns.request, image_params) do
-      {:ok, _image} ->
-        :ok
+      {:ok, cover} ->
+        cover
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

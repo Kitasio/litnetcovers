@@ -66,12 +66,14 @@
 
   <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
     <%= for cover <- @request.covers do %>
-      <div class="group">
-        <img class="w-full object-cover" src={cover.cover_url} />
-        <div class="h-5">
-          <button phx-click="delete" phx-value-cover_id={cover.id} class="hidden group-hover:block">Delete</button>
+      <%= for overlay <- cover.overlays do %>
+        <div class="group">
+          <img class="w-full object-cover" src={overlay.url} />
+          <div class="h-5">
+            <button phx-click="delete" phx-value-cover_id={cover.id} class="hidden group-hover:block">Delete</button>
+          </div>
         </div>
-      </div>
+      <% end %>
     <% end %>
   </div>
 </div>
