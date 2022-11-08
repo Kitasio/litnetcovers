@@ -5,6 +5,7 @@ defmodule Litcovers.Media.Overlay do
   @derive {Jason.Encoder, only: [:id, :url]}
   schema "overlays" do
     field :url, :string
+    field :selected, :boolean
     belongs_to :cover, Litcovers.Media.Cover
 
     timestamps()
@@ -13,7 +14,7 @@ defmodule Litcovers.Media.Overlay do
   @doc false
   def changeset(overlay, attrs) do
     overlay
-    |> cast(attrs, [:url])
+    |> cast(attrs, [:url, :selected])
     |> validate_required([:url])
   end
 end
