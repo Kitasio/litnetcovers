@@ -10,7 +10,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
   def mount(_params, session, socket) do
     current_user = Accounts.get_user_by_session_token(session["user_token"])
     realms = [:fantasy, :realism, :futurism]
-    types = [:object, :subject, :third_person]
+    types = [:object, :subject]
     sentiments = [:positive, :neutral, :negative]
 
     eyes = Character.list_eyes()
