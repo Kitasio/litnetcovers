@@ -103,8 +103,10 @@
       <% end %>
     </div>
 
-    <button x-on:click="stage = stage - 1" class="btn mt-5">Назад</button>
-    <button x-on:click="stage = stage + 1" class="btn mt-5">Далее</button>
+    <div class="flex gap-5 mt-10">
+      <button x-on:click="stage = stage - 1" class="btn">Назад</button>
+      <button x-on:click="stage = stage + 1" class="btn">Далее</button>
+    </div>
   </div>
   
   <div x-show="stage == 4">
