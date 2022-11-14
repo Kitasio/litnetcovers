@@ -156,6 +156,17 @@ defmodule LitcoversWeb.UserAuth do
     end
   end
 
+  def require_has_litcoins(conn, _opts) do
+    if conn.assigns[:current_user].litcoins > 0 do
+      conn
+    else
+      conn
+      |> put_flash(:error, "У вас недостаточно литкоинов")
+      |> redirect(to: Routes.page_path(conn, :index))
+      |> halt()
+    end
+  end
+
   def require_authenticated_admin(conn, _opts) do
     if conn.assigns[:current_user] do
       if conn.assigns[:current_user].is_admin do

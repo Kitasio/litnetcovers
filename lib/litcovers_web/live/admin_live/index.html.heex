@@ -70,6 +70,7 @@
         <tr>
           <th class="p-4 border border-slate-600">Email</th>
           <th class="p-4 border border-slate-600">Max requests</th>
+          <th class="p-4 border border-slate-600">Litcoins</th>
         </tr>
       </thead>
       <tbody>
@@ -81,6 +82,13 @@
                   <span><%= user.max_requests %></span>
                   <span class="cursor-pointer" phx-click="remove_requests" phx-value-user_id={user.id}>-</span>
                   <span class="cursor-pointer" phx-click="add_requests" phx-value-user_id={user.id}>+</span>
+                </div>
+              </td>
+              <td class="p-4 border border-slate-700">
+                <div class="flex justify-between items-center">
+                  <span><%= user.litcoins %></span>
+                  <span class="cursor-pointer" phx-click="remove_litcoins" phx-value-user_id={user.id}>-</span>
+                  <span class="cursor-pointer" phx-click="add_litcoins" phx-value-user_id={user.id}>+</span>
                 </div>
               </td>
             </tr>

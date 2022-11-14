@@ -184,8 +184,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
   def handle_event("save", %{"request" => request_params}, socket) do
     cond do
-      Media.user_requests_amount(socket.assigns.current_user) <
-          socket.assigns.current_user.max_requests ->
+      socket.assigns.current_user.litcoins > 0 ->
         %{"prompt_id" => prompt_id} = request_params
         prompt = Litcovers.Sd.get_prompt!(prompt_id)
 
@@ -194,6 +193,13 @@ defmodule LitcoversWeb.RequestsLive.Index do
             Task.start(fn ->
               Media.gen_covers(request)
             end)
+
+            params = %{litcoins: socket.assigns.current_user.litcoins - 1}
+
+            Accounts.update_litcoins(
+              socket.assigns.current_user,
+              params
+            )
 
             {:noreply,
              socket
@@ -208,7 +214,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
       true ->
         {:noreply,
          socket
-         |> put_flash(:error, "Вы уже подали максимальное количество заявок")
+         |> put_flash(:error, "У вас недостаточно литкоинов.")
          |> redirect(to: Routes.live_path(socket, LitcoversWeb.ProfileLive.Index))}
     end
   end

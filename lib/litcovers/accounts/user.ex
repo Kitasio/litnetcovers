@@ -10,6 +10,7 @@ defmodule Litcovers.Accounts.User do
     field :confirmed_at, :naive_datetime
     field :is_admin, :boolean
     field :max_requests, :integer
+    field :litcoins, :integer
 
     has_many :requests, Litcovers.Media.Request
 
@@ -50,6 +51,11 @@ defmodule Litcovers.Accounts.User do
   def max_requests_changeset(user, attrs) do
     user
     |> cast(attrs, [:max_requests])
+  end
+
+  def litcoins_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:litcoins])
   end
 
   defp validate_email(changeset) do

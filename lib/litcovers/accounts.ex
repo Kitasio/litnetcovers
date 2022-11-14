@@ -107,6 +107,12 @@ defmodule Litcovers.Accounts do
     |> Repo.update!()
   end
 
+  def update_litcoins(user, attrs) do
+    user
+    |> User.litcoins_changeset(attrs)
+    |> Repo.update!()
+  end
+
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
@@ -430,7 +436,8 @@ defmodule Litcovers.Accounts do
   end
 
   def create_token() do
-    token_params = %{token: Ecto.UUID.generate}
+    token_params = %{token: Ecto.UUID.generate()}
+
     %Token{}
     |> Token.changeset(token_params)
     |> Repo.insert()
