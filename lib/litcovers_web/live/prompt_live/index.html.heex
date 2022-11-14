@@ -1,4 +1,6 @@
-<h1>Listing Prompts</h1>
+<h1 class="mt-5">Listing Prompts</h1>
+
+<button class="btn my-5"><%= live_patch "New Prompt", to: Routes.prompt_index_path(@socket, :new) %></button>
 
 <%= if @live_action in [:new, :edit] do %>
   <.modal return_to={Routes.prompt_index_path(@socket, :index)}>
@@ -13,7 +15,7 @@
   </.modal>
 <% end %>
 
-<table class="table-auto border-collapse border border-slate-500">
+<table class=" mt-5 table-auto border-collapse border border-slate-500">
   <thead>
     <tr>
       <th class="p-4 border border-slate-600">ID</th>
@@ -44,4 +46,3 @@
   </tbody>
 </table>
 
-<span><%= live_patch "New Prompt", to: Routes.prompt_index_path(@socket, :new) %></span>
