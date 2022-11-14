@@ -35,6 +35,16 @@ defmodule Litcovers.Media do
     |> Repo.preload([:user, :prompt, :covers])
   end
 
+  def list_completed_requests(limit) do
+    Request
+    |> limit_query(limit)
+    |> order_by_date_insert()
+    |> completed_query()
+    |> with_final_desc()
+    |> Repo.all()
+    |> Repo.preload([:user, :prompt, :covers])
+  end
+
   def list_uncompleted_requests do
     Request
     |> uncompleted_query()
@@ -48,6 +58,10 @@ defmodule Litcovers.Media do
     |> order_by_date_insert()
     |> Repo.all()
     |> Repo.preload([:user, :prompt, :ideas, :title_splits, covers: [:overlays]])
+  end
+
+  defp limit_query(query, limit) do
+    from(r in query, limit: ^limit)
   end
 
   defp order_by_date_insert(query) do

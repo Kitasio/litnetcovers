@@ -7,9 +7,15 @@ defmodule LitcoversWeb.RequestsLive.All do
   import LitcoversWeb.UiComponents
 
   def mount(_params, _session, socket) do
-    requests = Media.list_completed_requests()
+    requests = Media.list_completed_requests(10)
 
     {:ok, socket |> assign(requests: requests, title: "All requests")}
+  end
+
+  def handle_event("show_all", %{}, socket) do
+    requests = Media.list_completed_requests()
+
+    {:noreply, socket |> assign(requests: requests)}
   end
 
   def handle_event("bad_prompt", %{"request_id" => request_id}, socket) do
