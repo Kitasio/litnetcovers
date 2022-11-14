@@ -62,7 +62,7 @@ defmodule LitcoversWeb.UiComponents do
 
   def cover_status_box(assigns) do
     ~H"""
-    <div class="p-4 group relative flex w-full border-2 bg-zinc-800 hover:bg-zinc-900 rounded border-zinc-400 hover:border-pink-500 transition duration-300">
+    <div class="p-4 group relative flex w-full border border-zinc-900 bg-zinc-800 hover:bg-zinc-900 rounded hover:border-pink-500 transition duration-300">
       <.request_status completed={assigns.request.completed} />
       <div class="w-full h-44 flex flex-col justify-between">
         <div>
