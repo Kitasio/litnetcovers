@@ -97,9 +97,18 @@
 
   <div x-show="stage == 3">
     <div class="text-lg mt-7">Какое слово точнее всего описывает вашу книгу?</div>
-    <div class="flex gap-5">
+    <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
       <%= for prompt <- @style_prompts do %>
-        <span phx-click="select_prompt" phx-value-prompt_id={prompt.id} phx-value-prompt={prompt.style_prompt} :class={"'#{prompt.style_prompt}' == '#{@style_prompt}' ? 'text-pink-600 underline' : ''"} class="capitalize cursor-pointer hover:text-pink-600 hover:underline"><%= prompt.name %></span>
+        <%= if prompt.image_url do %>
+          <div>
+            <div phx-click="select_prompt" phx-value-prompt_id={prompt.id} phx-value-prompt={prompt.style_prompt} :class={"'#{prompt.style_prompt}' == '#{@style_prompt}' ? 'border-green-500 hover:border-green-500': 'brightness-50'"} class="aspect-cover transition duration-300 hover:brightness-100 cursor-pointer rounded overflow-hidden border-2 border-zinc-400 hover:border-pink-600">
+              <img class="w-full h-full object-cover" src={prompt.image_url} />
+            </div>
+            <div phx-click="select_prompt" phx-value-prompt_id={prompt.id} phx-value-prompt={prompt.style_prompt} :class={"'#{prompt.style_prompt}' == '#{@style_prompt}' ? 'text-pink-600 underline' : ''"} class="capitalize cursor-pointer hover:text-pink-600 hover:underline"><%= prompt.name %></div>
+          </div>
+        <% else %>
+          <div phx-click="select_prompt" phx-value-prompt_id={prompt.id} phx-value-prompt={prompt.style_prompt} :class={"'#{prompt.style_prompt}' == '#{@style_prompt}' ? 'text-pink-600 underline' : ''"} class="capitalize cursor-pointer hover:text-pink-600 hover:underline"><%= prompt.name %></div>
+        <% end %>
       <% end %>
     </div>
 
