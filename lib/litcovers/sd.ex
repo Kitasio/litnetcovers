@@ -19,8 +19,11 @@ defmodule Litcovers.Sd do
   """
   def list_prompts do
     Prompt
+    |> order_by_query(:id)
     |> Repo.all()
   end
+
+  defp order_by_query(query, field), do: from(p in query, order_by: [desc: ^field])
 
   def list_all_where(realm, sentiment, type) do
     Prompt

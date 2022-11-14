@@ -13,14 +13,14 @@
   </.modal>
 <% end %>
 
-<table>
+<table class="table-auto border-collapse border border-slate-500">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Style prompt</th>
-      <th>Type</th>
-      <th>Sentiment</th>
-      <th>Realm</th>
+      <th class="p-4 border border-slate-600">ID</th>
+      <th class="p-4 border border-slate-600">Name</th>
+      <th class="p-4 border border-slate-600">Type</th>
+      <th class="p-4 border border-slate-600">Sentiment</th>
+      <th class="p-4 border border-slate-600">Realm</th>
 
       <th></th>
     </tr>
@@ -28,11 +28,11 @@
   <tbody id="prompts">
     <%= for prompt <- @prompts do %>
       <tr id={"prompt-#{prompt.id}"}>
-        <td><%= prompt.name %></td>
-        <td><%= prompt.style_prompt %></td>
-        <td><%= prompt.type %></td>
-        <td><%= prompt.sentiment %></td>
-        <td><%= prompt.realm %></td>
+        <td class="p-4 border border-slate-700"><%= prompt.id %></td>
+        <td class="p-4 border border-slate-700"><%= prompt.name %></td>
+        <td class="p-4 border border-slate-700"><%= prompt.type %></td>
+        <td class="p-4 border border-slate-700"><%= prompt.sentiment %></td>
+        <td class="p-4 border border-slate-700"><%= prompt.realm %></td>
 
         <td>
           <span><%= live_redirect "Show", to: Routes.prompt_show_path(@socket, :show, prompt) %></span>
