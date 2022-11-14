@@ -11,7 +11,7 @@
 
 @layer components {
   .btn {
-    @apply px-3 py-2 md:px-5 md:py-3 text-sm md:text-base text-slate-200 hover:text-slate-300 rounded-full hover:scale-105 bg-gradient-to-r from-pink-800 to-pink-500 border-2 border-pink-600 hover:border-gray-200 transition-all duration-200;
+    @apply px-3 py-2 md:px-5 md:py-3 text-sm md:text-base text-pink-200 border-2 border-pink-600 rounded-full bg-pink-600 hover:bg-pink-200 hover:text-pink-600 transition-all duration-200;
   }
   .link {
     @apply text-slate-200 text-sm md:text-base hover:text-pink-600 hover:underline transition duration-200;
