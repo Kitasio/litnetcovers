@@ -55,7 +55,7 @@ defmodule BookCoverGenerator do
       {:ok, %Response{body: res_body}} ->
         %{"urls" => %{"get" => generation_url}} = Jason.decode!(res_body)
 
-        case check_for_output(generation_url, headers, options, 35) do
+        case check_for_output(generation_url, headers, options, 45) do
           {:ok, image_links} ->
             {:ok, image_links}
 
