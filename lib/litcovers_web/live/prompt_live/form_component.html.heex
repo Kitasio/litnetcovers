@@ -16,6 +16,10 @@
     <%= label f, :style_prompt %>
     <%= textarea f, :style_prompt %>
     <%= error_tag f, :style_prompt %>
+
+    <%= label f, :image_url %>
+    <%= text_input f, :image_url %>
+    <%= error_tag f, :image_url %>
   
     <%= label f, :type %>
     <%= select f, :type, Ecto.Enum.values(Litcovers.Sd.Prompt, :type), prompt: "Choose a value" %>
