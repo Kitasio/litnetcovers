@@ -11,11 +11,7 @@
     <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
       <%= for request <- @requests do %>
         <%= live_redirect to: Routes.live_path(@socket, LitcoversWeb.ProfileLive.Show, request.id) do %>
-          <%= if request.selected_cover do %>
-            <.cover_box src={get_cover(request.selected_cover)} />
-          <% else %>
-            <.cover_status_box request={request} />
-          <% end %>
+          <.cover_status_box request={request} />
         <% end %>
       <% end %>
     </div>

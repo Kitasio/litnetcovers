@@ -52,25 +52,34 @@ defmodule LitcoversWeb.UiComponents do
     """
   end
 
+  def date(assigns) do
+    date = Date.to_iso8601(assigns.date)
+
+    ~H"""
+    <span class="text-xs text-zinc-400"><%= date %></span>
+    """
+  end
+
   def cover_status_box(assigns) do
     ~H"""
-    <%= if assigns.request.completed do %>
-      <div class="relative flex items-center justify-center aspect-cover w-full border-2 bg-zinc-800 hover:bg-zinc-900 rounded border-zinc-400 hover:border-pink-500 transition duration-300">
-        <.request_status completed={assigns.request.completed} />
-        <div class="space-y-2">
-          <.p class="text-center font-extrabold group-hover:text-zinc-50"><%= assigns.request.title %></.p>
-          <.p class="text-center text-teal-400 group-hover:text-zinc-50">Обложки готовы</.p>
+    <div class="p-4 group relative flex w-full border-2 bg-zinc-800 hover:bg-zinc-900 rounded border-zinc-400 hover:border-pink-500 transition duration-300">
+      <.request_status completed={assigns.request.completed} />
+      <div class="w-full h-44 flex flex-col justify-between">
+        <div>
+          <p class="group-hover:text-zinc-50"><%= assigns.request.author %></p>
+          <p class="font-extrabold text-xl group-hover:text-zinc-50"><%= assigns.request.title %></p>
+        </div>
+      
+        <div class="mt-7 flex justify-between w-full">
+          <%= if assigns.request.completed do %>
+            <p class="text-teal-400 text-xs">Обложки готовы</p>
+          <% else %>
+            <p class="text-orange-400 text-xs">Обложки готовятся</p>
+          <% end %>
+          <.date date={assigns.request.inserted_at}></.date>
         </div>
       </div>
-    <% else %>
-      <div class="p-4 relative flex items-center group justify-center aspect-cover w-full border-2 bg-zinc-800 hover:bg-zinc-900 rounded border-zinc-400 hover:border-pink-500 transition duration-300">
-        <.request_status completed={assigns.request.completed} />
-        <div class="space-y-2">
-          <.p class="text-center font-extrabold group-hover:text-zinc-50"><%= assigns.request.title %></.p>
-          <.p class="text-center text-orange-400 group-hover:text-zinc-50">Обложки готовятся</.p>
-        </div>
-      </div>
-    <% end %>
+    </div>
     """
   end
 
@@ -85,12 +94,12 @@ defmodule LitcoversWeb.UiComponents do
   def request_status(assigns) do
     ~H"""
     <%= if assigns.completed do %>
-      <div class="p-2 absolute top-4 right-4 rounded-full bg-cyan-200">
-        <svg class="fill-cyan-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"/></svg>
+      <div class="p-1 absolute top-4 right-4 rounded-full bg-cyan-200">
+        <svg class="fill-cyan-700 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"/></svg>
       </div>
     <% else %>
-      <div class="p-2 absolute top-4 right-4 rounded-full bg-orange-200">
-        <svg class="fill-orange-600 animate-slow-spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3.055 13H5.07a7.002 7.002 0 0 0 13.858 0h2.016a9.001 9.001 0 0 1-17.89 0zm0-2a9.001 9.001 0 0 1 17.89 0H18.93a7.002 7.002 0 0 0-13.858 0H3.055z"/></svg>
+      <div class="p-1 absolute top-4 right-4 rounded-full bg-orange-200">
+        <svg class="fill-orange-600 w-4 h-4 animate-slow-spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3.055 13H5.07a7.002 7.002 0 0 0 13.858 0h2.016a9.001 9.001 0 0 1-17.89 0zm0-2a9.001 9.001 0 0 1 17.89 0H18.93a7.002 7.002 0 0 0-13.858 0H3.055z"/></svg>
       </div>
     <% end %>
     """
