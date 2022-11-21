@@ -149,11 +149,11 @@ defmodule BookCoverGenerator do
   end
 
   def create_prompt(idea_prompt, style_prompt, gender, :subject) do
-    "#{random_portrait()}, #{idea_prompt}, #{get_character_prompt(gender)}, #{style_prompt}"
+    "mdjrny-v4 style #{random_portrait()}, #{idea_prompt}, #{get_character_prompt(gender)}, #{style_prompt}"
   end
 
   def create_prompt(idea_prompt, style_prompt, _gender, :object) do
-    "#{idea_prompt}, #{style_prompt}"
+    "mdjrny-v4 style #{idea_prompt}, #{style_prompt}"
   end
 
   defp is_english?(input) do

@@ -1,6 +1,6 @@
 defmodule SDParams do
   @derive Jason.Encoder
-  defstruct version: "c24bbf13332c755f9e1c8b3f10c7f438889145def57d554a74ea751dc5e3b509",
+  defstruct version: "9936c2001faa2194a261c01381f90e65261879985476014a0a37a334593a05eb",
             input: %{
               prompt: "multicolor hyperspace",
               width: 512,
