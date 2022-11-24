@@ -2,6 +2,7 @@ defmodule LitcoversWeb.V1.RequestController do
   use LitcoversWeb, :controller
 
   alias Litcovers.Media
+  alias Litcovers.Accounts
 
   def index(conn, _params) do
     requests = Media.list_user_requests(conn.assigns.current_user)
@@ -22,12 +23,18 @@ defmodule LitcoversWeb.V1.RequestController do
     prompt = Litcovers.Sd.get_prompt!(prompt_id)
 
     cond do
-      Media.user_requests_amount(conn.assigns.current_user) <
-          conn.assigns.current_user.max_requests ->
+      conn.assigns.current_user.litcoins > 0 ->
         case Media.create_request(conn.assigns.current_user, prompt, request_params) do
           {:ok, request} ->
             request = Media.get_request_and_covers!(request.id)
             Task.start(fn -> Media.gen_covers(request) end)
+
+            params = %{litcoins: conn.assigns.current_user.litcoins - 1}
+
+            Accounts.update_litcoins(
+              conn.assigns.current_user,
+              params
+            )
 
             conn
             |> render(:show, request: request)
@@ -50,10 +57,16 @@ defmodule LitcoversWeb.V1.RequestController do
 
   def update(conn, %{"id" => id}) do
     cond do
-      Media.user_requests_amount(conn.assigns.current_user) <
-          conn.assigns.current_user.max_requests ->
+      conn.assigns.current_user.litcoins > 0 ->
         request = Media.get_request_and_covers!(id)
         Task.start(fn -> Media.gen_more(request) end)
+
+        params = %{litcoins: conn.assigns.current_user.litcoins - 1}
+
+        Accounts.update_litcoins(
+          conn.assigns.current_user,
+          params
+        )
 
         conn
         |> render(:show, request: request)
@@ -62,14 +75,5 @@ defmodule LitcoversWeb.V1.RequestController do
         conn
         |> render(:error, errors: "max requests reached")
     end
-  end
-
-  def delete(conn, %{"id" => id}) do
-    request = Media.get_request!(id)
-    {:ok, _request} = Media.delete_request(request)
-
-    conn
-    |> put_flash(:info, "Request deleted successfully.")
-    |> redirect(to: Routes.request_path(conn, :index))
   end
 end
