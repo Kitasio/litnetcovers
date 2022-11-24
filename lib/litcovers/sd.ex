@@ -27,7 +27,7 @@ defmodule Litcovers.Sd do
 
   def list_all_where(realm, sentiment, type) do
     Prompt
-    |> not_bad()
+    |> order_by_query(:id)
     |> where_realm_query(realm)
     |> where_sentiment_query(sentiment)
     |> where_type_query(type)

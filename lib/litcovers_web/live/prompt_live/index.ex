@@ -6,7 +6,12 @@ defmodule LitcoversWeb.PromptLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :prompts, list_prompts())}
+    {:ok,
+     socket
+     |> assign(:prompts, Sd.list_prompts())
+     |> assign(:realm, nil)
+     |> assign(:sentiment, nil)
+     |> assign(:type, nil)}
   end
 
   @impl true
@@ -40,7 +45,47 @@ defmodule LitcoversWeb.PromptLive.Index do
     {:noreply, assign(socket, :prompts, list_prompts())}
   end
 
+  def handle_event("all", %{}, socket) do
+    {:noreply,
+     socket
+     |> assign(:realm, nil)
+     |> assign(:sentiment, nil)
+     |> assign(:type, nil)
+     |> assign(:prompts, Sd.list_prompts())}
+  end
+
+  def handle_event("realm", %{"realm" => realm}, socket) do
+    {:noreply,
+     socket
+     |> assign(
+       realm: realm,
+       prompts: list_prompts_where(realm, socket.assigns.sentiment, socket.assigns.type)
+     )}
+  end
+
+  def handle_event("sentiment", %{"sentiment" => sentiment}, socket) do
+    {:noreply,
+     socket
+     |> assign(
+       sentiment: sentiment,
+       prompts: list_prompts_where(socket.assigns.realm, sentiment, socket.assigns.type)
+     )}
+  end
+
+  def handle_event("type", %{"type" => type}, socket) do
+    {:noreply,
+     socket
+     |> assign(
+       type: type,
+       prompts: list_prompts_where(socket.assigns.realm, socket.assigns.sentiment, type)
+     )}
+  end
+
+  defp list_prompts_where(realm, sentiment, type) do
+    Sd.list_all_where(realm, sentiment, type)
+  end
+
   defp list_prompts do
-    Sd.list_prompts()
+    Sd.list_all_where(nil, nil, nil)
   end
 end

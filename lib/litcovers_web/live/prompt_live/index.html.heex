@@ -2,6 +2,25 @@
 
 <button class="btn my-5"><%= live_patch "New Prompt", to: Routes.prompt_index_path(@socket, :new) %></button>
 
+<h2>Sort by: <%= @type %> <%= @sentiment %> <%= @realm %></h2>
+<div class="flex gap-5">
+  <button class="link" phx-click="type" phx-value-type="object">Object</button>
+  <button class="link" phx-click="type" phx-value-type="subject">Subject</button>
+</div>
+<div class="flex gap-5">
+  <button class="link" phx-click="sentiment" phx-value-sentiment="positive">Positive</button>
+  <button class="link" phx-click="sentiment" phx-value-sentiment="neutral">Neutral</button>
+  <button class="link" phx-click="sentiment" phx-value-sentiment="negative">Negative</button>
+</div>
+<div class="flex gap-5">
+  <button class="link" phx-click="realm" phx-value-realm="fantasy">Fantasy</button>
+  <button class="link" phx-click="realm" phx-value-realm="realism">Realism</button>
+  <button class="link" phx-click="realm" phx-value-realm="futurism">Futursim</button>
+</div>
+
+<button class="link" phx-click="all">Show all</button>
+
+
 <%= if @live_action in [:new, :edit] do %>
   <.modal return_to={Routes.prompt_index_path(@socket, :index)}>
     <.live_component
