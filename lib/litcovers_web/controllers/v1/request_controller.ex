@@ -19,7 +19,7 @@ defmodule LitcoversWeb.V1.RequestController do
       do: render(conn, :error, errors: "prompt_id was not specified")
 
   def create(conn, %{"request" => request_params}) do
-    %{"prompt_id" => prompt_id} = request_params
+    %{"prompt_id" => prompt_id, "character_gender" => character_gender} = request_params
     prompt = Litcovers.Sd.get_prompt!(prompt_id)
 
     cond do
@@ -27,6 +27,7 @@ defmodule LitcoversWeb.V1.RequestController do
         case Media.create_request(conn.assigns.current_user, prompt, request_params) do
           {:ok, request} ->
             request = Media.get_request_and_covers!(request.id)
+            request = %{request | character_gender: get_female_or(character_gender)}
             Task.start(fn -> Media.gen_covers(request) end)
 
             params = %{litcoins: conn.assigns.current_user.litcoins - 1}
