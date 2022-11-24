@@ -46,7 +46,7 @@ defmodule LitcoversWeb.V1.RequestController do
 
       true ->
         conn
-        |> render(:error, errors: "max requests reached")
+        |> render(:error, errors: "No litcoins")
     end
   end
 
@@ -73,7 +73,7 @@ defmodule LitcoversWeb.V1.RequestController do
 
       true ->
         conn
-        |> render(:error, errors: "max requests reached")
+        |> render(:error, errors: "No litcoins")
     end
   end
 end
