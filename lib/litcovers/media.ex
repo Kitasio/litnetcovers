@@ -177,9 +177,10 @@ defmodule Litcovers.Media do
 
             urls =
               BookCoverGenerator.put_text_on_images(
-                request.title_splits |> get_splits(),
+                get_line_length_list(request.title),
                 cover.cover_url,
                 request.author,
+                request.title,
                 request.prompt.realm |> to_string()
               )
 
@@ -210,8 +211,6 @@ defmodule Litcovers.Media do
              System.get_env("OAI_TOKEN")
            ),
          _ <- save_ideas(ideas_list, request),
-         {:ok, splits} <- BookCoverGenerator.title_splits_list(request.title),
-         _ <- save_splits(splits, request),
          prompt <-
            BookCoverGenerator.create_prompt(
              ideas_list |> Enum.random(),
@@ -234,9 +233,10 @@ defmodule Litcovers.Media do
 
             urls =
               BookCoverGenerator.put_text_on_images(
-                splits,
+                get_line_length_list(request.title),
                 cover.cover_url,
                 request.author,
+                request.title,
                 request.prompt.realm |> to_string()
               )
 
@@ -249,6 +249,20 @@ defmodule Litcovers.Media do
 
           broadcast(request, :gen_complete)
       end
+    end
+  end
+
+  # returns a list of numbers based on the length of a given string
+  def get_line_length_list(str) do
+    cond do
+      String.length(str) <= 16 ->
+        [16]
+
+      String.length(str) <= 26 ->
+        [16, 26]
+
+      true ->
+        [16, 26, 32]
     end
   end
 

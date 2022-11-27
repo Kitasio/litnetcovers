@@ -268,23 +268,42 @@ defmodule BookCoverGenerator do
     "#{not_famous_celeb} as #{famous_celeb}"
   end
 
-  def insert_author_title(link, author, title, prompt_realm) do
+  def insert_author_title(link, author, title, prompt_realm, num) do
+    params = %Overlay{
+      font_file_name: get_rand_type(prompt_realm, "title") <> ".ttf",
+      title: title,
+      author: author,
+      image_url: link |> insert_vinyetta(),
+      line_length: num
+    }
+
+    imagekit_url = Application.get_env(:litcovers, :imagekit_url)
+    bucket = Application.get_env(:litcovers, :bucket)
+    filename = "#{Ecto.UUID.generate()}.png"
+
+    case Overlay.request_overlay(params) do
+      {:ok, image_bytes} ->
+        ExAws.S3.put_object(bucket, filename, image_bytes) |> ExAws.request!()
+
+        image_url = Path.join(imagekit_url, filename)
+        image_url
+
+      {:error, reason} ->
+        Logger.error("Error while requesting overlay API: #{inspect(reason)}")
+    end
+  end
+
+  def insert_vinyetta(link) do
+    vinyetta = "tr:w-512,h-768,oi-vin.png,ow-512,oh-768"
     uri = link |> URI.parse()
     %URI{host: host, path: path} = uri
 
     {filename, list} = path |> String.split("/") |> List.pop_at(-1)
     bucket = list |> List.last()
 
-    fonts = %{
-      author_font: get_rand_type(prompt_realm, "author"),
-      title_font: get_rand_type(prompt_realm, "title")
-    }
-
-    transformation = transformer(author, title, fonts)
-
     case host do
       "ik.imagekit.io" ->
-        Path.join(["https://", host, bucket, transformation, filename])
+        Path.join(["https://", host, bucket, vinyetta, filename])
 
       _ ->
         link
@@ -343,12 +362,12 @@ defmodule BookCoverGenerator do
     end
   end
 
-  def put_text_on_images([], _img_url, _author, _prompt_realm), do: []
+  def put_text_on_images([], _img_url, _author, _title, _prompt_realm), do: []
 
-  def put_text_on_images([title | splits_list], img_url, author, prompt_realm) do
+  def put_text_on_images([num | line_length_list], img_url, author, title, prompt_realm) do
     [
-      insert_author_title(img_url, author, title, prompt_realm)
-      | put_text_on_images(splits_list, img_url, author, prompt_realm)
+      insert_author_title(img_url, author, title, prompt_realm, num)
+      | put_text_on_images(line_length_list, img_url, author, title, prompt_realm)
     ]
   end
 
