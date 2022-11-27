@@ -1,6 +1,7 @@
 defmodule Overlay do
   @derive Jason.Encoder
-  defstruct font_file_name: "Stig.ttf",
+  defstruct author_font: "Stig.ttf",
+            title_font: "Ramp.ttf",
             title: "Title",
             author: "Author",
             image_url:

@@ -270,7 +270,8 @@ defmodule BookCoverGenerator do
 
   def insert_author_title(link, author, title, prompt_realm, num) do
     params = %Overlay{
-      font_file_name: get_rand_type(prompt_realm, "title") <> ".ttf",
+      author_font: get_rand_type(prompt_realm, "author") <> ".ttf",
+      title_font: get_rand_type(prompt_realm, "title") <> ".ttf",
       title: title,
       author: author,
       image_url: link |> insert_vinyetta(),
