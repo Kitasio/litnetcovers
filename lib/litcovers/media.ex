@@ -219,7 +219,12 @@ defmodule Litcovers.Media do
              request.prompt.type
            ),
          {:ok, sd_res} <-
-           BookCoverGenerator.diffuse(prompt, 1, System.get_env("REPLICATE_TOKEN")) do
+           BookCoverGenerator.diffuse(
+             prompt,
+             request.prompt.type,
+             1,
+             System.get_env("REPLICATE_TOKEN")
+           ) do
       %{"output" => image_list} = sd_res
 
       case BookCoverGenerator.save_to_spaces(image_list) do

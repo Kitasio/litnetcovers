@@ -36,12 +36,30 @@ defmodule BookCoverGenerator do
     end
   end
 
+  defp get_version(type) do
+    case type do
+      :object ->
+        "8abccf52e7cba9f6e82317253f4a3549082e966db5584e92c808ece132037776"
+
+      :subject ->
+        "9936c2001faa2194a261c01381f90e65261879985476014a0a37a334593a05eb"
+
+      _ ->
+        "9936c2001faa2194a261c01381f90e65261879985476014a0a37a334593a05eb"
+    end
+  end
+
   # Returns a list of image links
   def diffuse(_prompt, _amount, nil),
     do: raise("REPLICATE_TOKEN was not set\nVisit https://replicate.com/account to get it")
 
-  def diffuse(prompt, amount, replicate_token) do
-    sd_params = %SDParams{input: %{prompt: prompt, num_outputs: amount, height: 768}}
+  def diffuse(prompt, type, amount, replicate_token) do
+    version = get_version(type)
+
+    sd_params = %SDParams{
+      version: version,
+      input: %{prompt: prompt, num_outputs: amount, height: 768}
+    }
 
     body = Jason.encode!(sd_params)
     headers = [Authorization: "Token #{replicate_token}", "Content-Type": "application/json"]
@@ -153,7 +171,7 @@ defmodule BookCoverGenerator do
   end
 
   def create_prompt(idea_prompt, style_prompt, _gender, :object) do
-    "mdjrny-v4 style #{idea_prompt}, #{style_prompt}"
+    "#{idea_prompt}, #{style_prompt}"
   end
 
   defp is_english?(input) do
