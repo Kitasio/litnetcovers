@@ -63,6 +63,14 @@ defmodule LitcoversWeb.RequestsLive.Index do
     }
   end
 
+  def handle_event("change_gender", %{"gender" => gender}, socket) do
+    socket =
+      socket
+      |> assign(gender: gender)
+
+    {:noreply, socket}
+  end
+
   def handle_event("next", %{"value" => value}, socket) do
     case socket.assigns.stage.id do
       0 ->
@@ -207,6 +215,15 @@ defmodule LitcoversWeb.RequestsLive.Index do
     else
       img
     end
+  end
+
+  def gender_picker(assigns) do
+    ~H"""
+    <div class="my-10 flex justify-center w-full gap-5">
+      <button :class={"'#{assigns.gender}' == 'female'? 'text-pink-600 underline': ''"} class="link text-xl" phx-click="change_gender" phx-value-gender={:female}>ЖЕНЩИНА</button>
+      <button :class={"'#{assigns.gender}' == 'male'? 'text-pink-600 underline': ''"} class="link text-xl" phx-click="change_gender" phx-value-gender={:male}>МУЖЧИНА</button>
+    </div>
+    """
   end
 
   def stage_box(assigns) do
