@@ -1,3 +1,6 @@
+<%= if @stage.id < 4 do %>
+  <.stage_nav stage={@stage.id} />
+<% end %>
 <div id="stage-box" class="transition duration-300">
   <%= if @stage.id == 0 do %>
     <.stage_msg msg={@stage.msg} />

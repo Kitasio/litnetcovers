@@ -57,10 +57,15 @@ defmodule LitcoversWeb.RequestsLive.Index do
         gender: :female,
         style_prompts: style_prompts,
         style_prompt: prompt.style_prompt,
-        prompt_id: prompt.id,
-        title: "Мои обложки"
+        prompt_id: prompt.id
       )
     }
+  end
+
+  def handle_event("set_stage", %{"stage" => stage}, socket) do
+    stage = get_stage(stage |> String.to_integer())
+    socket = assign(socket, stage: stage)
+    {:noreply, socket}
   end
 
   def handle_event("change_gender", %{"gender" => gender}, socket) do
@@ -190,6 +195,27 @@ defmodule LitcoversWeb.RequestsLive.Index do
     end
   end
 
+  def stage_nav(assigns) do
+    ~H"""
+    <div class="mt-3 flex justify-center text-xs sm:text-base">
+      <%= for stage <- stages() do %>
+        <%= if stage.id <= assigns.stage do %>
+          <%= if stage.id == assigns.stage do %>
+            <button class="uppercase text-zinc-100 font-light">
+              <%= stage.name %>
+            </button>
+          <% else %>
+            <button phx-click={JS.push("set_stage") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")} phx-value-stage={stage.id} class="uppercase text-zinc-400 hover:text-zinc-100 font-light">
+              <%= stage.name %>
+            </button>
+          <% end %>
+          <span class="last:hidden pb-1 mx-2 text-zinc-400"> > </span>
+        <% end %>
+      <% end %>
+    </div>
+    """
+  end
+
   def img_box(assigns) do
     if assigns.value == nil do
       ~H"""
@@ -244,8 +270,8 @@ defmodule LitcoversWeb.RequestsLive.Index do
     """
   end
 
-  defp get_stage(id) do
-    stages = [
+  defp stages do
+    [
       %{
         id: 0,
         name: "Тип обложки",
@@ -256,9 +282,10 @@ defmodule LitcoversWeb.RequestsLive.Index do
       %{id: 3, name: "Стиль", msg: "Какой стиль обложки вам больше нравится?"},
       %{id: 4, name: nil, msg: nil}
     ]
+  end
 
-    # gets a stage by id
-    Enum.find(stages, fn stage -> stage.id == id end)
+  defp get_stage(id) do
+    Enum.find(stages(), fn stage -> stage.id == id end)
   end
 
   def placeholder_or_empty(nil),
