@@ -25,7 +25,7 @@ module.exports = {
         }
       },
       aspectRatio: {
-        'cover': '512/704'
+        'cover': '512/768'
       }
     },
   },

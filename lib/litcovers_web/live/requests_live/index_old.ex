@@ -1,44 +1,31 @@
-defmodule LitcoversWeb.RequestsLive.Index do
+defmodule LitcoversWeb.RequestsLive.IndexOld do
   use LitcoversWeb, :live_view
-  use Phoenix.Component
 
-  alias Phoenix.LiveView.JS
   alias Litcovers.Accounts
   alias Litcovers.Media
   alias Litcovers.Media.Request
+  alias Litcovers.Character
   alias Litcovers.Sd
-
-  def types() do
-    [
-      %{name: :object, label: "СЕТТИНГ"},
-      %{name: nil, label: nil},
-      %{name: :subject, label: "ПЕРСОНАЖ"}
-    ]
-  end
-
-  def realms() do
-    [
-      %{name: :fantasy, label: "ФЭНТЕЗИ - ПРОШЛОЕ"},
-      %{name: :realism, label: "РЕАЛЬНОСТЬ - НАСТОЯЩЕЕ"},
-      %{name: :futurism, label: "ФАНТАСТИКА - БУДУЩЕЕ"}
-    ]
-  end
-
-  def sentiments do
-    [
-      %{name: :positive, label: "тёплая - Светлая"},
-      %{name: :neutral, label: "Натуральная - нейтральная"},
-      %{name: :negative, label: "Брутальная - мрачная"}
-    ]
-  end
 
   def mount(_params, session, socket) do
     current_user = Accounts.get_user_by_session_token(session["user_token"])
+    realms = [:fantasy, :realism, :futurism]
+    types = [:object, :subject]
+    sentiments = [:positive, :neutral, :negative]
+
+    eyes = Character.list_eyes()
+    eye = eyes |> List.first()
+    eye_prompt = eye.prompt
+
+    hair = Character.list_hair()
+    h = hair |> List.first()
+    hair_prompt = h.prompt
 
     style_prompts = Sd.list_all_where(:fantasy, :positive, :object)
     prompt = style_prompts |> List.first()
+    # style_prompt = prompt.style_prompt
 
-    stage = get_stage(0)
+    character_prompt = get_character_prompt(:male, eye_prompt, hair_prompt)
 
     {
       :ok,
@@ -47,73 +34,143 @@ defmodule LitcoversWeb.RequestsLive.Index do
         current_user: current_user,
         changeset: Media.change_request(%Request{}),
         placeholder: placeholder_or_empty(Media.get_random_placeholder() |> List.first()),
-        stage: stage,
-        realms: realms(),
+        realms: realms,
         realm: :fantasy,
-        types: types(),
+        types: types,
         type: :object,
-        sentiments: sentiments(),
+        sentiments: sentiments,
         sentiment: :positive,
-        gender: :female,
+        eyes: eyes,
+        eye_prompt: eye_prompt,
+        hair: hair,
+        hair_prompt: hair_prompt,
+        gender: :male,
         style_prompts: style_prompts,
         style_prompt: prompt.style_prompt,
         prompt_id: prompt.id,
+        character_prompt: character_prompt,
         title: "Мои обложки"
       )
     }
   end
 
-  def handle_event("next", %{"value" => value}, socket) do
-    case socket.assigns.stage.id do
-      0 ->
-        stage = get_stage(socket.assigns.stage.id + 1)
+  def get_celeb_name(gender, is_famous) do
+    case Character.get_random_celeb(gender, is_famous) do
+      nil ->
+        ""
 
-        socket =
-          socket
-          |> assign(
-            stage: stage,
-            type: value
-          )
-
-        {:noreply, socket}
-
-      1 ->
-        stage = get_stage(socket.assigns.stage.id + 1)
-
-        socket =
-          socket
-          |> assign(
-            stage: stage,
-            realm: value
-          )
-
-        {:noreply, socket}
-
-      2 ->
-        stage = get_stage(socket.assigns.stage.id + 1)
-
-        style_prompts = Sd.list_all_where(socket.assigns.realm, value, socket.assigns.type)
-
-        socket =
-          socket
-          |> assign(
-            stage: stage,
-            sentiment: value,
-            style_prompts: style_prompts
-          )
-
-        {:noreply, socket}
-
-      3 ->
-        stage = get_stage(socket.assigns.stage.id + 1)
-        prompt = Sd.get_prompt!(value)
-
-        socket =
-          socket
-          |> assign(stage: stage, style_prompt: prompt.style_prompt, prompt_id: prompt.id)
-
-        {:noreply, socket}
+      celeb ->
+        celeb.name
     end
+  end
+
+  def get_character_prompt(gender, eye_prompt, hair_prompt) do
+    famous_celeb = get_celeb_name(gender, true)
+    not_famous_celeb = get_celeb_name(gender, false)
+
+    "#{not_famous_celeb} as #{famous_celeb}, #{eye_prompt}, #{hair_prompt}"
+  end
+
+  def list_prompts(realm, sentiment, type) do
+    style_prompts = Sd.list_all_where(to_string(realm), to_string(sentiment), to_string(type))
+
+    if Enum.empty?(style_prompts) do
+      {:error, "No prompts found"}
+    else
+      prompt = style_prompts |> List.first()
+      {:ok, style_prompts, prompt}
+    end
+  end
+
+  def handle_event("select_type", %{"type" => type}, socket) do
+    case list_prompts(socket.assigns.realm, socket.assigns.sentiment, type) do
+      {:ok, style_prompts, prompt} ->
+        {:noreply,
+         assign(socket,
+           type: type,
+           style_prompt: prompt.style_prompt,
+           prompt_id: prompt.id,
+           style_prompts: style_prompts
+         )}
+
+      {:error, _} ->
+        {:noreply, assign(socket, type: type)}
+    end
+  end
+
+  def handle_event("select_realm", %{"realm" => realm}, socket) do
+    case list_prompts(realm, socket.assigns.sentiment, socket.assigns.type) do
+      {:ok, style_prompts, prompt} ->
+        {:noreply,
+         assign(socket,
+           realm: realm,
+           style_prompt: prompt.style_prompt,
+           prompt_id: prompt.id,
+           style_prompts: style_prompts
+         )}
+
+      {:error, _} ->
+        {:noreply, assign(socket, realm: realm)}
+    end
+  end
+
+  def handle_event("select_sentiment", %{"sentiment" => sentiment}, socket) do
+    case list_prompts(socket.assigns.realm, sentiment, socket.assigns.type) do
+      {:ok, style_prompts, prompt} ->
+        {:noreply,
+         assign(socket,
+           sentiment: sentiment,
+           style_prompt: prompt.style_prompt,
+           prompt_id: prompt.id,
+           style_prompts: style_prompts
+         )}
+
+      {:error, _} ->
+        {:noreply, assign(socket, sentiment: sentiment)}
+    end
+  end
+
+  def handle_event("select_eye", %{"eye" => eye}, socket) do
+    {:noreply,
+     assign(socket,
+       eye_prompt: eye,
+       character_prompt:
+         get_character_prompt(
+           socket.assigns.gender,
+           eye,
+           socket.assigns.hair_prompt
+         )
+     )}
+  end
+
+  def handle_event("select_hair", %{"hair" => hair}, socket) do
+    {:noreply,
+     assign(socket,
+       hair_prompt: hair,
+       character_prompt:
+         get_character_prompt(
+           socket.assigns.gender,
+           socket.assigns.eye_prompt,
+           hair
+         )
+     )}
+  end
+
+  def handle_event("select_gender", %{"gender" => gender}, socket) do
+    {:noreply,
+     assign(socket,
+       gender: gender,
+       character_prompt:
+         get_character_prompt(
+           gender,
+           socket.assigns.eye_prompt,
+           socket.assigns.hair_prompt
+         )
+     )}
+  end
+
+  def handle_event("select_prompt", %{"prompt" => prompt, "prompt_id" => prompt_id}, socket) do
+    {:noreply, assign(socket, style_prompt: prompt, prompt_id: prompt_id)}
   end
 
   def handle_event("validate", %{"request" => params}, socket) do
@@ -160,88 +217,6 @@ defmodule LitcoversWeb.RequestsLive.Index do
          |> put_flash(:error, "У вас недостаточно литкоинов.")
          |> redirect(to: Routes.live_path(socket, LitcoversWeb.ProfileLive.Index))}
     end
-  end
-
-  def insert_tr(link, label) do
-    tr =
-      "tr:w-512,h-768,oi-vin.png,ow-512,oh-768,f-jpg,pr-true:ot-#{label},ots-30,otp-5_5_25_5,ofo-bottom,otc-fafafa"
-
-    uri = link |> URI.parse()
-    %URI{host: host, path: path} = uri
-
-    {filename, list} = path |> String.split("/") |> List.pop_at(-1)
-    folder = list |> List.last()
-    bucket = "soulgenesis"
-
-    case host do
-      "ik.imagekit.io" ->
-        Path.join(["https://", host, bucket, folder, tr, filename])
-
-      _ ->
-        link
-    end
-  end
-
-  def img_box(assigns) do
-    if assigns.value == nil do
-      ~H"""
-      <div></div>
-      """
-    else
-      src = default_img(assigns.src)
-
-      label = assigns.label |> String.upcase()
-      url = insert_tr(src, label)
-
-      ~H"""
-        <div class="overflow-hidden">
-          <img class="w-full h-full object-cover aspect-cover cursor-pointer transition duration-500 ease-out hover:scale-[1.02] hover:saturate-[1.3]" src={url} alt={assigns.label} phx-click={JS.push("next") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")} phx-value-value={assigns.value} />
-        </div>
-      """
-    end
-  end
-
-  defp default_img(img) do
-    if img == nil do
-      "https://ik.imagekit.io/soulgenesis/litnet/realm_fantasy.jpg"
-    else
-      img
-    end
-  end
-
-  def stage_box(assigns) do
-    ~H"""
-    <div class="grid md:grid-cols-3">
-      <%= render_slot(@inner_block) %>
-    </div>
-    """
-  end
-
-  def stage_msg(assigns) do
-    ~H"""
-    <div class="text-center my-10">
-      <h1 class="text-xl font-light uppercase">
-        <%= assigns.msg %>
-      </h1>
-    </div>
-    """
-  end
-
-  defp get_stage(id) do
-    stages = [
-      %{
-        id: 0,
-        name: "Тип обложки",
-        msg: "Какой тип обложки будет более подходящим для вашего произведения?"
-      },
-      %{id: 1, name: "Мир", msg: "Какой мир ближе к вашей книге?"},
-      %{id: 2, name: "Атмосфера", msg: "Какая атмосфера царит в вашем мире?"},
-      %{id: 3, name: "Стиль", msg: "Какой стиль обложки вам больше нравится?"},
-      %{id: 4, name: nil, msg: nil}
-    ]
-
-    # gets a stage by id
-    Enum.find(stages, fn stage -> stage.id == id end)
   end
 
   def placeholder_or_empty(nil),
