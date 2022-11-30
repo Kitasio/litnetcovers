@@ -106,24 +106,27 @@ defmodule LitcoversWeb.RequestsLive.Index do
         stage = get_stage(socket.assigns.stage.id + 1)
 
         style_prompts = Sd.list_all_where(socket.assigns.realm, value, socket.assigns.type)
+        random_prompt = style_prompts |> Enum.random()
 
         socket =
           socket
           |> assign(
             stage: stage,
             sentiment: value,
-            style_prompts: style_prompts
+            style_prompts: style_prompts,
+            style_prompt: random_prompt.style_prompt,
+            prompt_id: random_prompt.id
           )
 
         {:noreply, socket}
 
       3 ->
-        stage = get_stage(socket.assigns.stage.id + 1)
-        prompt = Sd.get_prompt!(value)
-
-        socket =
-          socket
-          |> assign(stage: stage, style_prompt: prompt.style_prompt, prompt_id: prompt.id)
+        # stage = get_stage(socket.assigns.stage.id + 1)
+        # prompt = Sd.get_prompt!(value)
+        #
+        # socket =
+        #   socket
+        #   |> assign(stage: stage, style_prompt: prompt.style_prompt, prompt_id: prompt.id)
 
         {:noreply, socket}
     end
@@ -279,8 +282,8 @@ defmodule LitcoversWeb.RequestsLive.Index do
       },
       %{id: 1, name: "Мир", msg: "Какой мир ближе к вашей книге?"},
       %{id: 2, name: "Атмосфера", msg: "Какая атмосфера царит в вашем мире?"},
-      %{id: 3, name: "Стиль", msg: "Какой стиль обложки вам больше нравится?"},
-      %{id: 4, name: nil, msg: nil}
+      # %{id: 3, name: "Стиль", msg: "Какой стиль обложки вам больше нравится?"},
+      %{id: 3, name: nil, msg: nil}
     ]
   end
 
