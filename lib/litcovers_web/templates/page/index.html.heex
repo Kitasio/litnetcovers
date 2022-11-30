@@ -1,11 +1,39 @@
 <div class="h-screen">
   <%= render LitcoversWeb.LayoutView, "nav.html", conn: @conn %>
 
-  <div class="mt-64 flex flex-col gap-4">
-    <h1 class="text-2xl md:text-3xl lg:text-5xl font-extrabold">Cоздай профессиональную<br> обложку для своей книги</h1>
-    <p class="lg:text-lg font-extralight">Несколько простых шагов, магия и потрясающий результат</p>
-    <div class="mt-4">
-      <%= link "Создать обложку", to: Routes.live_path(@conn, LitcoversWeb.RequestsLive.Index), class: "btn" %>
+  <div class="mt-5 md:mt-24 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <img class="aspect-cover rounded sm:max-w-sm sm:mx-auto md:mx-0 sm:order-last" src="https://ik.imagekit.io/soulgenesis/litnet/subject_female_realism_neutral.jpg" />
+    <div class="flex flex-col items-center gap-3 sm:items-start">
+      <h1 class="text-center sm:text-left text-2xl md:text-3xl lg:text-4xl font-medium">Cоздай<br> профессиональную<br> обложку для своей книги</h1>
+      <p class="text-center sm:text-left lg:text-lg font-extralight">Несколько простых шагов, магия и потрясающий результат</p>
+      <div class="mt-2 md:mt-4">
+        <%= link "Попробовать", to: Routes.live_path(@conn, LitcoversWeb.RequestsLive.Index), class: "btn" %>
+      </div>
     </div>
   </div>
+
+  <div class="mt-20 md:mt-44 p-10 md:p-24 flex flex-col sm:flex-row sm:justify-between gap-20 rounded bg-gradient-to-b sm:bg-gradient-to-r from-rose-700 to-pink-600">
+    <div class="text-center">
+      <p class="text-8xl md:text-9xl font-extrabold opacity-50">01</p>
+      <p class="md:text-xl">Пройди<br> быструю регистрацию</p>
+    </div>
+    <div class="text-center">
+      <p class="text-8xl md:text-9xl font-extrabold opacity-70">02</p>
+      <p class="md:text-xl">Заполни<br> данные по книге</p>
+    </div>
+    <div class="text-center">
+      <p class="text-8xl md:text-9xl font-extrabold">03</p>
+      <p class="md:text-xl">Выбери<br> свою обложку</p>
+    </div>
+  </div>
+
+  <div class="mt-20">
+    <h2 class="text-2xl md:text-3xl font-bold">Вместе мы создадим</h2>
+
+    <div>
+      
+    </div>
+  </div>
+
+  <div class="h-screen"></div>
 </div>

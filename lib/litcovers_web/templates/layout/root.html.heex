@@ -11,7 +11,7 @@
   </head>
   <body class="bg-zinc-900">
     <%= if @conn.request_path == "/" do %>
-      <div class="bg-overlay h-screen" style="--overlay-image: url(https://ik.imagekit.io/soulgenesis/litnet/bg.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1662304728307); --overlay-angle: 90deg; --overlay-colors: rgba(0, 0, 0, 0.93), rgba(0, 0, 0, 0.1);">
+      <div>
         <div class="text-slate-200 max-w-screen-xl mx-auto px-4">
           <%= @inner_content %>
         </div>
