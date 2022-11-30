@@ -25,6 +25,7 @@ defmodule Litcovers.Media.Request do
     field :selected_cover, :integer
     field :character_gender, :string
     field :final_desc, :string
+    field :comment, :string
 
     belongs_to :user, Litcovers.Accounts.User
     belongs_to :prompt, Litcovers.Sd.Prompt
@@ -43,12 +44,14 @@ defmodule Litcovers.Media.Request do
       :title,
       :description,
       :selected_cover,
-      :character_gender
+      :character_gender,
+      :comment
     ])
     |> validate_required([:author, :title, :description])
     |> validate_length(:author, max: 30)
     |> validate_length(:title, max: 40)
     |> validate_length(:description, max: 600)
+    |> validate_length(:comment, max: 600)
   end
 
   def admin_changeset(request, attrs) do

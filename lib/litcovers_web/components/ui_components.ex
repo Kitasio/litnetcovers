@@ -16,6 +16,12 @@ defmodule LitcoversWeb.UiComponents do
         <.h2>Описание</.h2>
         <.p><%= assigns.request.description %></.p>
       </div>
+      <%= if assigns.request.comment do %>
+        <div>
+          <.h2>Комментарий</.h2>
+          <.p><%= assigns.request.comment %></.p>
+        </div>
+      <% end %>
     </div>
     """
   end
