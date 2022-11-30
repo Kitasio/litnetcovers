@@ -69,6 +69,9 @@
       <thead>
         <tr>
           <th class="p-4 border border-slate-600">Email</th>
+          <th class="p-4 border border-slate-600">Name</th>
+          <th class="p-4 border border-slate-600">Position</th>
+          <th class="p-4 border border-slate-600">Phone</th>
           <th class="p-4 border border-slate-600">Max requests</th>
           <th class="p-4 border border-slate-600">Litcoins</th>
         </tr>
@@ -77,6 +80,9 @@
         <%= for user <- @users do %>
             <tr>
               <td class="p-4 border border-slate-700"><%= user.email %></td>
+              <td class="p-4 border border-slate-700"><%= user.name %></td>
+              <td class="p-4 border border-slate-700"><%= user.position %></td>
+              <td class="p-4 border border-slate-700"><%= user.phone %></td>
               <td class="p-4 border border-slate-700">
                 <div class="flex justify-between items-center">
                   <span><%= user.max_requests %></span>

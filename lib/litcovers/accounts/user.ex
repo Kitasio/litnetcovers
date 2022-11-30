@@ -42,6 +42,9 @@ defmodule Litcovers.Accounts.User do
     |> cast(attrs, [:email, :password, :name, :phone, :position])
     |> validate_email()
     |> validate_password(opts)
+    |> validate_length(:name, max: 50)
+    |> validate_length(:position, max: 100)
+    |> validate_length(:phone, max: 50)
   end
 
   def admin_registration_changeset(user, attrs, opts \\ []) do
