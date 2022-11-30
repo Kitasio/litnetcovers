@@ -11,6 +11,9 @@ defmodule Litcovers.Accounts.User do
     field :is_admin, :boolean
     field :max_requests, :integer
     field :litcoins, :integer
+    field :name, :string
+    field :phone, :string
+    field :position, :string
 
     has_many :requests, Litcovers.Media.Request
 
@@ -36,7 +39,7 @@ defmodule Litcovers.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :name, :phone, :position])
     |> validate_email()
     |> validate_password(opts)
   end
