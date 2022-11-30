@@ -11,10 +11,10 @@
 
 @layer components {
   .btn {
-    @apply px-3 py-2 md:px-5 md:py-3 text-sm md:text-base text-pink-200 border-2 border-pink-600 rounded-full bg-pink-600 hover:bg-pink-200 hover:text-pink-600 transition-all duration-200;
+    @apply px-3 py-2 md:px-5 md:py-3 text-xs sm:text-sm md:text-base text-pink-200 border-2 border-pink-600 rounded-full bg-pink-600 hover:bg-pink-200 hover:text-pink-600 transition-all duration-200;
   }
   .link {
-    @apply text-slate-200 text-sm md:text-base hover:text-pink-600 hover:underline transition duration-200;
+    @apply text-slate-200 text-xs sm:text-sm md:text-base hover:text-pink-600 hover:underline transition duration-200;
   }
   .input {
     @apply block w-full px-0.5 bg-transparent border-0 border-b-2 border-slate-200 focus:ring-0 focus:border-pink-600; 

@@ -263,7 +263,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
   def stage_msg(assigns) do
     ~H"""
     <div class="text-center my-10">
-      <h1 class="text-xl font-light uppercase">
+      <h1 class="text-sm sm:text-base lg:text-xl font-light uppercase">
         <%= assigns.msg %>
       </h1>
     </div>
