@@ -41,7 +41,7 @@ defmodule LitcoversWeb.UiComponents do
       <div class="absolute hidden group-hover:inline bottom-0 p-4 text-xs text-zinc-200 font-medium z-20"><%= assigns.cover.prompt %></div>
       <%= if assigns.request.selected_cover == nil do %>
         <div phx-click="select_cover" phx-value-cover_id={assigns.cover.id} phx-value-request_id={assigns.request.id} class="aspect-cover cursor-pointer rounded overflow-hidden border-2 border-zinc-400 hover:border-pink-600">
-          <img class="w-full h-full object-cover group-hover:brightness-50" src={insert_image_watermark(assigns.cover.cover_url)} />
+          <img class="w-full h-full object-cover group-hover:brightness-50" src={assigns.cover.cover_url} />
         </div>
       <% else %>
         <%= if assigns.cover.id == assigns.request.selected_cover do %>
@@ -50,7 +50,7 @@ defmodule LitcoversWeb.UiComponents do
           </div>
         <% else %>
           <div phx-click="select_cover" phx-value-cover_id={assigns.cover.id} phx-value-request_id={assigns.request.id} class="aspect-cover cursor-pointer rounded border-2 brightness-50 overflow-hidden border-zinc-400">
-            <img class="w-full h-full object-cover" src={insert_image_watermark(assigns.cover.cover_url)} />
+            <img class="w-full h-full object-cover" src={assigns.cover.cover_url} />
           </div>
         <% end %>
       <% end %>

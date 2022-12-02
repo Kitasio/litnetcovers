@@ -7,6 +7,9 @@
     <button phx-click="toggle_complete" class="text-red-400">Статус: в процессе</button>
   <% end %>
   <.request_info request={@request} />
+  <div class="mt-10">
+    <span><%= @request.prompt.type %> | <%= @request.prompt.realm %> | <%= @request.prompt.sentiment %> | <span class="font-bold"><%= @request.prompt.name %></span></span>
+  </div>
 
   <div class="mt-5" x-data="{ open: false }">
     <div class="flex justify-center">
@@ -67,11 +70,12 @@
   <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
     <%= for cover <- @request.covers do %>
       <%= for overlay <- cover.overlays do %>
-        <div class="group">
+        <div class="group relative">
+        <div class="absolute hidden group-hover:inline bottom-0 p-4 text-xs text-zinc-200 font-medium z-20"><%= cover.prompt %></div>
           <%= if overlay.selected do %>
-            <img phx-click="toggle_overlay" phx-value-overlay_id={overlay.id} class="w-full border rounded object-cover cursor-pointer border-green-500" src={overlay.url} />
+            <img phx-click="toggle_overlay" phx-value-overlay_id={overlay.id} class="w-full group-hover:brightness-50 border rounded object-cover cursor-pointer border-green-500" src={overlay.url} />
           <% else %>
-            <img phx-click="toggle_overlay" phx-value-overlay_id={overlay.id} class="w-full border rounded object-cover cursor-pointer" src={overlay.url} />
+            <img phx-click="toggle_overlay" phx-value-overlay_id={overlay.id} class="w-full group-hover:brightness-50 border rounded object-cover cursor-pointer" src={overlay.url} />
           <% end %>
         </div>
       <% end %>
