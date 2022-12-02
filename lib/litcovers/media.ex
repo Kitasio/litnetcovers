@@ -153,7 +153,27 @@ defmodule Litcovers.Media do
     [split | get_splits(title_splits)]
   end
 
+  defp get_description(request) do
+    if request.final_desc == nil do
+      request.description
+    else
+      request.final_desc
+    end
+  end
+
   def gen_more(request) do
+    if request.ideas == [] do
+      {:ok, ideas_list} =
+        BookCoverGenerator.description_to_cover_idea(
+          get_description(request),
+          request.prompt.type,
+          request.character_gender,
+          System.get_env("OAI_TOKEN")
+        )
+
+      save_ideas(ideas_list, request)
+    end
+
     %{idea: idea} = request.ideas |> Enum.random()
 
     with prompt <-
