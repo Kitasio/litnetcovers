@@ -1,6 +1,6 @@
 defmodule LitcoversWeb.RequestsLive.Index do
   use LitcoversWeb, :live_view
-  use Phoenix.Component
+  import Phoenix.Component
 
   alias Phoenix.LiveView.JS
   alias Litcovers.Accounts
@@ -208,11 +208,17 @@ defmodule LitcoversWeb.RequestsLive.Index do
               <%= stage.name %>
             </button>
           <% else %>
-            <button phx-click={JS.push("set_stage") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")} phx-value-stage={stage.id} class="uppercase text-zinc-400 hover:text-zinc-100 font-light">
+            <button
+              phx-click={
+                JS.push("set_stage") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")
+              }
+              phx-value-stage={stage.id}
+              class="uppercase text-zinc-400 hover:text-zinc-100 font-light"
+            >
               <%= stage.name %>
             </button>
           <% end %>
-          <span class="last:hidden pb-1 mx-2 text-zinc-400"> > </span>
+          <span class="last:hidden pb-1 mx-2 text-zinc-400">></span>
         <% end %>
       <% end %>
     </div>
@@ -229,11 +235,18 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
       label = assigns.label |> String.upcase()
       url = insert_tr(src, label)
+      assigns = assign(assigns, :url, url)
 
       ~H"""
-        <div class="overflow-hidden">
-          <img class="w-full h-full object-cover aspect-cover cursor-pointer transition duration-500 ease-out hover:scale-[1.02] hover:saturate-[1.3]" src={url} alt={assigns.label} phx-click={JS.push("next") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")} phx-value-value={assigns.value} />
-        </div>
+      <div class="overflow-hidden">
+        <img
+          class="w-full h-full object-cover aspect-cover cursor-pointer transition duration-500 ease-out hover:scale-[1.02] hover:saturate-[1.3]"
+          src={@url}
+          alt={assigns.label}
+          phx-click={JS.push("next") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")}
+          phx-value-value={assigns.value}
+        />
+      </div>
       """
     end
   end
@@ -249,8 +262,12 @@ defmodule LitcoversWeb.RequestsLive.Index do
   def gender_picker(assigns) do
     ~H"""
     <div class="my-10 flex justify-center w-full gap-5">
-      <button :class={"'#{assigns.gender}' == 'female'? 'text-pink-600 underline': ''"} class="link text-xl" phx-click="change_gender" phx-value-gender={:female}>ЖЕНЩИНА</button>
-      <button :class={"'#{assigns.gender}' == 'male'? 'text-pink-600 underline': ''"} class="link text-xl" phx-click="change_gender" phx-value-gender={:male}>МУЖЧИНА</button>
+      <button class="link text-xl" phx-click="change_gender" phx-value-gender={:female}>
+        ЖЕНЩИНА
+      </button>
+      <button class="link text-xl" phx-click="change_gender" phx-value-gender={:male}>
+        МУЖЧИНА
+      </button>
     </div>
     """
   end

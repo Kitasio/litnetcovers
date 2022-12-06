@@ -1,5 +1,6 @@
 defmodule LitcoversWeb.PromptLive.FormComponent do
   use LitcoversWeb, :live_component
+  import Phoenix.Component
 
   alias Litcovers.Sd
 

@@ -1,6 +1,5 @@
 defmodule LitcoversWeb.V1.CoverView do
   use LitcoversWeb, :view
-  alias LitcoversWeb.V1.CoverView
 
   def render("show.json", %{cover: cover}) do
     # %{data: render_one(cover, CoverView, "cover.json")}

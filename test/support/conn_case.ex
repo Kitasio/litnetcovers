@@ -28,6 +28,8 @@ defmodule LitcoversWeb.ConnCase do
 
       # The default endpoint for testing
       @endpoint LitcoversWeb.Endpoint
+
+      use LitcoversWeb, :verified_routes
     end
   end
 

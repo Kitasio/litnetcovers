@@ -1,5 +1,6 @@
 defmodule LitcoversWeb.ProfileLive.Index do
   use LitcoversWeb, :live_view
+  import Phoenix.Component
 
   import LitcoversWeb.UiComponents
 

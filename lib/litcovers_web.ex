@@ -16,6 +16,7 @@ defmodule LitcoversWeb do
   below. Instead, define any helper function in modules
   and import those modules here.
   """
+  def static_paths, do: ~w(assets uploads fonts images favicon.ico robots.txt)
 
   def controller do
     quote do
@@ -24,6 +25,8 @@ defmodule LitcoversWeb do
       import Plug.Conn
       import LitcoversWeb.Gettext
       alias LitcoversWeb.Router.Helpers, as: Routes
+
+      unquote(verified_routes())
     end
   end
 
@@ -45,7 +48,7 @@ defmodule LitcoversWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {LitcoversWeb.LayoutView, "live.html"}
+        layout: {LitcoversWeb.LayoutView, :live}
 
       unquote(view_helpers())
     end
@@ -92,6 +95,7 @@ defmodule LitcoversWeb do
       # Import LiveView and .heex helpers (live_render, live_patch, <.form>, etc)
       import Phoenix.LiveView.Helpers
       import LitcoversWeb.LiveHelpers
+      import Phoenix.Component
 
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
@@ -99,6 +103,17 @@ defmodule LitcoversWeb do
       import LitcoversWeb.ErrorHelpers
       import LitcoversWeb.Gettext
       alias LitcoversWeb.Router.Helpers, as: Routes
+
+      unquote(verified_routes())
+    end
+  end
+
+  def verified_routes do
+    quote do
+      use Phoenix.VerifiedRoutes,
+        endpoint: LitcoversWeb.Endpoint,
+        router: LitcoversWeb.Router,
+        statics: LitcoversWeb.static_paths()
     end
   end
 

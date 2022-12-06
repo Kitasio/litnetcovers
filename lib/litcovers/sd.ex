@@ -34,10 +34,6 @@ defmodule Litcovers.Sd do
     |> Repo.all()
   end
 
-  defp not_bad(query) do
-    from(p in query, where: p.bad == false)
-  end
-
   defp where_realm_query(query, nil), do: query
 
   defp where_realm_query(query, realm) do

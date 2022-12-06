@@ -1,5 +1,6 @@
 defmodule LitcoversWeb.PromptLive.Index do
   use LitcoversWeb, :live_view
+  import Phoenix.Component
 
   alias Litcovers.Sd
   alias Litcovers.Sd.Prompt

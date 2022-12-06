@@ -1,5 +1,6 @@
 defmodule LitcoversWeb.AdminLive.Show do
   use LitcoversWeb, :live_view
+  import Phoenix.Component
 
   import LitcoversWeb.UiComponents
   alias Litcovers.Accounts

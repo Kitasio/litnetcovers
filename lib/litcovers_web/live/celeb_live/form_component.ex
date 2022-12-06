@@ -1,5 +1,6 @@
 defmodule LitcoversWeb.CelebLive.FormComponent do
   use LitcoversWeb, :live_component
+  import Phoenix.Component
 
   alias Litcovers.Character
 

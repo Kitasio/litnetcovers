@@ -29,7 +29,8 @@ defmodule LitcoversWeb.UiComponents do
   def pinger(assigns) do
     ~H"""
     <span class="absolute -top-1 -right-1 flex h-3 w-3">
-      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75">
+      </span>
       <span class={"relative inline-flex rounded-full h-3 w-3 #{assigns.color}"}></span>
     </span>
     """
@@ -38,18 +39,36 @@ defmodule LitcoversWeb.UiComponents do
   def cover_selector_box(assigns) do
     ~H"""
     <div class="group relative">
-      <div class="absolute hidden group-hover:inline bottom-0 p-4 text-xs text-zinc-200 font-medium z-20"><%= assigns.cover.prompt %></div>
+      <div class="absolute hidden group-hover:inline bottom-0 p-4 text-xs text-zinc-200 font-medium z-20">
+        <%= assigns.cover.prompt %>
+      </div>
       <%= if assigns.request.selected_cover == nil do %>
-        <div phx-click="select_cover" phx-value-cover_id={assigns.cover.id} phx-value-request_id={assigns.request.id} class="aspect-cover cursor-pointer rounded overflow-hidden border-2 border-zinc-400 hover:border-pink-600">
-          <img class="w-full h-full object-cover group-hover:brightness-50" src={assigns.cover.cover_url} />
+        <div
+          phx-click="select_cover"
+          phx-value-cover_id={assigns.cover.id}
+          phx-value-request_id={assigns.request.id}
+          class="aspect-cover cursor-pointer rounded overflow-hidden border-2 border-zinc-400 hover:border-pink-600"
+        >
+          <img
+            class="w-full h-full object-cover group-hover:brightness-50"
+            src={assigns.cover.cover_url}
+          />
         </div>
       <% else %>
         <%= if assigns.cover.id == assigns.request.selected_cover do %>
           <div class="aspect-cover rounded border-2 overflow-hidden border-lime-300">
-            <img class="w-full h-full object-cover group-hover:brightness-50" src={assigns.cover.cover_url} />
+            <img
+              class="w-full h-full object-cover group-hover:brightness-50"
+              src={assigns.cover.cover_url}
+            />
           </div>
         <% else %>
-          <div phx-click="select_cover" phx-value-cover_id={assigns.cover.id} phx-value-request_id={assigns.request.id} class="aspect-cover cursor-pointer rounded border-2 brightness-50 overflow-hidden border-zinc-400">
+          <div
+            phx-click="select_cover"
+            phx-value-cover_id={assigns.cover.id}
+            phx-value-request_id={assigns.request.id}
+            class="aspect-cover cursor-pointer rounded border-2 brightness-50 overflow-hidden border-zinc-400"
+          >
             <img class="w-full h-full object-cover" src={assigns.cover.cover_url} />
           </div>
         <% end %>
@@ -59,10 +78,10 @@ defmodule LitcoversWeb.UiComponents do
   end
 
   def date(assigns) do
-    date = Date.to_iso8601(assigns.date)
+    assigns = assign(assigns, :date, Date.to_iso8601(assigns.date))
 
     ~H"""
-    <span class="text-xs text-zinc-400"><%= date %></span>
+    <span class="text-xs text-zinc-400"><%= @date %></span>
     """
   end
 
@@ -75,7 +94,7 @@ defmodule LitcoversWeb.UiComponents do
           <p class="group-hover:text-zinc-50"><%= assigns.request.author %></p>
           <p class="font-extrabold text-xl group-hover:text-zinc-50"><%= assigns.request.title %></p>
         </div>
-      
+
         <div class="mt-7 flex justify-between w-full">
           <%= if assigns.request.completed do %>
             <p class="text-teal-400 text-xs">Обложки готовы</p>
@@ -101,11 +120,27 @@ defmodule LitcoversWeb.UiComponents do
     ~H"""
     <%= if assigns.completed do %>
       <div class="p-1 absolute top-4 right-4 rounded-full bg-cyan-200">
-        <svg class="fill-cyan-700 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"/></svg>
+        <svg
+          class="fill-cyan-700 w-4 h-4"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+        >
+          <path fill="none" d="M0 0h24v24H0z" /><path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z" />
+        </svg>
       </div>
     <% else %>
       <div class="p-1 absolute top-4 right-4 rounded-full bg-orange-200">
-        <svg class="fill-orange-600 w-4 h-4 animate-slow-spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3.055 13H5.07a7.002 7.002 0 0 0 13.858 0h2.016a9.001 9.001 0 0 1-17.89 0zm0-2a9.001 9.001 0 0 1 17.89 0H18.93a7.002 7.002 0 0 0-13.858 0H3.055z"/></svg>
+        <svg
+          class="fill-orange-600 w-4 h-4 animate-slow-spin"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+        >
+          <path fill="none" d="M0 0h24v24H0z" /><path d="M3.055 13H5.07a7.002 7.002 0 0 0 13.858 0h2.016a9.001 9.001 0 0 1-17.89 0zm0-2a9.001 9.001 0 0 1 17.89 0H18.93a7.002 7.002 0 0 0-13.858 0H3.055z" />
+        </svg>
       </div>
     <% end %>
     """
@@ -138,7 +173,11 @@ defmodule LitcoversWeb.UiComponents do
 
   def download_btn(assigns) do
     ~H"""
-    <a href={"data:image/png;base64,#{assigns.src}"} download="cover.png" class="px-3 py-2 md:px-5 md:py-3 text-sm md:text-base text-slate-200 hover:text-slate-300 rounded-full hover:scale-105 bg-pink-500 border-2 border-pink-600 hover:border-gray-200 transition-all duration-200">
+    <a
+      href={"data:image/png;base64,#{assigns.src}"}
+      download="cover.png"
+      class="px-3 py-2 md:px-5 md:py-3 text-sm md:text-base text-slate-200 hover:text-slate-300 rounded-full hover:scale-105 bg-pink-500 border-2 border-pink-600 hover:border-gray-200 transition-all duration-200"
+    >
       <%= render_slot(@inner_block) %>
     </a>
     """

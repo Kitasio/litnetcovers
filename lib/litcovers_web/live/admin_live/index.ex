@@ -1,5 +1,6 @@
 defmodule LitcoversWeb.AdminLive.Index do
   use LitcoversWeb, :live_view
+  import Phoenix.Component
 
   alias Litcovers.Accounts
   alias Litcovers.Media

@@ -1,5 +1,6 @@
 defmodule LitcoversWeb.HairLive.Index do
   use LitcoversWeb, :live_view
+  import Phoenix.Component
 
   alias Litcovers.Character
   alias Litcovers.Character.Hair

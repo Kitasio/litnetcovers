@@ -403,10 +403,6 @@ defmodule Litcovers.Media do
     |> Repo.all()
   end
 
-  defp limit_query(query, amount) do
-    from(p in query, limit: ^amount)
-  end
-
   defp random_order_query(query) do
     from(p in query, order_by: fragment("RANDOM()"))
   end
