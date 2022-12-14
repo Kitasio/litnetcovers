@@ -238,11 +238,19 @@ defmodule LitcoversWeb.RequestsLive.Index do
       assigns = assign(assigns, :url, url)
 
       ~H"""
-      <div class="overflow-hidden">
+      <div
+        id={"#{@url}"}
+        class="overflow-hidden"
+        x-data={"{ showImage: false, imageUrl: '#{@url}' }"}
+        x-init={"console.log('#{@url}')"}
+      >
         <img
-          class="w-full h-full object-cover aspect-cover cursor-pointer transition duration-500 ease-out hover:scale-[1.02] hover:saturate-[1.3]"
-          src={@url}
+          x-show="showImage"
+          x-transition.duration.500ms
+          x-bind:src="imageUrl"
+          x-on:load="showImage = true"
           alt={assigns.label}
+          class="w-full h-full object-cover aspect-cover cursor-pointer transition duration-500 ease-out hover:scale-[1.02] hover:saturate-[1.3]"
           phx-click={JS.push("next") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")}
           phx-value-value={assigns.value}
         />
