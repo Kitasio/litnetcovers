@@ -47,6 +47,7 @@ defmodule Litcovers.Media do
 
   def list_uncompleted_requests do
     Request
+    |> order_by_date_insert()
     |> uncompleted_query()
     |> Repo.all()
     |> Repo.preload(:user)
