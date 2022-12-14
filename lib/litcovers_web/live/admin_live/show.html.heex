@@ -38,7 +38,7 @@
 	        <%= for entry <- @uploads.cover.entries do %>
 	          <div class="flex flex-col">
 	            <div class="flex-grow h-[20vh]">
-	              <%= live_img_preview entry, class: "object-cover align-bottom max-h-full mix-w-full" %>
+	              <.live_img_preview entry={entry} class="object-cover align-bottom max-h-full mix-w-full" />
 	            </div>
 	  
 	            <%= link "cancel", to: "#", phx_click: "cancel_upload", phx_value_ref: entry.ref, class: "border-b-2 border-blue-clue" %>
