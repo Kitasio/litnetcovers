@@ -41,6 +41,15 @@
   <% end %>
 
   <%= if @stage.id == 3 do %>
+    <.stage_msg msg={@stage.msg} />
+    <.stage_box>
+      <%= for p <- @style_prompts do %>
+        <.img_box src={p.image_url} label={p.name} value={p.id} />
+      <% end %>
+    </.stage_box>
+  <% end %>
+
+  <%= if @stage.id == 4 do %>
     <.form let={f} for={@changeset} phx-change="validate" phx-submit="save">
       <%= label f, "1. Автор", class: "capitalize text-2xl" %>
       <p class="font-light">Будет отображаться на самой обложке</p>
