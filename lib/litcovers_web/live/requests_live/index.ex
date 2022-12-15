@@ -204,7 +204,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
       <%= for stage <- stages() do %>
         <%= if stage.id <= assigns.stage do %>
           <%= if stage.id == assigns.stage do %>
-            <button class="uppercase text-zinc-100 font-light">
+            <button class="capitalize text-zinc-100 font-light">
               <%= stage.name %>
             </button>
           <% else %>
@@ -213,7 +213,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
                 JS.push("set_stage") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")
               }
               phx-value-stage={stage.id}
-              class="uppercase text-zinc-400 hover:text-zinc-100 font-light"
+              class="capitalize text-zinc-400 hover:text-zinc-100 font-light"
             >
               <%= stage.name %>
             </button>
@@ -269,12 +269,25 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
   def gender_picker(assigns) do
     ~H"""
-    <div class="my-10 flex justify-center w-full gap-5">
-      <button class="link text-xl" phx-click="change_gender" phx-value-gender={:female}>
-        ЖЕНЩИНА
+    <div class="mt-5 flex justify-center w-full gap-5">
+      <button
+        x-bind:class={"'#{assigns.gender}' == 'female' ? 'underline text-pink-600': ''"}
+        class="capitalize link"
+        phx-click="change_gender"
+        phx-value-gender={:female}
+      >
+        Женщина
       </button>
-      <button class="link text-xl" phx-click="change_gender" phx-value-gender={:male}>
-        МУЖЧИНА
+      <!-- <button class="capitalize link text-xl" phx-click="change_gender" phx-value-gender={:couple}> -->
+      <!--   Пара -->
+      <!-- </button> -->
+      <button
+        x-bind:class={"'#{assigns.gender}' == 'male' ? 'underline text-pink-600': ''"}
+        class="capitalize link"
+        phx-click="change_gender"
+        phx-value-gender={:male}
+      >
+        Мужчина
       </button>
     </div>
     """
@@ -290,8 +303,8 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
   def stage_msg(assigns) do
     ~H"""
-    <div class="text-center my-10">
-      <h1 class="text-sm sm:text-base lg:text-xl font-light uppercase">
+    <div class="text-center mt-5 mb-4">
+      <h1 class="text-sm sm:text-base lg:text-xl font-light">
         <%= assigns.msg %>
       </h1>
     </div>

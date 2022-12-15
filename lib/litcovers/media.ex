@@ -187,6 +187,7 @@ defmodule Litcovers.Media do
          {:ok, sd_res} <-
            BookCoverGenerator.diffuse(
              prompt,
+             request.character_gender,
              request.prompt.type,
              1,
              System.get_env("REPLICATE_TOKEN")
@@ -248,6 +249,7 @@ defmodule Litcovers.Media do
          {:ok, sd_res} <-
            BookCoverGenerator.diffuse(
              prompt,
+             request.character_gender,
              request.prompt.type,
              1,
              System.get_env("REPLICATE_TOKEN")

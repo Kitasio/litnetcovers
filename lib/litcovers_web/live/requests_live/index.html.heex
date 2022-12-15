@@ -12,6 +12,9 @@
   <% end %>
 
   <%= if @stage.id == 1 do %>
+    <%= if @type == "subject" do %>
+      <.gender_picker gender={@gender} />
+    <% end %>
     <.stage_msg msg={@stage.msg} />
     <.stage_box>
       <%= for r <- @realms do %>
@@ -22,9 +25,6 @@
         <% end %>
       <% end %>
     </.stage_box>
-    <%= if @type == "subject" do %>
-      <.gender_picker gender={@gender} />
-    <% end %>
   <% end %>
 
   <%= if @stage.id == 2 do %>
@@ -38,9 +38,6 @@
         <% end %>
       <% end %>
     </.stage_box>
-    <%= if @type == "subject" do %>
-      <.gender_picker gender={@gender} />
-    <% end %>
   <% end %>
 
   <%= if @stage.id == 3 do %>

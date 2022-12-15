@@ -36,7 +36,11 @@ defmodule BookCoverGenerator do
     end
   end
 
-  defp get_version(type) do
+  defp get_version(_type, "couple") do
+    "139abcbafe063bd8569836fbc97913ff9d0db1308a93e6f9a2a4d7d721008b9c"
+  end
+
+  defp get_version(type, _gender) do
     case type do
       :object ->
         "8abccf52e7cba9f6e82317253f4a3549082e966db5584e92c808ece132037776"
@@ -53,8 +57,8 @@ defmodule BookCoverGenerator do
   def diffuse(_prompt, _amount, nil),
     do: raise("REPLICATE_TOKEN was not set\nVisit https://replicate.com/account to get it")
 
-  def diffuse(prompt, type, amount, replicate_token) do
-    version = get_version(type)
+  def diffuse(prompt, gender, type, amount, replicate_token) do
+    version = get_version(type, gender)
 
     sd_params = %SDParams{
       version: version,
