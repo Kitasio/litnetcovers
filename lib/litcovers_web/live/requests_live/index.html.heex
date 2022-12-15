@@ -12,10 +12,10 @@
   <% end %>
 
   <%= if @stage.id == 1 do %>
+    <.stage_msg msg={@stage.msg} />
     <%= if @type == "subject" do %>
       <.gender_picker gender={@gender} />
     <% end %>
-    <.stage_msg msg={@stage.msg} />
     <.stage_box>
       <%= for r <- @realms do %>
         <%= if @type == "subject" do %>

@@ -225,15 +225,10 @@ defmodule Litcovers.Media do
   end
 
   def gen_covers(request) do
-    with {:ok, english_desc} <-
-           BookCoverGenerator.translate_to_english(
-             request.description,
-             System.get_env("OAI_TOKEN")
-           ),
-         _ <- ai_update_request(request, %{final_desc: english_desc}),
+    with _ <- ai_update_request(request, %{final_desc: request.description}),
          {:ok, ideas_list} <-
            BookCoverGenerator.description_to_cover_idea(
-             english_desc,
+             request.final_desc,
              request.prompt.type,
              request.character_gender,
              System.get_env("OAI_TOKEN")

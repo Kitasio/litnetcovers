@@ -263,7 +263,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
   def gender_picker(assigns) do
     ~H"""
-    <div class="mt-5 flex justify-center w-full gap-5">
+    <div class="mt-5 mb-4 flex justify-center w-full gap-5">
       <button
         x-bind:class={"'#{assigns.gender}' == 'female' ? 'underline text-pink-600': ''"}
         class="capitalize link"
