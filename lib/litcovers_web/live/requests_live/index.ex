@@ -105,11 +105,14 @@ defmodule LitcoversWeb.RequestsLive.Index do
       2 ->
         stage = get_stage(socket.assigns.stage.id + 1)
 
+        style_prompts = Sd.list_all_where(socket.assigns.realm, value, socket.assigns.type)
+
         socket =
           socket
           |> assign(
             stage: stage,
-            sentiment: value
+            sentiment: value,
+            style_prompts: style_prompts
           )
 
         {:noreply, socket}
@@ -122,6 +125,9 @@ defmodule LitcoversWeb.RequestsLive.Index do
           socket
           |> assign(stage: stage, style_prompt: prompt.style_prompt, prompt_id: prompt.id)
 
+        {:noreply, socket}
+
+      4 ->
         {:noreply, socket}
     end
   end
