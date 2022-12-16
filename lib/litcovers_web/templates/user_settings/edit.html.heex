@@ -4,9 +4,9 @@
 
 <.form let={f} for={@email_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_email">
   <%= if @email_changeset.action do %>
-    <div class="alert alert-danger">
+    <.flash kind={:error} title="Error!" flash={@flash}>
       <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
+    </.flash>
   <% end %>
 
   <%= hidden_input f, :action, name: "action", value: "update_email" %>
@@ -28,9 +28,9 @@
 
 <.form let={f} for={@password_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_password">
   <%= if @password_changeset.action do %>
-    <div class="alert alert-danger">
+    <.flash kind={:error} title="Error!" flash={@flash}>
       <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
+    </.flash>
   <% end %>
 
   <%= hidden_input f, :action, name: "action", value: "update_password" %>
