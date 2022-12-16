@@ -14,6 +14,7 @@ defmodule Litcovers.Accounts.User do
     field :name, :string
     field :phone, :string
     field :position, :string
+    field :consent, :boolean
 
     has_many :requests, Litcovers.Media.Request
 
@@ -39,12 +40,13 @@ defmodule Litcovers.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password, :name, :phone, :position])
+    |> cast(attrs, [:email, :password, :name, :phone, :position, :consent])
     |> validate_email()
     |> validate_password(opts)
     |> validate_length(:name, max: 50)
     |> validate_length(:position, max: 100)
     |> validate_length(:phone, max: 50)
+    |> validate_acceptance(:consent, message: "Acceptance of the terms and conditions is required")
   end
 
   def admin_registration_changeset(user, attrs, opts \\ []) do
