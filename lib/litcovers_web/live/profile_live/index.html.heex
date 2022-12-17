@@ -5,12 +5,12 @@
     <%= if @current_user.litcoins > 0 do %>
       <%= live_redirect to: ~p"/#{@socket.assigns.locale}/request" do %>
         <div class="mt-10 flex items-center justify-center w-full h-96 rounded border border-zinc-400 hover:border-pink-500 transition duration-300">
-          <.p class="text-center">Сейчас тут ничего нет,<br> пора это исправить по нажатию кнопки</.p>
+          <.p class="text-center"><%= gettext "There's nothing here for now," %><br> <%= gettext "It's time to change it with a click of a button" %></.p>
         </div>
       <% end %>
     <% else %>
       <div class="mt-10">
-        <p>На данный момент у вас нет литкоинов, чтобы сделать запрос.</p>
+        <p><%= gettext "At the moment you don't have litcoins to make a request." %></p>
       </div>
     <% end %>
   <% else %>

@@ -1,7 +1,7 @@
-<h1 class="mt-5">Подтверждение аккаунта</h1>
+<h1 class="mt-5"><%= gettext "Account confirmation" %></h1>
 
-<.form let={_f} for={:user} action={Routes.user_confirmation_path(@conn, :update, @token)}>
+<.form let={_f} for={:user} action={Routes.user_confirmation_path(@conn, @conn.assigns.locale, :update, @token)}>
   <div>
-    <%= submit "Подтвердить", class: "btn mt-3" %>
+    <%= submit gettext("Submit"), class: "btn mt-3" %>
   </div>
 </.form>

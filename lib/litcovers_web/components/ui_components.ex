@@ -1,24 +1,25 @@
 defmodule LitcoversWeb.UiComponents do
   use Phoenix.Component
+  import LitcoversWeb.Gettext
 
   def request_info(assigns) do
     ~H"""
     <div class="mt-5 flex flex-col gap-7">
       <div>
-        <.h2>Автор</.h2>
+        <.h2><%= gettext("Author") %></.h2>
         <.p><%= assigns.request.author %></.p>
       </div>
       <div>
-        <.h2>Название</.h2>
+        <.h2><%= gettext("Title") %></.h2>
         <.p><%= assigns.request.title %></.p>
       </div>
       <div>
-        <.h2>Описание</.h2>
+        <.h2><%= gettext("Annotation") %></.h2>
         <.p><%= assigns.request.description %></.p>
       </div>
       <%= if assigns.request.comment do %>
         <div>
-          <.h2>Комментарий</.h2>
+          <.h2><%= gettext("Comment") %></.h2>
           <.p><%= assigns.request.comment %></.p>
         </div>
       <% end %>
@@ -97,9 +98,9 @@ defmodule LitcoversWeb.UiComponents do
 
         <div class="mt-7 flex justify-between w-full">
           <%= if assigns.request.completed do %>
-            <p class="text-teal-400 text-xs">Обложки готовы</p>
+            <p class="text-teal-400 text-xs"><%= gettext("Covers are ready") %></p>
           <% else %>
-            <p class="text-orange-400 text-xs">Обложки готовятся</p>
+            <p class="text-orange-400 text-xs"><%= gettext("Generating covers") %></p>
           <% end %>
           <.date date={assigns.request.inserted_at}></.date>
         </div>

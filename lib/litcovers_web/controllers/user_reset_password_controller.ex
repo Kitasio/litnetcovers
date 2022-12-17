@@ -13,14 +13,16 @@ defmodule LitcoversWeb.UserResetPasswordController do
     if user = Accounts.get_user_by_email(email) do
       Accounts.deliver_user_reset_password_instructions(
         user,
-        &Routes.user_reset_password_url(conn, :edit, &1)
+        &Routes.user_reset_password_url(conn, conn.assigns.locale, :edit, &1)
       )
     end
 
     conn
     |> put_flash(
       :info,
-      "If your email is in our system, you will receive instructions to reset your password shortly."
+      gettext(
+        "If your email is in our system, you will receive instructions to reset your password shortly."
+      )
     )
     |> redirect(to: "/")
   end
@@ -35,8 +37,8 @@ defmodule LitcoversWeb.UserResetPasswordController do
     case Accounts.reset_user_password(conn.assigns.user, user_params) do
       {:ok, _} ->
         conn
-        |> put_flash(:info, "Password reset successfully.")
-        |> redirect(to: Routes.user_session_path(conn, :new))
+        |> put_flash(:info, gettext("Password reset successfully."))
+        |> redirect(to: Routes.user_session_path(conn, conn.assigns.locale, :new))
 
       {:error, changeset} ->
         render(conn, "edit.html", changeset: changeset)
@@ -50,7 +52,7 @@ defmodule LitcoversWeb.UserResetPasswordController do
       conn |> assign(:user, user) |> assign(:token, token)
     else
       conn
-      |> put_flash(:error, "Reset password link is invalid or it has expired.")
+      |> put_flash(:error, gettext("Reset password link is invalid or it has expired."))
       |> redirect(to: "/")
       |> halt()
     end

@@ -11,15 +11,17 @@ defmodule LitcoversWeb.UserConfirmationController do
     if user = Accounts.get_user_by_email(email) do
       Accounts.deliver_user_confirmation_instructions(
         user,
-        &Routes.user_confirmation_url(conn, :edit, &1)
+        &Routes.user_confirmation_url(conn, conn.assigns.locale, :edit, &1)
       )
     end
 
     conn
     |> put_flash(
       :info,
-      "If your email is in our system and it has not been confirmed yet, " <>
-        "you will receive an email with instructions shortly."
+      gettext(
+        "If your email is in our system and it has not been confirmed yet, " <>
+          "you will receive an email with instructions shortly."
+      )
     )
     |> redirect(to: "/")
   end
@@ -34,7 +36,7 @@ defmodule LitcoversWeb.UserConfirmationController do
     case Accounts.confirm_user(token) do
       {:ok, _} ->
         conn
-        |> put_flash(:info, "User confirmed successfully.")
+        |> put_flash(:info, gettext("User confirmed successfully."))
         |> redirect(to: "/")
 
       :error ->
@@ -48,7 +50,7 @@ defmodule LitcoversWeb.UserConfirmationController do
 
           %{} ->
             conn
-            |> put_flash(:error, "User confirmation link is invalid or it has expired.")
+            |> put_flash(:error, gettext("User confirmation link is invalid or it has expired."))
             |> redirect(to: "/")
         end
     end

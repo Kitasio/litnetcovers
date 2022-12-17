@@ -8,6 +8,7 @@ defmodule LitcoversWeb.ProfileLive.Index do
   alias Litcovers.Media
 
   def mount(%{"locale" => locale} = _params, session, socket) do
+    Gettext.put_locale(locale)
     if connected?(socket), do: Media.subscribe()
     current_user = Accounts.get_user_by_session_token(session["user_token"])
     requests = Media.list_user_requests(current_user)
@@ -19,7 +20,7 @@ defmodule LitcoversWeb.ProfileLive.Index do
         current_user: current_user,
         requests: requests,
         locale: locale,
-        title: "Мои обложки"
+        title: gettext("My covers")
       )
     }
   end

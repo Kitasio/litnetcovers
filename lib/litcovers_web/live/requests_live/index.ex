@@ -10,29 +10,30 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
   def types() do
     [
-      %{name: :object, label: "СЕТТИНГ"},
+      %{name: :object, label: gettext("Setting")},
       %{name: nil, label: nil},
-      %{name: :subject, label: "ПЕРСОНАЖ"}
+      %{name: :subject, label: gettext("Character")}
     ]
   end
 
   def realms() do
     [
-      %{name: :fantasy, label: "ФЭНТЕЗИ - ПРОШЛОЕ"},
-      %{name: :realism, label: "РЕАЛЬНОСТЬ - НАСТОЯЩЕЕ"},
-      %{name: :futurism, label: "ФАНТАСТИКА - БУДУЩЕЕ"}
+      %{name: :fantasy, label: gettext("Fantasy - Past")},
+      %{name: :realism, label: gettext("Realism - Present")},
+      %{name: :futurism, label: gettext("Futurism - Future")}
     ]
   end
 
   def sentiments do
     [
-      %{name: :positive, label: "тёплая - Светлая"},
-      %{name: :neutral, label: "Натуральная - нейтральная"},
-      %{name: :negative, label: "Брутальная - мрачная"}
+      %{name: :positive, label: gettext("Warm - Bright")},
+      %{name: :neutral, label: gettext("Natural - Neutral")},
+      %{name: :negative, label: gettext("Brutal - Dark")}
     ]
   end
 
   def mount(%{"locale" => locale} = _params, session, socket) do
+    Gettext.put_locale(locale)
     current_user = Accounts.get_user_by_session_token(session["user_token"])
 
     style_prompts = Sd.list_all_where(:fantasy, :positive, :object)
@@ -163,7 +164,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
             {:noreply,
              socket
-             |> put_flash(:info, "Ваша заявка подана.")
+             |> put_flash(:info, gettext("Your request has been submited."))
              |> redirect(to: ~p"/#{socket.assigns.locale}/profile")}
 
           {:error, %Ecto.Changeset{} = changeset} ->
@@ -174,7 +175,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
       true ->
         {:noreply,
          socket
-         |> put_flash(:error, "У вас недостаточно литкоинов.")
+         |> put_flash(:error, gettext("You don't have enough litcoins."))
          |> redirect(to: ~p"/#{socket.assigns.locale}/profile")}
     end
   end
@@ -277,7 +278,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
         phx-click="change_gender"
         phx-value-gender={:female}
       >
-        Женщина
+        <%= gettext("Female") %>
       </button>
       <!-- <button class="capitalize link text-xl" phx-click="change_gender" phx-value-gender={:couple}> -->
       <!--   Пара -->
@@ -288,7 +289,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
         phx-click="change_gender"
         phx-value-gender={:male}
       >
-        Мужчина
+        <%= gettext("Male") %>
       </button>
     </div>
     """
@@ -316,12 +317,12 @@ defmodule LitcoversWeb.RequestsLive.Index do
     [
       %{
         id: 0,
-        name: "Тип обложки",
-        msg: "Какой тип обложки будет более подходящим для вашего произведения?"
+        name: gettext("Cover type"),
+        msg: gettext("What type of cover is more suitable for your book?")
       },
-      %{id: 1, name: "Мир", msg: "Какой мир ближе к вашей книге?"},
-      %{id: 2, name: "Атмосфера", msg: "Какая атмосфера царит в вашем мире?"},
-      %{id: 3, name: "Стиль", msg: "Какой стиль обложки вам больше нравится?"},
+      %{id: 1, name: gettext("World"), msg: gettext("What world is your book set in?")},
+      %{id: 2, name: gettext("Vibe"), msg: gettext("What vibe does your book have?")},
+      %{id: 3, name: gettext("Style"), msg: gettext("What style do you prefer?")},
       %{id: 4, name: nil, msg: nil}
     ]
   end

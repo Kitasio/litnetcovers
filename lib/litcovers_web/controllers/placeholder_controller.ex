@@ -19,7 +19,7 @@ defmodule LitcoversWeb.PlaceholderController do
       {:ok, placeholder} ->
         conn
         |> put_flash(:info, "Placeholder created successfully.")
-        |> redirect(to: Routes.placeholder_path(conn, :show, placeholder))
+        |> redirect(to: Routes.placeholder_path(conn, conn.assigns.locale, :show, placeholder))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -44,7 +44,7 @@ defmodule LitcoversWeb.PlaceholderController do
       {:ok, placeholder} ->
         conn
         |> put_flash(:info, "Placeholder updated successfully.")
-        |> redirect(to: Routes.placeholder_path(conn, :show, placeholder))
+        |> redirect(to: Routes.placeholder_path(conn, conn.assigns.locale, :show, placeholder))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", placeholder: placeholder, changeset: changeset)
@@ -57,6 +57,6 @@ defmodule LitcoversWeb.PlaceholderController do
 
     conn
     |> put_flash(:info, "Placeholder deleted successfully.")
-    |> redirect(to: Routes.placeholder_path(conn, :index))
+    |> redirect(to: Routes.placeholder_path(conn, conn.assigns.locale, :index))
   end
 end

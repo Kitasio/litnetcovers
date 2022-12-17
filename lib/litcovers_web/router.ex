@@ -11,7 +11,10 @@ defmodule LitcoversWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
-    plug SetLocale, gettext: LitcoversWeb.Gettext, default_locale: "ru"
+
+    plug SetLocale,
+      gettext: LitcoversWeb.Gettext,
+      default_locale: "ru"
   end
 
   pipeline :api do
@@ -99,26 +102,9 @@ defmodule LitcoversWeb.Router do
     live "/prompts/new", PromptLive.Index, :new
     live "/prompts/:id/edit", PromptLive.Index, :edit
 
-    live "/eyes", EyeLive.Index, :index
-    live "/eyes/new", EyeLive.Index, :new
-    live "/eyes/:id/edit", EyeLive.Index, :edit
-
-    live "/eyes/:id", EyeLive.Show, :show
-    live "/eyes/:id/show/edit", EyeLive.Show, :edit
-
-    live "/hair", HairLive.Index, :index
-    live "/hair/new", HairLive.Index, :new
-    live "/hair/:id/edit", HairLive.Index, :edit
-
-    live "/hair/:id", HairLive.Show, :show
-    live "/hair/:id/show/edit", HairLive.Show, :edit
-
     live "/celebs", CelebLive.Index, :index
     live "/celebs/new", CelebLive.Index, :new
     live "/celebs/:id/edit", CelebLive.Index, :edit
-
-    live "/celebs/:id", CelebLive.Show, :show
-    live "/celebs/:id/show/edit", CelebLive.Show, :edit
 
     live "/:request_id", AdminLive.Show
   end

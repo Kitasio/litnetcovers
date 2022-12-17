@@ -16,11 +16,11 @@ defmodule LitcoversWeb.UserRegistrationController do
         {:ok, _} =
           Accounts.deliver_user_confirmation_instructions(
             user,
-            &Routes.user_confirmation_url(conn, :edit, &1)
+            &Routes.user_confirmation_url(conn, conn.assings.locale, :edit, &1)
           )
 
         conn
-        |> put_flash(:info, "Перейдите по ссылке которую мы послали на ваш Email")
+        |> put_flash(:info, gettext("Use the link we sent you to confirm your email address."))
         |> UserAuth.log_in_user(user)
 
       {:error, %Ecto.Changeset{} = changeset} ->

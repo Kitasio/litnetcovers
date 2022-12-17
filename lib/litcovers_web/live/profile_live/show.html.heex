@@ -1,9 +1,9 @@
 <div class="my-10">
   <div class="flex justify-center">
     <%= if @request.completed do %>
-      <.h1>Обложки готовы</.h1>
+      <.h1><%= gettext "Covers are ready" %></.h1>
     <% else %>
-      <.h1>Создание обложек</.h1>
+      <.h1><%= gettext "Covers creation in progress" %></.h1>
     <% end %>
   </div>
 
@@ -12,7 +12,7 @@
 
     <%= if @request.completed do %>
       <div class="pt-10">
-        <.h2>Варианты по вашему запросу</.h2>
+        <.h2><%= gettext "Covers for your request" %></.h2>
         <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
           <%= for cover <- @request.covers do %>
             <%= for overlay <- cover.overlays do %>
@@ -31,7 +31,7 @@
       </div>
     <% else %>
     <div class="pt-10">
-      <.h2><span class="animate-pulse">Наши система готовит варианты</span></.h2>
+      <.h2><span class="animate-pulse"><%= gettext "The system is generating covers" %></span></.h2>
       <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
       <%= for _ <- 1..3 do %>
         <div class="relative aspect-cover flex items-center justify-center w-full bg-zinc-700 rounded">

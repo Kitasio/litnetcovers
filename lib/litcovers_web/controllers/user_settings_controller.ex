@@ -25,7 +25,7 @@ defmodule LitcoversWeb.UserSettingsController do
         conn
         |> put_flash(
           :info,
-          "A link to confirm your email change has been sent to the new address."
+          gettext("A link to confirm your email change has been sent to the new address.")
         )
         |> redirect(to: ~p"/#{conn.assigns.locale}/users/settings")
 
@@ -41,7 +41,7 @@ defmodule LitcoversWeb.UserSettingsController do
     case Accounts.update_user_password(user, password, user_params) do
       {:ok, user} ->
         conn
-        |> put_flash(:info, "Password updated successfully.")
+        |> put_flash(:info, gettext("Password updated successfully."))
         |> put_session(:user_return_to, ~p"/#{conn.assigns.locale}/users/settings")
         |> UserAuth.log_in_user(user)
 
@@ -54,12 +54,12 @@ defmodule LitcoversWeb.UserSettingsController do
     case Accounts.update_user_email(conn.assigns.current_user, token) do
       :ok ->
         conn
-        |> put_flash(:info, "Email changed successfully.")
+        |> put_flash(:info, gettext("Email changed successfully."))
         |> redirect(to: ~p"/#{conn.assigns.locale}/users/settings")
 
       :error ->
         conn
-        |> put_flash(:error, "Email change link is invalid or it has expired.")
+        |> put_flash(:error, gettext("Email change link is invalid or it has expired."))
         |> redirect(to: ~p"/#{conn.assigns.locale}/users/settings")
     end
   end

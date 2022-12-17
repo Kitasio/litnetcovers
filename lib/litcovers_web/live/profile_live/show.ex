@@ -8,7 +8,8 @@ defmodule LitcoversWeb.ProfileLive.Show do
 
   def mount(params, session, socket) do
     if connected?(socket), do: Media.subscribe()
-    %{"request_id" => request_id} = params
+    %{"request_id" => request_id, "locale" => locale} = params
+    Gettext.put_locale(locale)
     request = Media.get_request_and_covers!(request_id)
 
     {
@@ -17,7 +18,7 @@ defmodule LitcoversWeb.ProfileLive.Show do
       |> assign(
         current_user: Accounts.get_user_by_session_token(session["user_token"]),
         request: request,
-        title: "Создание обложки"
+        title: gettext("Cover creation")
       )
     }
   end

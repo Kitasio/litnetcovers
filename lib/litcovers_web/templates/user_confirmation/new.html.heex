@@ -1,11 +1,11 @@
-<h1 class="mt-5">Послать ссылку с подтверждением снова</h1>
+<h1 class="mt-5"><%= gettext "Resend the confirmation Email" %></h1>
 
-<.form let={f} for={:user} action={Routes.user_confirmation_path(@conn, :create)}>
+<.form let={f} for={:user} action={Routes.user_confirmation_path(@conn, @conn.assigns.locale, :create)}>
   <%= label f, :email %>
   <%= email_input f, :email, required: true %>
 
   <div>
-    <%= submit "Отправить", class: "btn mt-3" %>
+    <%= submit gettext("Send"), class: "btn mt-3" %>
   </div>
 </.form>
 

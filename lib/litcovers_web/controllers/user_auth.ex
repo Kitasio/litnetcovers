@@ -2,6 +2,7 @@ defmodule LitcoversWeb.UserAuth do
   import Plug.Conn
   import Phoenix.Controller
 
+  import LitcoversWeb.Gettext
   alias Litcovers.Accounts
   alias LitcoversWeb.Router.Helpers, as: Routes
 
@@ -143,7 +144,7 @@ defmodule LitcoversWeb.UserAuth do
         conn
         |> put_flash(
           :error,
-          "Вы должны подтвердить ваш Email перейдя по ссылке которую мы отправили"
+          gettext("You need to confirm your account before continuing.")
         )
         |> maybe_store_return_to()
         |> redirect(to: "/#{conn.assigns.locale}/users/confirm")
@@ -151,7 +152,7 @@ defmodule LitcoversWeb.UserAuth do
       end
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
+      |> put_flash(:error, gettext("You must log in to access this page."))
       |> maybe_store_return_to()
       |> redirect(to: "/")
       |> halt()
@@ -163,7 +164,7 @@ defmodule LitcoversWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "У вас недостаточно литкоинов")
+      |> put_flash(:error, gettext("У вас недостаточно литкоинов"))
       |> redirect(to: "/")
       |> halt()
     end
@@ -175,14 +176,14 @@ defmodule LitcoversWeb.UserAuth do
         conn
       else
         conn
-        |> put_flash(:error, "You cannot access this page.")
+        |> put_flash(:error, gettext("You cannot access this page."))
         |> maybe_store_return_to()
         |> redirect(to: "/")
         |> halt()
       end
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
+      |> put_flash(:error, gettext("You must log in to access this page."))
       |> maybe_store_return_to()
       |> redirect(to: "/")
       |> halt()

@@ -30,3 +30,361 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Welcome to %{name}!"
 msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.html.heex:54
+#, elixir-autogen, elixir-format
+msgid "1. Author"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.html.heex:59
+#, elixir-autogen, elixir-format
+msgid "2. Title"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.html.heex:64
+#, elixir-autogen, elixir-format
+msgid "3. Annotation"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.html.heex:65
+#, elixir-autogen, elixir-format
+msgid "Tell about your book"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.html.heex:55
+#: lib/litcovers_web/live/requests_live/index.html.heex:60
+#, elixir-autogen, elixir-format
+msgid "Will be shown on the cover itself"
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_settings_controller.ex:28
+#, elixir-autogen, elixir-format
+msgid "A link to confirm your email change has been sent to the new address."
+msgstr ""
+
+#: lib/litcovers_web/live/profile_live/index.html.heex:13
+#, elixir-autogen, elixir-format
+msgid "At the moment you don't have litcoins to make a request."
+msgstr ""
+
+#: lib/litcovers_web/live/profile_live/show.ex:21
+#, elixir-autogen, elixir-format
+msgid "Cover creation"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:320
+#, elixir-autogen, elixir-format
+msgid "Cover type"
+msgstr ""
+
+#: lib/litcovers_web/components/ui_components.ex:101
+#: lib/litcovers_web/live/profile_live/show.html.heex:4
+#, elixir-autogen, elixir-format
+msgid "Covers are ready"
+msgstr ""
+
+#: lib/litcovers_web/live/profile_live/show.html.heex:6
+#, elixir-autogen, elixir-format
+msgid "Covers creation in progress"
+msgstr ""
+
+#: lib/litcovers_web/live/profile_live/show.html.heex:15
+#, elixir-autogen, elixir-format
+msgid "Covers for your request"
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_settings_controller.ex:62
+#, elixir-autogen, elixir-format
+msgid "Email change link is invalid or it has expired."
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_settings_controller.ex:57
+#, elixir-autogen, elixir-format
+msgid "Email changed successfully."
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:281
+#, elixir-autogen, elixir-format
+msgid "Female"
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_confirmation_controller.ex:21
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_reset_password_controller.ex:23
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system, you will receive instructions to reset your password shortly."
+msgstr ""
+
+#: lib/litcovers_web/live/profile_live/index.html.heex:8
+#, elixir-autogen, elixir-format
+msgid "It's time to change it with a click of a button"
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_session_controller.ex:24
+#, elixir-autogen, elixir-format
+msgid "Logged out successfully."
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:292
+#, elixir-autogen, elixir-format
+msgid "Male"
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_reset_password_controller.ex:40
+#, elixir-autogen, elixir-format
+msgid "Password reset successfully."
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_settings_controller.ex:44
+#, elixir-autogen, elixir-format
+msgid "Password updated successfully."
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_reset_password_controller.ex:55
+#, elixir-autogen, elixir-format
+msgid "Reset password link is invalid or it has expired."
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:325
+#, elixir-autogen, elixir-format
+msgid "Style"
+msgstr ""
+
+#: lib/litcovers_web/live/profile_live/show.html.heex:34
+#, elixir-autogen, elixir-format
+msgid "The system is generating covers"
+msgstr ""
+
+#: lib/litcovers_web/live/profile_live/index.html.heex:8
+#, elixir-autogen, elixir-format
+msgid "There's nothing here for now,"
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_registration_controller.ex:23
+#, elixir-autogen, elixir-format
+msgid "Use the link we sent you to confirm your email address."
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_confirmation_controller.ex:53
+#, elixir-autogen, elixir-format
+msgid "User confirmation link is invalid or it has expired."
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_confirmation_controller.ex:39
+#, elixir-autogen, elixir-format
+msgid "User confirmed successfully."
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:324
+#, elixir-autogen, elixir-format
+msgid "Vibe"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:325
+#, elixir-autogen, elixir-format
+msgid "What style do you prefer?"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:321
+#, elixir-autogen, elixir-format
+msgid "What type of cover is more suitable for your book?"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:324
+#, elixir-autogen, elixir-format
+msgid "What vibe does your book have?"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:323
+#, elixir-autogen, elixir-format
+msgid "What world is your book set in?"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:323
+#, elixir-autogen, elixir-format
+msgid "World"
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_auth.ex:179
+#, elixir-autogen, elixir-format
+msgid "You cannot access this page."
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:178
+#, elixir-autogen, elixir-format
+msgid "You don't have enough litcoins."
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_auth.ex:155
+#: lib/litcovers_web/controllers/user_auth.ex:186
+#, elixir-autogen, elixir-format
+msgid "You must log in to access this page."
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_auth.ex:147
+#, elixir-autogen, elixir-format
+msgid "You need to confirm your account before continuing."
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:167
+#, elixir-autogen, elixir-format
+msgid "Your request has been submited."
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_auth.ex:167
+#, elixir-autogen, elixir-format
+msgid "У вас недостаточно литкоинов"
+msgstr ""
+
+#: lib/litcovers_web/templates/user_confirmation/edit.html.heex:1
+#, elixir-autogen, elixir-format
+msgid "Account confirmation"
+msgstr ""
+
+#: lib/litcovers_web/templates/layout/nav.html.heex:11
+#, elixir-autogen, elixir-format
+msgid "Admin page"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:31
+#, elixir-autogen, elixir-format
+msgid "Brutal - Dark"
+msgstr ""
+
+#: lib/litcovers_web/templates/user_registration/new.html.heex:20
+#, elixir-autogen, elixir-format
+msgid "By providing your email address, you consent to receive emails from us."
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:15
+#, elixir-autogen, elixir-format
+msgid "Character"
+msgstr ""
+
+#: lib/litcovers_web/templates/layout/nav.html.heex:18
+#: lib/litcovers_web/templates/layout/nav.html.heex:20
+#, elixir-autogen, elixir-format
+msgid "Create cover"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:21
+#, elixir-autogen, elixir-format
+msgid "Fantasy - Past"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:23
+#, elixir-autogen, elixir-format
+msgid "Futurism - Future"
+msgstr ""
+
+#: lib/litcovers_web/templates/layout/nav.html.heex:31
+#: lib/litcovers_web/templates/user_session/new.html.heex:1
+#: lib/litcovers_web/templates/user_session/new.html.heex:20
+#, elixir-autogen, elixir-format
+msgid "Login"
+msgstr ""
+
+#: lib/litcovers_web/templates/layout/nav.html.heex:23
+#, elixir-autogen, elixir-format
+msgid "Logout"
+msgstr ""
+
+#: lib/litcovers_web/live/profile_live/index.ex:23
+#, elixir-autogen, elixir-format
+msgid "My covers"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:30
+#, elixir-autogen, elixir-format
+msgid "Natural - Neutral"
+msgstr ""
+
+#: lib/litcovers_web/templates/user_registration/new.html.heex:6
+#, elixir-autogen, elixir-format
+msgid "Oops, something went wrong! Please check the errors below."
+msgstr ""
+
+#: lib/litcovers_web/templates/layout/nav.html.heex:24
+#, elixir-autogen, elixir-format
+msgid "Profile page"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:22
+#, elixir-autogen, elixir-format
+msgid "Realism - Present"
+msgstr ""
+
+#: lib/litcovers_web/templates/layout/nav.html.heex:30
+#, elixir-autogen, elixir-format
+msgid "Register"
+msgstr ""
+
+#: lib/litcovers_web/templates/user_registration/new.html.heex:1
+#: lib/litcovers_web/templates/user_registration/new.html.heex:25
+#, elixir-autogen, elixir-format
+msgid "Registration"
+msgstr ""
+
+#: lib/litcovers_web/templates/user_confirmation/new.html.heex:1
+#, elixir-autogen, elixir-format
+msgid "Resend the confirmation Email"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.html.heex:79
+#: lib/litcovers_web/templates/user_confirmation/new.html.heex:8
+#, elixir-autogen, elixir-format
+msgid "Send"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:13
+#, elixir-autogen, elixir-format
+msgid "Setting"
+msgstr ""
+
+#: lib/litcovers_web/templates/user_confirmation/edit.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "Submit"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.ex:29
+#, elixir-autogen, elixir-format
+msgid "Warm - Bright"
+msgstr ""
+
+#: lib/litcovers_web/components/ui_components.ex:17
+#, elixir-autogen, elixir-format
+msgid "Annotation"
+msgstr ""
+
+#: lib/litcovers_web/components/ui_components.ex:9
+#, elixir-autogen, elixir-format
+msgid "Author"
+msgstr ""
+
+#: lib/litcovers_web/components/ui_components.ex:22
+#, elixir-autogen, elixir-format
+msgid "Comment"
+msgstr ""
+
+#: lib/litcovers_web/components/ui_components.ex:103
+#, elixir-autogen, elixir-format
+msgid "Generating covers"
+msgstr ""
+
+#: lib/litcovers_web/components/ui_components.ex:13
+#, elixir-autogen, elixir-format
+msgid "Title"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.html.heex:69
+#, elixir-autogen, elixir-format
+msgid "4. Comment"
+msgstr ""
+
+#: lib/litcovers_web/live/requests_live/index.html.heex:70
+#, elixir-autogen, elixir-format
+msgid "Optionally, additional details that should be in the cover, or thoughts in general"
+msgstr ""
