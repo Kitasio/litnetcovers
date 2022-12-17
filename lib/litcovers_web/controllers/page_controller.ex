@@ -8,4 +8,6 @@ defmodule LitcoversWeb.PageController do
   def docs(conn, _params) do
     render(conn, "docs.html")
   end
+
+  def dummy(_conn, _params), do: nil
 end

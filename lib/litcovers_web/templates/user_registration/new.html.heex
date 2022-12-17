@@ -1,6 +1,6 @@
 <h1 class="mt-10 text-4xl font-bold">Регистрация</h1>
 
-<.form let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
+<.form let={f} for={@changeset} action={~p"/#{@conn.assigns.locale}/users/register"}>
   <%= if @changeset.action do %>
     <.flash kind={:error} title="Error!" flash={@flash}>
       <p>Oops, something went wrong! Please check the errors below.</p>

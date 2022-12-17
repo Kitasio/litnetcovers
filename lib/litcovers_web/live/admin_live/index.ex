@@ -5,7 +5,7 @@ defmodule LitcoversWeb.AdminLive.Index do
   alias Litcovers.Accounts
   alias Litcovers.Media
 
-  def mount(_params, session, socket) do
+  def mount(%{"locale" => locale} = _params, session, socket) do
     {
       :ok,
       socket
@@ -14,6 +14,7 @@ defmodule LitcoversWeb.AdminLive.Index do
         tokens: Accounts.list_invite_tokens(),
         users: Accounts.list_regular_users(),
         requests: Media.list_uncompleted_requests(),
+        locale: locale,
         title: "Admin page"
       )
     }

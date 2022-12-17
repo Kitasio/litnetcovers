@@ -3,7 +3,7 @@
 
   <%= if Enum.empty?(@requests) do %>
     <%= if @current_user.litcoins > 0 do %>
-      <%= live_redirect to: Routes.live_path(@socket, LitcoversWeb.RequestsLive.Index) do %>
+      <%= live_redirect to: ~p"/#{@socket.assigns.locale}/request" do %>
         <div class="mt-10 flex items-center justify-center w-full h-96 rounded border border-zinc-400 hover:border-pink-500 transition duration-300">
           <.p class="text-center">Сейчас тут ничего нет,<br> пора это исправить по нажатию кнопки</.p>
         </div>
@@ -16,7 +16,7 @@
   <% else %>
     <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
       <%= for request <- @requests do %>
-        <%= live_redirect to: Routes.live_path(@socket, LitcoversWeb.ProfileLive.Show, request.id) do %>
+        <%= live_redirect to: ~p"/#{@locale}/profile/#{request.id}" do %>
           <.cover_status_box request={request} />
         <% end %>
       <% end %>

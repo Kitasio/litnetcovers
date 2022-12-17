@@ -1,0 +1,33 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#: lib/litcovers_web/components/core_components.ex:456
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr ""
+
+#: lib/litcovers_web/components/core_components.ex:75
+#: lib/litcovers_web/components/core_components.ex:162
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/docs.html.heex:3
+#, elixir-autogen, elixir-format
+msgid "This tutorial is brought to you by %{company}"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/docs.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Welcome to %{name}!"
+msgstr "Howdy, %{name}!"

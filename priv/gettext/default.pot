@@ -1,0 +1,32 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#: lib/litcovers_web/components/core_components.ex:456
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr ""
+
+#: lib/litcovers_web/components/core_components.ex:75
+#: lib/litcovers_web/components/core_components.ex:162
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/docs.html.heex:3
+#, elixir-autogen, elixir-format
+msgid "This tutorial is brought to you by %{company}"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/docs.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Welcome to %{name}!"
+msgstr ""

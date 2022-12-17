@@ -146,14 +146,14 @@ defmodule LitcoversWeb.UserAuth do
           "Вы должны подтвердить ваш Email перейдя по ссылке которую мы отправили"
         )
         |> maybe_store_return_to()
-        |> redirect(to: Routes.user_confirmation_path(conn, :new))
+        |> redirect(to: "/#{conn.assigns.locale}/users/confirm")
         |> halt()
       end
     else
       conn
       |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
-      |> redirect(to: Routes.user_session_path(conn, :new))
+      |> redirect(to: "/")
       |> halt()
     end
   end
@@ -164,7 +164,7 @@ defmodule LitcoversWeb.UserAuth do
     else
       conn
       |> put_flash(:error, "У вас недостаточно литкоинов")
-      |> redirect(to: Routes.page_path(conn, :index))
+      |> redirect(to: "/")
       |> halt()
     end
   end
@@ -177,14 +177,14 @@ defmodule LitcoversWeb.UserAuth do
         conn
         |> put_flash(:error, "You cannot access this page.")
         |> maybe_store_return_to()
-        |> redirect(to: Routes.user_session_path(conn, :new))
+        |> redirect(to: "/")
         |> halt()
       end
     else
       conn
       |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
-      |> redirect(to: Routes.user_session_path(conn, :new))
+      |> redirect(to: "/")
       |> halt()
     end
   end

@@ -1,8 +1,8 @@
 <h1><%= @title %></h1>
 
 <div class="my-5 flex flex-col gap-3">
-  <a class="link" href={~p"/admin/prompts"}>Prompts</a>
-  <a class="link" href={~p"/admin/request/all"}>All Requests</a>
+  <a class="link" href={~p"/#{@locale}/admin/prompts"}>Prompts</a>
+  <a class="link" href={~p"/#{@locale}/admin/request/all"}>All Requests</a>
 </div>
 
 <div class="flex flex-col gap-7">
@@ -24,7 +24,7 @@
             <tr>
               <td class="p-4 border border-slate-700"><%= request.user.email %></td>
               <td class="p-4 border border-slate-700">
-                <%= live_redirect request.title, to: Routes.live_path(@socket, LitcoversWeb.AdminLive.Show, request.id), class: "link" %>
+                <%= live_redirect request.title, to: ~p"/#{@locale}/admin/#{request.id}", class: "link" %>
               </td>
               <td class="p-4 border border-slate-700"><%= request.completed %></td>
               <td class="p-4 border border-slate-700">

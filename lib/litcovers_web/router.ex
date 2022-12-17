@@ -11,6 +11,7 @@ defmodule LitcoversWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+    plug SetLocale, gettext: LitcoversWeb.Gettext, default_locale: "ru"
   end
 
   pipeline :api do
@@ -20,13 +21,6 @@ defmodule LitcoversWeb.Router do
   pipeline :api_authenticated do
     plug Litcovers.ApiAuthPipeline
     plug :fetch_current_user_api
-  end
-
-  scope "/", LitcoversWeb do
-    pipe_through :browser
-
-    get "/", PageController, :index
-    get "/docs", PageController, :docs
   end
 
   # Other scopes may use custom stacks.
@@ -47,6 +41,19 @@ defmodule LitcoversWeb.Router do
       post "/prompts", PromptController, :index
       get "/covers/:id", CoverController, :show
     end
+  end
+
+  scope "/", LitcoversWeb do
+    pipe_through :browser
+
+    get "/", PageController, :dummy
+  end
+
+  scope "/:locale", LitcoversWeb do
+    pipe_through :browser
+
+    get "/", PageController, :index
+    get "/docs", PageController, :docs
   end
 
   # Enables LiveDashboard only for development
@@ -80,7 +87,7 @@ defmodule LitcoversWeb.Router do
 
   ## Authentication routes
 
-  scope "/admin", LitcoversWeb do
+  scope "/:locale/admin", LitcoversWeb do
     pipe_through [:browser, :require_authenticated_admin]
 
     resources "/placeholders", PlaceholderController
@@ -91,9 +98,6 @@ defmodule LitcoversWeb.Router do
     live "/prompts", PromptLive.Index, :index
     live "/prompts/new", PromptLive.Index, :new
     live "/prompts/:id/edit", PromptLive.Index, :edit
-
-    live "/prompts/:id", PromptLive.Show, :show
-    live "/prompts/:id/show/edit", PromptLive.Show, :edit
 
     live "/eyes", EyeLive.Index, :index
     live "/eyes/new", EyeLive.Index, :new
@@ -119,7 +123,7 @@ defmodule LitcoversWeb.Router do
     live "/:request_id", AdminLive.Show
   end
 
-  scope "/", LitcoversWeb do
+  scope "/:locale", LitcoversWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     get "/users/register", UserRegistrationController, :new
@@ -132,13 +136,13 @@ defmodule LitcoversWeb.Router do
     put "/users/reset_password/:token", UserResetPasswordController, :update
   end
 
-  scope "/", LitcoversWeb do
+  scope "/:locale", LitcoversWeb do
     pipe_through [:browser, :require_authenticated_user, :require_has_litcoins]
 
     live "/request", RequestsLive.Index
   end
 
-  scope "/", LitcoversWeb do
+  scope "/:locale", LitcoversWeb do
     pipe_through [:browser, :require_authenticated_user]
 
     get "/users/settings", UserSettingsController, :edit
@@ -149,7 +153,7 @@ defmodule LitcoversWeb.Router do
     live "/profile/:request_id", ProfileLive.Show
   end
 
-  scope "/", LitcoversWeb do
+  scope "/:locale", LitcoversWeb do
     pipe_through [:browser]
 
     delete "/users/log_out", UserSessionController, :delete

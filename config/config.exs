@@ -10,6 +10,9 @@ import Config
 config :litcovers,
   ecto_repos: [Litcovers.Repo]
 
+# Configures gettext
+config :litcovers, LitcoversWeb.Gettext, default_locale: "ru", locales: ~w(en ru)
+
 # Configures the endpoint
 config :litcovers, LitcoversWeb.Endpoint,
   url: [host: "localhost"],

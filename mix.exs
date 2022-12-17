@@ -19,7 +19,7 @@ defmodule Litcovers.MixProject do
   def application do
     [
       mod: {Litcovers.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :set_locale]
     ]
   end
 
@@ -59,7 +59,8 @@ defmodule Litcovers.MixProject do
       {:httpoison, "~> 1.8"},
       {:font_metrics, "~> 0.5"},
       {:truetype_metrics, "~> 0.6.1"},
-      {:guardian, "~> 2.0"}
+      {:guardian, "~> 2.0"},
+      {:set_locale, "~> 0.2.9"}
     ]
   end
 

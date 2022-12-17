@@ -6,13 +6,16 @@ defmodule LitcoversWeb.PromptLive.Index do
   alias Litcovers.Sd.Prompt
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(%{"locale" => locale} = _params, _session, socket) do
+    IO.inspect(locale)
+
     {:ok,
      socket
      |> assign(:prompts, Sd.list_prompts())
      |> assign(:realm, nil)
      |> assign(:sentiment, nil)
-     |> assign(:type, nil)}
+     |> assign(:type, nil)
+     |> assign(:locale, locale)}
   end
 
   @impl true

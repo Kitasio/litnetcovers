@@ -1,6 +1,6 @@
 <h1 class="mt-5">Listing Prompts</h1>
 
-<button class="btn my-5"><%= live_patch "New Prompt", to: Routes.prompt_index_path(@socket, :new) %></button>
+<button class="btn my-5"><%= live_patch "New Prompt", to: ~p"/#{@locale}/admin/prompts/new" %></button>
 
 <h2>Sort by: <%= @type %> <%= @sentiment %> <%= @realm %></h2>
 <div class="flex gap-5">
@@ -22,14 +22,14 @@
 
 
 <%= if @live_action in [:new, :edit] do %>
-  <.modal return_to={Routes.prompt_index_path(@socket, :index)}>
+  <.modal return_to={~p"/#{@locale}/admin/prompts"}>
     <.live_component
       module={LitcoversWeb.PromptLive.FormComponent}
       id={@prompt.id || :new}
       title={@page_title}
       action={@live_action}
       prompt={@prompt}
-      return_to={Routes.prompt_index_path(@socket, :index)}
+      return_to={~p"/#{@locale}/admin/prompts"}
     />
   </.modal>
 <% end %>
@@ -56,8 +56,7 @@
         <td class="p-4 border border-slate-700"><%= prompt.realm %></td>
 
         <td>
-          <span><%= live_redirect "Show", to: Routes.prompt_show_path(@socket, :show, prompt) %></span>
-          <span><%= live_patch "Edit", to: Routes.prompt_index_path(@socket, :edit, prompt) %></span>
+          <span><%= live_patch "Edit", to: ~p"/#{@locale}/admin/prompts/#{prompt}/edit" %></span>
           <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: prompt.id, data: [confirm: "Are you sure?"] %></span>
         </td>
       </tr>

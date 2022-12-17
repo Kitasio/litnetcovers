@@ -7,7 +7,7 @@ defmodule LitcoversWeb.ProfileLive.Index do
   alias Litcovers.Accounts
   alias Litcovers.Media
 
-  def mount(_params, session, socket) do
+  def mount(%{"locale" => locale} = _params, session, socket) do
     if connected?(socket), do: Media.subscribe()
     current_user = Accounts.get_user_by_session_token(session["user_token"])
     requests = Media.list_user_requests(current_user)
@@ -18,6 +18,7 @@ defmodule LitcoversWeb.ProfileLive.Index do
       |> assign(
         current_user: current_user,
         requests: requests,
+        locale: locale,
         title: "Мои обложки"
       )
     }

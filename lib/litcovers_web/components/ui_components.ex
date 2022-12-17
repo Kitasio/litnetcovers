@@ -89,7 +89,7 @@ defmodule LitcoversWeb.UiComponents do
     ~H"""
     <div class="p-4 group relative flex w-full border border-zinc-900 bg-zinc-800 hover:bg-zinc-900 rounded hover:border-pink-500 transition duration-300">
       <.request_status completed={assigns.request.completed} />
-      <div class="w-full h-44 flex flex-col justify-between">
+      <div class="w-full h-56 flex flex-col justify-between">
         <div>
           <p class="group-hover:text-zinc-50"><%= assigns.request.author %></p>
           <p class="font-extrabold text-xl group-hover:text-zinc-50"><%= assigns.request.title %></p>

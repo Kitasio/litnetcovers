@@ -32,7 +32,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
     ]
   end
 
-  def mount(_params, session, socket) do
+  def mount(%{"locale" => locale} = _params, session, socket) do
     current_user = Accounts.get_user_by_session_token(session["user_token"])
 
     style_prompts = Sd.list_all_where(:fantasy, :positive, :object)
@@ -57,7 +57,8 @@ defmodule LitcoversWeb.RequestsLive.Index do
         gender: :female,
         style_prompts: style_prompts,
         style_prompt: prompt.style_prompt,
-        prompt_id: prompt.id
+        prompt_id: prompt.id,
+        locale: locale
       )
     }
   end
@@ -163,7 +164,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
             {:noreply,
              socket
              |> put_flash(:info, "Ваша заявка подана.")
-             |> redirect(to: Routes.live_path(socket, LitcoversWeb.ProfileLive.Index))}
+             |> redirect(to: ~p"/#{socket.assigns.locale}/profile")}
 
           {:error, %Ecto.Changeset{} = changeset} ->
             placeholder = placeholder_or_empty(Media.get_random_placeholder() |> List.first())
@@ -174,7 +175,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
         {:noreply,
          socket
          |> put_flash(:error, "У вас недостаточно литкоинов.")
-         |> redirect(to: Routes.live_path(socket, LitcoversWeb.ProfileLive.Index))}
+         |> redirect(to: ~p"/#{socket.assigns.locale}/profile")}
     end
   end
 
