@@ -389,3 +389,132 @@ msgstr "Комментарий"
 #, elixir-autogen, elixir-format
 msgid "Optionally, additional details that should be in the cover, or thoughts in general"
 msgstr "Опционально, дополнительные детали которые должны быть в обложке, либо мысли в целом"
+
+#: lib/litcovers_web/templates/page/index.html.heex:6
+#, elixir-autogen, elixir-format
+msgid "A few simple steps, little bit of magic, and wonderful results"
+msgstr "Несколько простых шагов, магия и удивительные результаты"
+
+#: lib/litcovers_web/templates/page/index.html.heex:43
+#, elixir-autogen, elixir-format
+msgid "All the best"
+msgstr "Все самое лучшее"
+
+#: lib/litcovers_web/views/page_view.ex:14
+#, elixir-autogen, elixir-format
+msgid "Amazing in its atmosphere and fullness"
+msgstr "Удивительные по своей атмосфере и наполненности"
+
+#: lib/litcovers_web/views/page_view.ex:18
+#, elixir-autogen, elixir-format
+msgid "Attributes"
+msgstr "Атрибуты"
+
+#: lib/litcovers_web/templates/page/index.html.heex:5
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Create"
+msgstr "Создай"
+
+#: lib/litcovers_web/views/page_view.ex:38
+#, elixir-autogen, elixir-format
+msgid "Digital versions and files for printing. All in one place, neatly folded for you"
+msgstr "Цифровые варианты и файлы под печать. Всё в одном месте, аккуратно сложенное для Вас"
+
+#: lib/litcovers_web/templates/page/index.html.heex:16
+#, elixir-autogen, elixir-format
+msgid "Do a quick<br> registration"
+msgstr "Пройди<br> быструю регистрацию"
+
+#: lib/litcovers_web/templates/page/index.html.heex:20
+#, elixir-autogen, elixir-format
+msgid "Fill a form<br> about the book"
+msgstr "Заполни<br> данные по книге"
+
+#: lib/litcovers_web/views/page_view.ex:9
+#, elixir-autogen, elixir-format
+msgid "Of characters from your book"
+msgstr "Персонажей из вашей книги"
+
+#: lib/litcovers_web/templates/page/index.html.heex:24
+#, elixir-autogen, elixir-format
+msgid "Pick<br> your cover"
+msgstr "Выбери<br> свою обложку"
+
+#: lib/litcovers_web/views/page_view.ex:8
+#, elixir-autogen, elixir-format
+msgid "Portraits"
+msgstr "Портреты"
+
+#: lib/litcovers_web/views/page_view.ex:44
+#, elixir-autogen, elixir-format
+msgid "Quick results and a choice"
+msgstr "Быстрый результат и возможность выбора"
+
+#: lib/litcovers_web/views/page_view.ex:52
+#, elixir-autogen, elixir-format
+msgid "Simple and convenient system"
+msgstr "Простая и удобная система"
+
+#: lib/litcovers_web/views/page_view.ex:36
+#, elixir-autogen, elixir-format
+msgid "Source files in high resolution"
+msgstr "Исходные файлы в высоком разрешении"
+
+#: lib/litcovers_web/templates/page/index.html.heex:29
+#, elixir-autogen, elixir-format
+msgid "Together we'll create"
+msgstr "Вместе мы создадим"
+
+#: lib/litcovers_web/templates/page/index.html.heex:8
+#: lib/litcovers_web/templates/page/index.html.heex:68
+#, elixir-autogen, elixir-format
+msgid "Try it"
+msgstr "Попробовать"
+
+#: lib/litcovers_web/views/page_view.ex:19
+#: lib/litcovers_web/views/page_view.ex:28
+#, elixir-autogen, elixir-format
+msgid "Unique artifacts and items from your worlds"
+msgstr "Уникальные артефакты и предметы из ваших миров"
+
+#: lib/litcovers_web/views/page_view.ex:46
+#, elixir-autogen, elixir-format
+msgid "We appreciate your time and know for sure that several options are better than one"
+msgstr "Мы ценим Ваше время и точно знаем, что несколько вариантов лучше, чем один"
+
+
+#: lib/litcovers_web/views/page_view.ex:53
+#, elixir-autogen, elixir-format
+msgid "Without the brain-crushing and incomprehensible. Just try it yourself!"
+msgstr "Без мозгодробительного и непонятного. Просто попробуйте сами!"
+
+
+#: lib/litcovers_web/views/page_view.ex:13
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Worlds"
+msgstr "Миры"
+
+#: lib/litcovers_web/templates/page/index.html.heex:66
+#, elixir-autogen, elixir-format
+msgid "Your cover awaits!"
+msgstr "Твоя обложка ждет выхода!"
+
+#: lib/litcovers_web/views/page_view.ex:30
+#, elixir-autogen, elixir-format
+msgid "Your new cover is a symbiosis of our many years of experience in the field of design and technology and AI"
+msgstr "Ваша новая обложка - это симбиоз нашего многолетнего опыта в области дизайна и технологий и искусственного интеллекта"
+
+#: lib/litcovers_web/templates/page/index.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "a professional"
+msgstr "профессиональную"
+
+#: lib/litcovers_web/templates/page/index.html.heex:5
+#, elixir-autogen, elixir-format, fuzzy
+msgid "cover"
+msgstr "обложку"
+
+#: lib/litcovers_web/templates/page/index.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "for your book"
+msgstr "для своей книги"

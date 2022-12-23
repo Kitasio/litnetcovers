@@ -388,3 +388,130 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Optionally, additional details that should be in the cover, or thoughts in general"
 msgstr ""
+
+#: lib/litcovers_web/templates/page/index.html.heex:6
+#, elixir-autogen, elixir-format
+msgid "A few simple steps, little bit of magic, and wonderful results"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/index.html.heex:43
+#, elixir-autogen, elixir-format
+msgid "All the best"
+msgstr ""
+
+#: lib/litcovers_web/views/page_view.ex:14
+#, elixir-autogen, elixir-format
+msgid "Amazing in its atmosphere and fullness"
+msgstr ""
+
+#: lib/litcovers_web/views/page_view.ex:18
+#, elixir-autogen, elixir-format
+msgid "Attributes"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/index.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "Create"
+msgstr ""
+
+#: lib/litcovers_web/views/page_view.ex:38
+#, elixir-autogen, elixir-format
+msgid "Digital versions and files for printing. All in one place, neatly folded for you"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/index.html.heex:16
+#, elixir-autogen, elixir-format
+msgid "Do a quick<br> registration"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/index.html.heex:20
+#, elixir-autogen, elixir-format
+msgid "Fill a form<br> about the book"
+msgstr ""
+
+#: lib/litcovers_web/views/page_view.ex:9
+#, elixir-autogen, elixir-format
+msgid "Of characters from your book"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/index.html.heex:24
+#, elixir-autogen, elixir-format
+msgid "Pick<br> your cover"
+msgstr ""
+
+#: lib/litcovers_web/views/page_view.ex:8
+#, elixir-autogen, elixir-format
+msgid "Portraits"
+msgstr ""
+
+#: lib/litcovers_web/views/page_view.ex:44
+#, elixir-autogen, elixir-format
+msgid "Quick results and a choice"
+msgstr ""
+
+#: lib/litcovers_web/views/page_view.ex:52
+#, elixir-autogen, elixir-format
+msgid "Simple and convenient system"
+msgstr ""
+
+#: lib/litcovers_web/views/page_view.ex:36
+#, elixir-autogen, elixir-format
+msgid "Source files in high resolution"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/index.html.heex:29
+#, elixir-autogen, elixir-format
+msgid "Together we'll create"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/index.html.heex:8
+#: lib/litcovers_web/templates/page/index.html.heex:68
+#, elixir-autogen, elixir-format
+msgid "Try it"
+msgstr ""
+
+#: lib/litcovers_web/views/page_view.ex:19
+#: lib/litcovers_web/views/page_view.ex:28
+#, elixir-autogen, elixir-format
+msgid "Unique artifacts and items from your worlds"
+msgstr ""
+
+#: lib/litcovers_web/views/page_view.ex:46
+#, elixir-autogen, elixir-format
+msgid "We appreciate your time and know for sure that several options are better than one"
+msgstr ""
+
+#: lib/litcovers_web/views/page_view.ex:53
+#, elixir-autogen, elixir-format
+msgid "Without the brain-crushing and incomprehensible. Just try it yourself!"
+msgstr ""
+
+#: lib/litcovers_web/views/page_view.ex:13
+#, elixir-autogen, elixir-format
+msgid "Worlds"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/index.html.heex:66
+#, elixir-autogen, elixir-format
+msgid "Your cover awaits!"
+msgstr ""
+
+#: lib/litcovers_web/views/page_view.ex:30
+#, elixir-autogen, elixir-format
+msgid "Your new cover is a symbiosis of our many years of experience in the field of design and technology and AI"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/index.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "a professional"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/index.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "cover"
+msgstr ""
+
+#: lib/litcovers_web/templates/page/index.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "for your book"
+msgstr ""

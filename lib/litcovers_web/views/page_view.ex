@@ -1,22 +1,22 @@
 defmodule LitcoversWeb.PageView do
   use LitcoversWeb, :view
 
-  def showcase() do
+  def showcase do
     [
       %{
         img: "https://ik.imagekit.io/soulgenesis/litnet/showcase_1.jpg",
-        heading: "Портреты",
-        sub: "Вашего антогониста или протогониста произведения"
+        heading: gettext("Portraits"),
+        sub: gettext("Of characters from your book")
       },
       %{
         img: "https://ik.imagekit.io/soulgenesis/litnet/showcase_2.jpg",
-        heading: "Миры",
-        sub: "Удивительные по своей атмосфере и наполненности"
+        heading: gettext("Worlds"),
+        sub: gettext("Amazing in its atmosphere and fullness")
       },
       %{
         img: "https://ik.imagekit.io/soulgenesis/litnet/showcase_3.jpg",
-        heading: "Атрибуты",
-        sub: "Уникальные артефакты и предметы из ваших миров"
+        heading: gettext("Attributes"),
+        sub: gettext("Unique artifacts and items from your worlds")
       }
     ]
   end
@@ -25,24 +25,32 @@ defmodule LitcoversWeb.PageView do
     [
       %{
         icon: "https://ik.imagekit.io/soulgenesis/litnet/point_1.png",
-        heading: "Передовые технологии и профессиональный штат",
-        sub: "Ваша новая обложка — симбиоз нашего многолетнего опыта в сфере дизайна и технологий"
+        heading: gettext("Unique artifacts and items from your worlds"),
+        sub:
+          gettext(
+            "Your new cover is a symbiosis of our many years of experience in the field of design and technology and AI"
+          )
       },
       %{
         icon: "https://ik.imagekit.io/soulgenesis/litnet/point_2.png",
-        heading: "Исходные файлы в высоком разрешении",
+        heading: gettext("Source files in high resolution"),
         sub:
-          "Цифровые варианты и файлы под печать. Всё в одном месте, аккуратно сложенное для Вас"
+          gettext(
+            "Digital versions and files for printing. All in one place, neatly folded for you"
+          )
       },
       %{
         icon: "https://ik.imagekit.io/soulgenesis/litnet/point_3.png",
-        heading: "Быстрый результат и возможность выбора",
-        sub: "Мы ценим Ваше время и точно знаем, что несколько вариантов  лучше, чем один"
+        heading: gettext("Quick results and a choice"),
+        sub:
+          gettext(
+            "We appreciate your time and know for sure that several options are better than one"
+          )
       },
       %{
         icon: "https://ik.imagekit.io/soulgenesis/litnet/point_4.png",
-        heading: "Простая и удобная система",
-        sub: "Без мозгодробительного и непонятного. Просто попробуйте сами!"
+        heading: gettext("Simple and convenient system"),
+        sub: gettext("Without the brain-crushing and incomprehensible. Just try it yourself!")
       }
     ]
   end

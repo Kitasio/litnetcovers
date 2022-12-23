@@ -2,10 +2,10 @@
   <div class="mt-5 md:mt-24 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <img class="aspect-cover rounded sm:max-w-sm sm:mx-auto md:mx-0 sm:order-last" src="https://ik.imagekit.io/soulgenesis/litnet/tr:w-512,h-768/main_cover1.jpg" />
     <div class="flex flex-col items-center gap-5 sm:items-start">
-      <h1 class="text-center sm:text-left text-2xl md:text-3xl lg:text-5xl xl:text-6xl font-bold">Cоздай<br> <span class="text-pink-500">профессиональную</span><br> <span class="text-pink-500">обложку</span> для своей книги</h1>
-      <p class="text-center sm:text-left lg:text-xl xl:text-2xl text-zinc-300">Несколько простых шагов, магия и потрясающий результат</p>
+      <h1 class="text-center sm:text-left text-2xl md:text-3xl lg:text-5xl xl:text-6xl font-bold"><%= gettext "Create" %><br> <span class="text-pink-500"><%= gettext "a professional" %></span><br> <span class="text-pink-500"><%= gettext "cover" %></span> <%= gettext "for your book" %></h1>
+      <p class="text-center sm:text-left lg:text-xl xl:text-2xl text-zinc-300"><%= gettext "A few simple steps, little bit of magic, and wonderful results" %></p>
       <div class="mt-2 md:mt-4">
-        <%= link "Попробовать", to: ~p"/request", class: "btn" %>
+        <%= link gettext("Try it"), to: ~p"/request", class: "btn" %>
       </div>
     </div>
   </div>
@@ -13,20 +13,20 @@
   <div class="mt-20 md:mt-44 lg:mt-56 p-10 md:p-24 flex flex-col sm:flex-row sm:justify-between gap-20 rounded bg-gradient-to-b sm:bg-gradient-to-r from-rose-700 to-pink-600">
     <div class="text-center">
       <p class="text-8xl md:text-9xl font-extrabold opacity-50">01</p>
-      <p class="md:text-xl">Пройди<br> быструю регистрацию</p>
+      <p class="md:text-xl"><%= raw gettext "Do a quick<br> registration" %></p>
     </div>
     <div class="text-center">
       <p class="text-8xl md:text-9xl font-extrabold opacity-70">02</p>
-      <p class="md:text-xl">Заполни<br> данные по книге</p>
+      <p class="md:text-xl"><%= raw gettext "Fill a form<br> about the book" %></p>
     </div>
     <div class="text-center">
       <p class="text-8xl md:text-9xl font-extrabold">03</p>
-      <p class="md:text-xl">Выбери<br> свою обложку</p>
+      <p class="md:text-xl"><%= raw gettext "Pick<br> your cover" %></p>
     </div>
   </div>
 
   <div class="mt-20 lg:mt-32">
-    <h2 class="text-2xl md:text-3xl font-bold">Вместе мы создадим</h2>
+    <h2 class="text-2xl md:text-3xl font-bold"><%= gettext "Together we'll create" %></h2>
 
     <div class="mt-10 grid md:grid-cols-3 gap-20 lg:gap-32">
       <%= for i <- showcase() do %>
@@ -40,7 +40,7 @@
   </div>
 
   <div class="mt-20 lg:mt-32">
-    <h2 class="text-2xl md:text-3xl font-bold">Всё самое лучшее</h2>
+    <h2 class="text-2xl md:text-3xl font-bold"><%= gettext "All the best" %></h2>
 
     <div class="mt-10 grid md:grid-cols-2 gap-10 md:gap-32 lg:gap-x-64">
       <%= for i <- points() do %>
@@ -63,9 +63,9 @@
 
 
   <div class="mt-20 flex flex-col justify-center items-center gap-5 w-full lg:mt-[40rem]">
-    <h2 class="text-2xl font-bold">Твоя обложка ждет выхода!</h2>
+    <h2 class="text-2xl font-bold"><%= gettext "Your cover awaits!" %></h2>
     <div class="mt-2 md:mt-4">
-      <%= link "Попробовать", to: ~p"/request", class: "btn" %>
+      <%= link gettext("Try it"), to: ~p"/request", class: "btn" %>
     </div>
   </div>
 
