@@ -60,7 +60,8 @@ defmodule Litcovers.MixProject do
       {:font_metrics, "~> 0.5"},
       {:truetype_metrics, "~> 0.6.1"},
       {:guardian, "~> 2.0"},
-      {:set_locale, "~> 0.2.9"}
+      {:set_locale, "~> 0.2.9"},
+      {:gen_smtp, "~> 1.2.0"}
     ]
   end
 

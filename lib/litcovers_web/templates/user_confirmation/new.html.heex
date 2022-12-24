@@ -1,6 +1,6 @@
 <h1 class="mt-5"><%= gettext "Resend the confirmation Email" %></h1>
 
-<.form let={f} for={:user} action={Routes.user_confirmation_path(@conn, @conn.assigns.locale, :create)}>
+<.form let={f} for={:user} action={Routes.user_confirmation_path(@conn, :create, @conn.assigns.locale)}>
   <%= label f, :email %>
   <%= email_input f, :email, required: true %>
 

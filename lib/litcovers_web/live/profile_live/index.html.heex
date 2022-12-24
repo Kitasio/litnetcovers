@@ -3,7 +3,7 @@
 
   <%= if Enum.empty?(@requests) do %>
     <%= if @current_user.litcoins > 0 do %>
-      <%= live_redirect to: ~p"/#{@socket.assigns.locale}/request" do %>
+      <%= live_redirect to: ~p"/#{@locale}/request" do %>
         <div class="mt-10 flex items-center justify-center w-full h-96 rounded border border-zinc-400 hover:border-pink-500 transition duration-300">
           <.p class="text-center"><%= gettext "There's nothing here for now," %><br> <%= gettext "It's time to change it with a click of a button" %></.p>
         </div>

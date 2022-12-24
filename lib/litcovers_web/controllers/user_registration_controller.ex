@@ -16,7 +16,7 @@ defmodule LitcoversWeb.UserRegistrationController do
         {:ok, _} =
           Accounts.deliver_user_confirmation_instructions(
             user,
-            &Routes.user_confirmation_url(conn, conn.assings.locale, :edit, &1)
+            &Routes.user_confirmation_url(conn, :edit, conn.assigns.locale, &1)
           )
 
         conn

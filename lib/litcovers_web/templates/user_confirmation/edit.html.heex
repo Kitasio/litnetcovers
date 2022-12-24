@@ -1,6 +1,6 @@
 <h1 class="mt-5"><%= gettext "Account confirmation" %></h1>
 
-<.form let={_f} for={:user} action={Routes.user_confirmation_path(@conn, @conn.assigns.locale, :update, @token)}>
+<.form let={_f} for={:user} action={Routes.user_confirmation_path(@conn, :update, @conn.assigns.locale, @token)}>
   <div>
     <%= submit gettext("Submit"), class: "btn mt-3" %>
   </div>
