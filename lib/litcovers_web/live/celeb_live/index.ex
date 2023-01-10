@@ -6,8 +6,15 @@ defmodule LitcoversWeb.CelebLive.Index do
   alias Litcovers.Character.Celeb
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, :celebs, list_celebs())}
+  def mount(%{"locale" => locale} = _params, _session, socket) do
+    Gettext.put_locale(locale)
+
+    {:ok,
+     socket
+     |> assign(
+       celebs: list_celebs(),
+       locale: locale
+     )}
   end
 
   @impl true

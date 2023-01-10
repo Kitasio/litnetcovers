@@ -8,7 +8,7 @@ defmodule LitcoversWeb.AdminLive.Show do
 
   def mount(params, session, socket) do
     if connected?(socket), do: Media.subscribe()
-    %{"request_id" => request_id} = params
+    %{"request_id" => request_id, "locale" => locale} = params
     request = Media.get_request_and_covers!(request_id)
 
     {
@@ -18,6 +18,7 @@ defmodule LitcoversWeb.AdminLive.Show do
         current_user: Accounts.get_user_by_session_token(session["user_token"]),
         changeset: Media.change_cover(%Litcovers.Media.Cover{}),
         request: request,
+        locale: locale,
         title: "Request page"
       )
       |> allow_upload(:cover,
@@ -63,9 +64,7 @@ defmodule LitcoversWeb.AdminLive.Show do
 
     {:noreply,
      socket
-     |> push_redirect(
-       to: Routes.live_path(socket, LitcoversWeb.AdminLive.Show, socket.assigns.request.id)
-     )}
+     |> push_redirect(to: ~p"/#{socket.assigns.locale}/admin/#{socket.assigns.request.id}")}
   end
 
   def handle_event("delete", %{"cover_id" => cover_id}, socket) do

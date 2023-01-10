@@ -1,14 +1,14 @@
 <h1>Listing Celebs</h1>
 
 <%= if @live_action in [:new, :edit] do %>
-  <.modal return_to={Routes.celeb_index_path(@socket, :index)}>
+  <.modal return_to={~p"/#{@locale}/admin/celebs"}>
     <.live_component
       module={LitcoversWeb.CelebLive.FormComponent}
       id={@celeb.id || :new}
       title={@page_title}
       action={@live_action}
       celeb={@celeb}
-      return_to={Routes.celeb_index_path(@socket, :index)}
+      return_to={~p"/#{@locale}/admin/celebs"}
     />
   </.modal>
 <% end %>
@@ -31,8 +31,7 @@
         <td><%= celeb.name %></td>
 
         <td>
-          <span><%= live_redirect "Show", to: Routes.celeb_show_path(@socket, :show, celeb) %></span>
-          <span><%= live_patch "Edit", to: Routes.celeb_index_path(@socket, :edit, celeb) %></span>
+          <span><%= live_patch "Edit", to: ~p"/#{@locale}/admin/celebs/#{celeb.id}/edit" %></span>
           <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: celeb.id, data: [confirm: "Are you sure?"] %></span>
         </td>
       </tr>
@@ -40,4 +39,4 @@
   </tbody>
 </table>
 
-<span><%= live_patch "New Celeb", to: Routes.celeb_index_path(@socket, :new) %></span>
+<span><%= live_patch "New Celeb", to: ~p"/#{@locale}/admin/celebs/new" %></span>
