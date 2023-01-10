@@ -4,11 +4,17 @@ defmodule Litcovers.Media do
   """
 
   import Ecto.Query, warn: false
+  alias CoverGen.Helpers
+  alias CoverGen.Spaces
   alias Litcovers.Repo
 
   alias Litcovers.Media.Request
   alias Litcovers.Accounts
   alias Litcovers.Sd
+
+  alias CoverGen.OAI
+  alias CoverGen.SD
+  alias CoverGen.Overlay
 
   @doc """
   Returns the list of requests.
@@ -165,7 +171,7 @@ defmodule Litcovers.Media do
   def gen_more(request) do
     if request.ideas == [] do
       {:ok, ideas_list} =
-        BookCoverGenerator.description_to_cover_idea(
+        OAI.description_to_cover_idea(
           get_description(request),
           request.prompt.type,
           request.character_gender,
@@ -178,14 +184,14 @@ defmodule Litcovers.Media do
     %{idea: idea} = request.ideas |> Enum.random()
 
     with prompt <-
-           BookCoverGenerator.create_prompt(
+           Helpers.create_prompt(
              idea,
              request.prompt.style_prompt,
              request.character_gender,
              request.prompt.type
            ),
          {:ok, sd_res} <-
-           BookCoverGenerator.diffuse(
+           SD.diffuse(
              prompt,
              request.character_gender,
              request.prompt.type,
@@ -194,7 +200,7 @@ defmodule Litcovers.Media do
            ) do
       %{"output" => image_list} = sd_res
 
-      case BookCoverGenerator.save_to_spaces(image_list) do
+      case Spaces.save_to_spaces(image_list) do
         {:error, reason} ->
           IO.inspect(reason)
 
@@ -204,8 +210,8 @@ defmodule Litcovers.Media do
             {:ok, cover} = create_cover(request, image_params)
 
             urls =
-              BookCoverGenerator.put_text_on_images(
-                get_line_length_list(request.title),
+              Overlay.put_text_on_images(
+                request.title |> Overlay.get_line_length_list(),
                 cover.cover_url,
                 request.author,
                 request.title,
@@ -227,7 +233,7 @@ defmodule Litcovers.Media do
   def gen_covers(request) do
     with _ <- ai_update_request(request, %{final_desc: request.description}),
          {:ok, ideas_list} <-
-           BookCoverGenerator.description_to_cover_idea(
+           OAI.description_to_cover_idea(
              request.description,
              request.prompt.type,
              request.character_gender,
@@ -235,14 +241,14 @@ defmodule Litcovers.Media do
            ),
          _ <- save_ideas(ideas_list, request),
          prompt <-
-           BookCoverGenerator.create_prompt(
+           Helpers.create_prompt(
              ideas_list |> Enum.random(),
              request.prompt.style_prompt,
              request.character_gender,
              request.prompt.type
            ),
          {:ok, sd_res} <-
-           BookCoverGenerator.diffuse(
+           SD.diffuse(
              prompt,
              request.character_gender,
              request.prompt.type,
@@ -251,7 +257,7 @@ defmodule Litcovers.Media do
            ) do
       %{"output" => image_list} = sd_res
 
-      case BookCoverGenerator.save_to_spaces(image_list) do
+      case Spaces.save_to_spaces(image_list) do
         {:error, reason} ->
           IO.inspect(reason)
 
@@ -261,8 +267,8 @@ defmodule Litcovers.Media do
             {:ok, cover} = create_cover(request, image_params)
 
             urls =
-              BookCoverGenerator.put_text_on_images(
-                get_line_length_list(request.title),
+              Overlay.put_text_on_images(
+                request.title |> Overlay.get_line_length_list(),
                 cover.cover_url,
                 request.author,
                 request.title,
@@ -278,20 +284,6 @@ defmodule Litcovers.Media do
 
           broadcast(request, :gen_complete)
       end
-    end
-  end
-
-  # returns a list of numbers based on the length of a given string
-  def get_line_length_list(str) do
-    cond do
-      String.length(str) <= 16 ->
-        [16]
-
-      String.length(str) <= 26 ->
-        [16, 26]
-
-      true ->
-        [16, 26, 32]
     end
   end
 
