@@ -26,7 +26,7 @@ defmodule CoverGen.SD do
 
     body = Jason.encode!(sd_params)
     headers = [Authorization: "Token #{replicate_token}", "Content-Type": "application/json"]
-    options = [timeout: 50_000, recv_timeout: 70_000]
+    options = [timeout: 50_000, recv_timeout: 165_000]
 
     endpoint = "https://api.replicate.com/v1/predictions"
 
@@ -36,7 +36,7 @@ defmodule CoverGen.SD do
       {:ok, %Response{body: res_body}} ->
         %{"urls" => %{"get" => generation_url}} = Jason.decode!(res_body)
 
-        case check_for_output(generation_url, headers, options, 45) do
+        case check_for_output(generation_url, headers, options, 50) do
           {:ok, image_links} ->
             {:ok, image_links}
 
@@ -77,8 +77,12 @@ defmodule CoverGen.SD do
       {:error, :out_of_tries} ->
         {:error, :out_of_tries}
 
-      {:error, :not_ready} ->
+      {:ok, :not_ready} ->
         :timer.sleep(2000)
+        check_for_output(generation_url, headers, options, num_of_tries - 1)
+
+      {:ok, :not_ready_slower} ->
+        :timer.sleep(15000)
         check_for_output(generation_url, headers, options, num_of_tries - 1)
 
       {:ok, :ready} ->
@@ -87,6 +91,7 @@ defmodule CoverGen.SD do
   end
 
   defp check_image(_image_list, num_of_tries) when num_of_tries <= 0, do: {:error, :out_of_tries}
-  defp check_image(nil, _num_of_tries), do: {:error, :not_ready}
+  defp check_image(nil, num_of_tries) when num_of_tries <= 5, do: {:ok, :not_ready_slower}
+  defp check_image(nil, _num_of_tries), do: {:ok, :not_ready}
   defp check_image(_image_list, _num_of_tries), do: {:ok, :ready}
 end
