@@ -1,5 +1,5 @@
 <h1>Edit Placeholder</h1>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.placeholder_path(@conn, :update, @placeholder)) %>
+<%= render "form.html", Map.put(assigns, :action, Routes.placeholder_path(@conn, :update, @conn.assigns.locale, @placeholder)) %>
 
-<span><%= link "Back", to: Routes.placeholder_path(@conn, :index) %></span>
+<span><%= link "Back", to: Routes.placeholder_path(@conn, :index, @conn.assigns.locale) %></span>
