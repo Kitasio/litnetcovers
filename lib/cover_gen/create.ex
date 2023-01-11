@@ -9,7 +9,7 @@ defmodule CoverGen.Create do
   alias CoverGen.Helpers
   alias CoverGen.Spaces
 
-  def new(request) do
+  def new(%Request{} = request) do
     with _ <- ai_update_request(request, %{final_desc: request.description}),
          {:ok, ideas_list} <-
            OAI.description_to_cover_idea(
@@ -66,7 +66,7 @@ defmodule CoverGen.Create do
     end
   end
 
-  def more(request) do
+  def more(%Request{} = request) do
     if request.ideas == [] do
       {:ok, ideas_list} =
         OAI.description_to_cover_idea(
