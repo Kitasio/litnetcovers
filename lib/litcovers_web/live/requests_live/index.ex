@@ -2,6 +2,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
   use LitcoversWeb, :live_view
   import Phoenix.Component
 
+  alias CoverGen.Create
   alias Phoenix.LiveView.JS
   alias Litcovers.Accounts
   alias Litcovers.Media
@@ -152,7 +153,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
         case Media.create_request(socket.assigns.current_user, prompt, request_params) do
           {:ok, request} ->
             Task.start(fn ->
-              Media.gen_covers(request)
+              Create.new(request)
             end)
 
             params = %{litcoins: socket.assigns.current_user.litcoins - 1}

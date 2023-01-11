@@ -1,6 +1,7 @@
 defmodule LitcoversWeb.V1.RequestController do
   use LitcoversWeb, :controller
 
+  alias CoverGen.Create
   alias Litcovers.Media
   alias Litcovers.Accounts
 
@@ -28,7 +29,7 @@ defmodule LitcoversWeb.V1.RequestController do
           {:ok, request} ->
             request = Media.get_request_and_covers!(request.id)
             request = %{request | character_gender: get_female_or(character_gender)}
-            Task.start(fn -> Media.gen_covers(request) end)
+            Task.start(fn -> Create.new(request) end)
 
             params = %{litcoins: conn.assigns.current_user.litcoins - 1}
 
@@ -60,7 +61,7 @@ defmodule LitcoversWeb.V1.RequestController do
     cond do
       conn.assigns.current_user.litcoins > 0 ->
         request = Media.get_request_and_covers!(id)
-        Task.start(fn -> Media.gen_more(request) end)
+        Task.start(fn -> Create.more(request) end)
 
         params = %{litcoins: conn.assigns.current_user.litcoins - 1}
 

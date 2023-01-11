@@ -5,6 +5,7 @@ defmodule LitcoversWeb.AdminLive.Show do
   import LitcoversWeb.UiComponents
   alias Litcovers.Accounts
   alias Litcovers.Media
+  alias CoverGen.Create
 
   def mount(params, session, socket) do
     if connected?(socket), do: Media.subscribe()
@@ -43,7 +44,7 @@ defmodule LitcoversWeb.AdminLive.Show do
 
   def handle_event("gen_more", %{}, socket) do
     Task.start(fn ->
-      Media.gen_more(socket.assigns.request)
+      Create.more(socket.assigns.request)
     end)
 
     {:noreply, socket}
