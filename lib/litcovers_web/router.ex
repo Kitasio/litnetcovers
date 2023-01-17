@@ -57,6 +57,7 @@ defmodule LitcoversWeb.Router do
 
     get "/", PageController, :index
     get "/docs", PageController, :docs
+    live "/wasm", WasmTestLive.Index, :index
   end
 
   # Enables LiveDashboard only for development

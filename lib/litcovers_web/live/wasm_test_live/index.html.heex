@@ -1,0 +1,78 @@
+<script type="module">
+  import init, { multiply, create_cover } from '/wasm/pkg/litcovers_wasm.js';
+
+  const params = {
+    author: "Prison Mike",
+    author_position: "TopCenter",
+    title: "Harry Potter and other people",
+    title_position: "BottomCenter",
+    blend_mode: "Overlay",
+    alfa: 3.0,
+    line_length: 16,
+  }
+
+  async function run() {
+    await init();
+
+    function adder(a, b) {
+      console.log(multiply(a, b))
+    }
+
+    function cover(base64_img, author_font_base64, title_font_base64, params) {
+      const cover = create_cover(base64_img, author_font_base64, title_font_base64, params) 
+      // return `data:image/png;charset=utf-8;base64,${cover}`
+      const image = document.getElementById("ItemPreview");
+      image.src = `data:image/png;charset=utf-8;base64,${cover}`
+    }
+
+    window.adder = adder;
+    window.cover = cover;
+  }
+
+  run();
+</script>
+
+<div x-data={"{
+      params: {
+        author: 'Prison Mike',
+        author_position: 'TopCenter',
+        title: 'Harry Potter and other people',
+        title_position: 'BottomCenter',
+        blend_mode: 'Overlay',
+        alfa: '3.0',
+        line_length: '16',
+      }
+    }"}>
+  <h1><%= @title %></h1>
+
+  <div class="flex gap-10">
+    <div>
+      <img id="ItemPreview" src={"data:image/png;charset=utf-8;base64,#{@base64_img}"}>
+    </div>
+    <div class="flex flex-col gap-3">
+      url: <%= @img_url %>
+      <form phx-submit="set-image">
+        <input class="input" name="url">
+        <button type="submit">click</button>
+      </form>
+      <input class="input" x-model="params.author">
+      <input class="input" x-model="params.author_position">
+      <input class="input" x-model="params.title">
+      <input class="input" x-model="params.title_position">
+      <input class="input" x-model="params.blend_mode">
+      <input class="input" type="number" x-model="params.alfa">
+      <input class="input" type="number" x-model="params.line_length">
+      <button class="btn mt-5" x-on:click={"cover('#{@base64_img}', '#{@author_font_base64}', '#{@title_font_base64}', params)"}>create cover</button>
+    </div>
+  </div>
+
+</div>
+
+<br>
+
+<button id="create-cover-btn" phx-hook="CreateCover" x-on:click={"$dispatch('create-cover', { img: 'data:image/png;charset=utf-8;base64,#{@base64_img}' })"}>
+  Save to spaces
+</button>
+<%= for url <- @images do %>
+  <img src={url}>
+<% end %>

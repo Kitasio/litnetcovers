@@ -38,6 +38,13 @@ Hooks.ExtractColors = {
       .then((p) => this.pushEvent("set-colors", { vibrant: p.Vibrant.getHex(), muted: p.Muted.getHex() }))
   }
 }
+Hooks.CreateCover = {
+  mounted() {
+    this.el.addEventListener("create-cover", event => {
+      this.pushEvent('create-cover', event.detail)
+    })
+  }
+}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {

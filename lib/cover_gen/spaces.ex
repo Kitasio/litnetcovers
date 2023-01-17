@@ -23,4 +23,13 @@ defmodule CoverGen.Spaces do
         [image_url | save_to_spaces(img_list)]
     end
   end
+
+  def save_bytes(image_bytes) do
+    imagekit_url = Application.get_env(:litcovers, :imagekit_url)
+    bucket = Application.get_env(:litcovers, :bucket)
+    filename = "#{Ecto.UUID.generate()}.png"
+
+    ExAws.S3.put_object(bucket, filename, image_bytes) |> ExAws.request!()
+    Path.join(imagekit_url, filename)
+  end
 end
