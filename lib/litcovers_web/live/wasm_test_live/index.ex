@@ -6,7 +6,18 @@ defmodule LitcoversWeb.WasmTestLive.Index do
     img_url = "https://ik.imagekit.io/soulgenesis/6c97d4a8-fdf2-4fde-af82-43383ff33008.png"
     base64_img = img_url_to_base64(img_url)
 
-    font_bytes = File.read!("priv/static/fonts/Angry.ttf")
+    fonts_base_path =
+      if System.get_env("MIX_ENV") == "prod" do
+        [Application.app_dir(:litcovers), "priv/static/fonts"] |> Path.join()
+      else
+        "priv/static/fonts"
+      end
+
+    font_bytes =
+      [fonts_base_path, "Angry.ttf"]
+      |> Path.join()
+      |> File.read!()
+
     base64_font = font_bytes |> Base.encode64()
 
     {
