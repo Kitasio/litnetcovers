@@ -26,6 +26,20 @@ module.exports = {
       },
       aspectRatio: {
         'cover': '512/768'
+      },
+      colors: {
+        'main': '#19181C',
+        'sec': '#212025',
+        'tag-main': '#37323E',
+        'tag-sec': '#242329',
+        'stroke-main': '#595860',
+        'stroke-sec': '#34313A',
+        'dis-input': '#555555',
+        'dis-btn': '#838383',
+        'accent-main': '#DB5598',
+        'accent-sec': '#5C2D45',
+        'hover': '#B42E71',
+        'gray': '#C6C6C6'
       }
     },
   },
