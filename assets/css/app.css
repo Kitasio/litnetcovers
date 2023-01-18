@@ -13,6 +13,9 @@
   .btn {
     @apply px-3 py-2 md:px-5 md:py-3 text-zinc-300 border-2 border-pink-600 rounded-full hover:bg-pink-600 hover:text-pink-200 transition-all duration-200;
   }
+  .btn-small {
+    @apply py-2.5 px-4 bg-accent-main hover:bg-hover rounded-full transition disabled:bg-dis-btn;
+  }
   .link {
     @apply text-slate-200 text-sm md:text-base hover:text-pink-600 hover:underline transition duration-200;
   }
