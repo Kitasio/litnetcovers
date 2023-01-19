@@ -1,6 +1,7 @@
 defmodule LitcoversWeb.RequestsLive.Index do
   use LitcoversWeb, :live_view
   import Phoenix.Component
+  import LitcoversWeb.UiComponents
 
   alias CoverGen.Create
   alias Phoenix.LiveView.JS
@@ -34,6 +35,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
   end
 
   def mount(%{"locale" => locale} = _params, session, socket) do
+    if connected?(socket), do: CoverGen.Create.subscribe()
     Gettext.put_locale(locale)
     current_user = Accounts.get_user_by_session_token(session["user_token"])
 
@@ -60,9 +62,52 @@ defmodule LitcoversWeb.RequestsLive.Index do
         style_prompts: style_prompts,
         style_prompt: prompt.style_prompt,
         prompt_id: prompt.id,
-        locale: locale
+        locale: locale,
+        lit_ai: true,
+        aspect_ratio: "cover",
+        width: 512,
+        height: 768,
+        img_url: nil,
+        request_id: nil,
+        request_completed: false
       )
     }
+  end
+
+  defp get_width_and_height("cover") do
+    {512, 768}
+  end
+
+  defp get_width_and_height("square") do
+    {512, 512}
+  end
+
+  def handle_info({:gen_complete, request}, socket) do
+    request = Media.get_request_and_covers!(request.id)
+    cover = request.covers |> List.first()
+
+    {:noreply,
+     socket
+     |> assign(
+       img_url: cover.cover_url,
+       request_id: request.id,
+       request_completed: request.completed
+     )}
+  end
+
+  def handle_event(
+        "aspect-ratio-change",
+        %{"aspect_ratio" => aspect_ratio},
+        socket
+      ) do
+    {width, height} = get_width_and_height(aspect_ratio)
+    {:noreply, assign(socket, aspect_ratio: aspect_ratio, width: width, height: height)}
+  end
+
+  def handle_event("toggle-change", %{"toggle" => toggle}, socket) do
+    toggle = if toggle == "1", do: true, else: false
+
+    {:noreply, assign(socket, :lit_ai, toggle)}
   end
 
   def handle_event("set_stage", %{"stage" => stage}, socket) do
@@ -145,39 +190,23 @@ defmodule LitcoversWeb.RequestsLive.Index do
   end
 
   def handle_event("save", %{"request" => request_params}, socket) do
-    cond do
-      socket.assigns.current_user.litcoins > 0 ->
-        %{"prompt_id" => prompt_id} = request_params
-        prompt = Litcovers.Sd.get_prompt!(prompt_id)
+    %{"prompt_id" => prompt_id} = request_params
+    prompt = Litcovers.Sd.get_prompt!(prompt_id)
 
-        case Media.create_request(socket.assigns.current_user, prompt, request_params) do
-          {:ok, request} ->
-            Task.start(fn ->
-              Create.new(request)
-            end)
+    case Media.create_request(socket.assigns.current_user, prompt, request_params) do
+      {:ok, request} ->
+        Task.start(fn ->
+          Create.new(request)
+        end)
 
-            params = %{litcoins: socket.assigns.current_user.litcoins - 1}
+        socket = socket |> assign(request_id: request.id, request_completed: false, img_url: nil)
 
-            Accounts.update_litcoins(
-              socket.assigns.current_user,
-              params
-            )
+        {:noreply, socket}
 
-            {:noreply,
-             socket
-             |> put_flash(:info, gettext("Your request has been submited."))
-             |> redirect(to: ~p"/#{socket.assigns.locale}/profile")}
-
-          {:error, %Ecto.Changeset{} = changeset} ->
-            placeholder = placeholder_or_empty(Media.get_random_placeholder() |> List.first())
-            {:noreply, assign(socket, changeset: changeset, placeholder: placeholder)}
-        end
-
-      true ->
-        {:noreply,
-         socket
-         |> put_flash(:error, gettext("You don't have enough litcoins."))
-         |> redirect(to: ~p"/#{socket.assigns.locale}/profile")}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        IO.inspect(changeset)
+        placeholder = placeholder_or_empty(Media.get_random_placeholder() |> List.first())
+        {:noreply, assign(socket, changeset: changeset, placeholder: placeholder)}
     end
   end
 
@@ -201,9 +230,103 @@ defmodule LitcoversWeb.RequestsLive.Index do
     end
   end
 
+  def img(assigns) do
+    assigns = assign_new(assigns, :img_url, fn -> nil end)
+    assigns = assign_new(assigns, :aspect_ratio, fn -> nil end)
+    assigns = assign_new(assigns, :request_id, fn -> nil end)
+    assigns = assign_new(assigns, :request_completed, fn -> false end)
+
+    assigns =
+      assign_new(assigns, :spin, fn ->
+        assigns.request_id != nil and assigns.request_completed == false
+      end)
+
+    if assigns.spin do
+      ~H"""
+      <div
+        x-data={"{ showImage: false, imageUrl: '#{@img_url}' }"}
+        class={"bg-sec flex items-center justify-center max-w-lg overflow-hidden rounded-lg aspect-#{@aspect_ratio} transition-all duration-300 mx-auto"}
+      >
+        <svg
+          class="animate-slow-spin"
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          fill="none"
+        >
+          <g clip-path="url(#a)">
+            <g stroke="#fff" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#b)">
+              <path d="M7 1.167V3.5M7 10.5v2.333M2.876 2.876l1.65 1.65M9.473 9.473l1.651 1.651M1.167 7H3.5M10.5 7h2.333M2.876 11.124l1.65-1.65M9.473 4.527l1.651-1.651" />
+            </g>
+          </g>
+          <defs>
+            <clipPath id="a"><path fill="#fff" d="M0 0h14v14H0z" /></clipPath>
+            <clipPath id="b"><path fill="#fff" d="M0 0h14v14H0z" /></clipPath>
+          </defs>
+        </svg>
+      </div>
+      """
+    else
+      ~H"""
+      <div
+        x-data={"{ showImage: false, imageUrl: '#{@img_url}' }"}
+        class={"bg-sec max-w-lg overflow-hidden rounded-lg aspect-#{@aspect_ratio} transition-all duration-300 mx-auto"}
+      >
+        <img
+          x-show="showImage"
+          x-transition.duration.500ms
+          x-bind:src="imageUrl"
+          x-on:load="showImage = true"
+          alt="Generated picture"
+          class="w-full h-full object-cover aspect-cover"
+        />
+      </div>
+      """
+    end
+  end
+
+  def generate_btn(assigns) do
+    assigns = assign_new(assigns, :request_id, fn -> nil end)
+    assigns = assign_new(assigns, :request_completed, fn -> false end)
+
+    assigns =
+      assign_new(assigns, :spin, fn ->
+        assigns.request_id != nil and assigns.request_completed == false
+      end)
+
+    ~H"""
+    <div class="pb-7 pt-12 flex">
+      <button
+        type="submit"
+        class="btn-small flex items-center justify-center gap-3 py-5 bg-accent-main rounded-full w-full"
+        x-bind:disabled={"#{@spin} && true"}
+      >
+        <svg
+          x-bind:class={"#{@spin} && 'animate-slow-spin'"}
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          fill="none"
+        >
+          <g clip-path="url(#a)">
+            <g stroke="#fff" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#b)">
+              <path d="M12.917 2.333v3.5h-3.5M.083 11.667v-3.5h3.5" /><path d="M1.547 5.25a5.25 5.25 0 0 1 8.663-1.96l2.707 2.543M.083 8.167 2.79 10.71a5.25 5.25 0 0 0 8.663-1.96" />
+            </g>
+          </g>
+          <defs>
+            <clipPath id="a"><path fill="#fff" d="M0 0h14v14H0z" /></clipPath>
+            <clipPath id="b"><path fill="#fff" d="M-.5 0h14v14h-14z" /></clipPath>
+          </defs>
+        </svg>
+        <span><%= gettext("Generate") %></span>
+      </button>
+    </div>
+    """
+  end
+
   def stage_nav(assigns) do
     ~H"""
-    <div class="mt-3 flex justify-center text-xs sm:text-base">
+    <div class="mt-3 flex text-xs sm:text-base">
       <%= for stage <- stages() do %>
         <%= if stage.id <= assigns.stage do %>
           <%= if stage.id == assigns.stage do %>
@@ -243,9 +366,8 @@ defmodule LitcoversWeb.RequestsLive.Index do
       ~H"""
       <div
         id={"#{@url}"}
-        class="overflow-hidden"
+        class="mr-8 aspect-cover overflow-hidden rounded-xl border-2 border-stroke-main hover:border-accent-main transition inline-block min-w-[250px] sm:min-w-fit sm:mr-0"
         x-data={"{ showImage: false, imageUrl: '#{@url}' }"}
-        x-init={"console.log('#{@url}')"}
       >
         <img
           x-show="showImage"
@@ -272,7 +394,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
   def gender_picker(assigns) do
     ~H"""
-    <div class="mt-5 mb-4 flex justify-center w-full gap-5">
+    <div class="px-8 mt-5 mb-4 flex w-full gap-5">
       <button
         x-bind:class={"'#{assigns.gender}' == 'female' ? 'underline text-pink-600': ''"}
         class="capitalize link"
@@ -298,7 +420,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
   def stage_box(assigns) do
     ~H"""
-    <div class="grid md:grid-cols-3">
+    <div class="min-h-[400px] sm:min-h-full  flex flex-nowrap sm:gap-5 overflow-x-scroll sm:overflow-x-hidden hide-scroll-bar sm:grid sm:grid-cols-3">
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -306,8 +428,8 @@ defmodule LitcoversWeb.RequestsLive.Index do
 
   def stage_msg(assigns) do
     ~H"""
-    <div class="text-center mt-5 mb-4">
-      <h1 class="text-sm sm:text-base lg:text-xl font-light">
+    <div class="mt-5 mb-4">
+      <h1 class="text-base font-light">
         <%= assigns.msg %>
       </h1>
     </div>

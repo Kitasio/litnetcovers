@@ -4,16 +4,12 @@ defmodule Litcovers.Media do
   """
 
   import Ecto.Query, warn: false
-  alias CoverGen.Helpers
-  alias CoverGen.Spaces
   alias Litcovers.Repo
 
   alias Litcovers.Media.Request
   alias Litcovers.Accounts
   alias Litcovers.Sd
 
-  alias CoverGen.OAI
-  alias CoverGen.SD
   alias CoverGen.Overlay
 
   @doc """
@@ -151,10 +147,6 @@ defmodule Litcovers.Media do
   def get_splits([title_split | title_splits]) do
     %{split: split} = title_split
     [split | get_splits(title_splits)]
-  end
-
-  def subscribe do
-    Phoenix.PubSub.subscribe(Litcovers.PubSub, "generations")
   end
 
   @doc """

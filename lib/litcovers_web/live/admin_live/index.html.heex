@@ -24,7 +24,7 @@
             <tr>
               <td class="p-4 border border-slate-700"><%= request.user.email %></td>
               <td class="p-4 border border-slate-700">
-                <%= live_redirect request.title, to: ~p"/#{@locale}/admin/#{request.id}", class: "link" %>
+                <%= live_redirect "#{request.id} #{request.title}", to: ~p"/#{@locale}/admin/#{request.id}", class: "link" %>
               </td>
               <td class="p-4 border border-slate-700"><%= request.completed %></td>
               <td class="p-4 border border-slate-700">

@@ -7,7 +7,7 @@ defmodule LitcoversWeb.ProfileLive.Show do
   alias Litcovers.Media
 
   def mount(params, session, socket) do
-    if connected?(socket), do: Media.subscribe()
+    if connected?(socket), do: CoverGen.Create.subscribe()
     %{"request_id" => request_id, "locale" => locale} = params
     Gettext.put_locale(locale)
     request = Media.get_request_and_covers!(request_id)

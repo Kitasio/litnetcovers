@@ -45,6 +45,13 @@ Hooks.CreateCover = {
     })
   }
 }
+Hooks.Toggle = {
+  mounted() {
+    this.el.addEventListener("toggle-change", event => {
+      this.pushEvent('toggle-change', event.detail)
+    })
+  }
+}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {

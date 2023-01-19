@@ -12,8 +12,8 @@
     <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
   </head>
   <body class="bg-main overflow-x-hidden">
-      <div class="text-slate-200">
-        <%= render "navbar.html", conn: @conn %>
+      <div class="text-slate-200 h-screen">
+        <%# render "navbar.html", conn: @conn %>
         <%= @inner_content %>
       </div>
   </body>

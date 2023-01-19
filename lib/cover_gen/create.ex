@@ -26,12 +26,18 @@ defmodule CoverGen.Create do
              request.character_gender,
              request.prompt.type
            ),
-         {:ok, sd_res} <-
-           SD.diffuse(
+         sd_params <-
+           SD.get_sd_params(
              prompt,
              request.character_gender,
              request.prompt.type,
              1,
+             request.width,
+             request.height
+           ),
+         {:ok, sd_res} <-
+           SD.diffuse(
+             sd_params,
              System.get_env("REPLICATE_TOKEN")
            ) do
       %{"output" => image_list} = sd_res
@@ -43,23 +49,10 @@ defmodule CoverGen.Create do
         img_urls ->
           for url <- img_urls do
             image_params = %{"cover_url" => url, "prompt" => prompt}
-            {:ok, cover} = Media.create_cover(request, image_params)
-
-            urls =
-              Overlay.put_text_on_images(
-                request.title |> Overlay.get_line_length_list(),
-                cover.cover_url,
-                request.author,
-                request.title,
-                request.prompt.realm |> to_string()
-              )
-
-            for url <- urls do
-              Media.create_overlay(cover, %{url: url})
-            end
+            {:ok, _cover} = Media.create_cover(request, image_params)
           end
 
-          # request = ai_update_request(request, %{completed: true})
+          {:ok, request} = ai_update_request(request, %{completed: true})
 
           broadcast(request, :gen_complete)
       end
@@ -139,6 +132,10 @@ defmodule CoverGen.Create do
       idea = String.trim(idea)
       Media.create_idea(request, %{idea: idea})
     end
+  end
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(Litcovers.PubSub, "generations")
   end
 
   defp broadcast(request, event) do

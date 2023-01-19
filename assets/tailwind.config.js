@@ -40,6 +40,9 @@ module.exports = {
         'accent-sec': '#5C2D45',
         'hover': '#B42E71',
         'gray': '#C6C6C6'
+      },
+      fontFamily: {
+        'sans': ['"Helvetica Neue"']
       }
     },
   },

@@ -12,18 +12,23 @@ defmodule CoverGen.SD do
               num_outputs: 1
             }
 
+  def get_sd_params(prompt, gender, type, amount, width, height) do
+    %SD{
+      version: get_version(type, gender),
+      input: %{
+        prompt: prompt,
+        width: width,
+        height: height,
+        num_outputs: amount
+      }
+    }
+  end
+
   # Returns a list of image links
   def diffuse(_prompt, _amount, nil),
     do: raise("REPLICATE_TOKEN was not set\nVisit https://replicate.com/account to get it")
 
-  def diffuse(prompt, gender, type, amount, replicate_token) do
-    version = get_version(type, gender)
-
-    sd_params = %SD{
-      version: version,
-      input: %{prompt: prompt, num_outputs: amount, height: 768}
-    }
-
+  def diffuse(sd_params, replicate_token) do
     body = Jason.encode!(sd_params)
     headers = [Authorization: "Token #{replicate_token}", "Content-Type": "application/json"]
     options = [timeout: 50_000, recv_timeout: 165_000]

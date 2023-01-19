@@ -69,6 +69,7 @@
 
   <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
     <%= for cover <- @request.covers do %>
+      <img class="w-full group-hover:brightness-50 border rounded object-cover cursor-pointer border-green-500" src={cover.cover_url} />
       <%= for overlay <- cover.overlays do %>
         <div class="group relative">
         <div class="absolute hidden group-hover:inline bottom-0 p-4 text-xs text-zinc-200 font-medium z-20"><%= cover.prompt %></div>

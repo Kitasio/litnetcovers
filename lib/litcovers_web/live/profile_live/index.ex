@@ -9,7 +9,7 @@ defmodule LitcoversWeb.ProfileLive.Index do
 
   def mount(%{"locale" => locale} = _params, session, socket) do
     Gettext.put_locale(locale)
-    if connected?(socket), do: Media.subscribe()
+    if connected?(socket), do: CoverGen.Create.subscribe()
     current_user = Accounts.get_user_by_session_token(session["user_token"])
     requests = Media.list_user_requests(current_user)
 

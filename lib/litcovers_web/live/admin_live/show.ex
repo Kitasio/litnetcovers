@@ -8,7 +8,7 @@ defmodule LitcoversWeb.AdminLive.Show do
   alias CoverGen.Create
 
   def mount(params, session, socket) do
-    if connected?(socket), do: Media.subscribe()
+    if connected?(socket), do: CoverGen.Create.subscribe()
     %{"request_id" => request_id, "locale" => locale} = params
     request = Media.get_request_and_covers!(request_id)
 
