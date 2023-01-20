@@ -229,6 +229,38 @@ defmodule LitcoversWeb.RequestsLive.Index do
     end
   end
 
+  def toggler(assigns) do
+    ~H"""
+    <div
+      class="flex items-center justify-start"
+      x-data="{ toggle: '1' }"
+      x-init="() => { $watch('toggle', active => $dispatch('toggle-change', { toggle: active })) }"
+      id="toggle-lit-ai"
+      phx-hook="Toggle"
+    >
+      <div
+        class="relative w-12 h-6 rounded-full transition duration-200 ease-linear"
+        x-bind:class="[toggle === '1' ? 'bg-accent-main' : 'bg-dis-btn']"
+      >
+        <label
+          for="toggle"
+          class="absolute left-0 -top-10 w-6 h-6 mb-2 bg-white border-2 rounded-full cursor-pointer transition transform duration-100 ease-linear"
+          x-bind:class="[toggle === '1' ? 'translate-x-full border-accent-main' : 'translate-x-0 border-dis-btn']"
+        >
+        </label>
+        <input type="hidden" name="toggle" value="off" />
+        <input
+          type="checkbox"
+          id="toggle"
+          name="toggle"
+          class="hidden"
+          @click="toggle === '0' ? toggle = '1' : toggle = '0'"
+        />
+      </div>
+    </div>
+    """
+  end
+
   def img(assigns) do
     assigns = assign_new(assigns, :img_url, fn -> nil end)
     assigns = assign_new(assigns, :aspect_ratio, fn -> nil end)
