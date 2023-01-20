@@ -30,8 +30,8 @@
     <%= if @lit_ai do %>
       <div class="bg-sec flex flex-col justify-between lg:h-full">
         <.form class="px-8 bg-sec flex flex-col gap-5" let={f} for={@changeset} phx-change="validate" phx-submit="save">
-          <.h1><%= gettext "Description" %></.h1>
-          <%= textarea f, :description, placeholder: @placeholder.description, rows: "4", class: "mt-5 textarea" %>
+          <.h1><%= gettext "Book description" %></.h1>
+          <%= textarea f, :description, placeholder: @placeholder.description, rows: "4", class: "textarea" %>
           <%= error_tag f, :description %>
 
           <div>
@@ -66,7 +66,7 @@
                   <.stage_msg msg={@stage.msg} />
                   <.stage_box>
                     <%= for t <- @types do %>
-                      <.img_box src={"https://ik.imagekit.io/soulgenesis/litnet/#{t.name}.jpg"} label={t.label} value={t.name} />
+                      <.img_box src={"https://ik.imagekit.io/soulgenesis/litnet/#{t.name}.jpg"} label={t.label} value={t.name} stage_id={@stage.id} />
                     <% end %>
                   </.stage_box>
                 <% end %>
@@ -79,9 +79,9 @@
                 <.stage_box>
                   <%= for r <- @realms do %>
                     <%= if @type == "subject" do %>
-                      <.img_box src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{@gender}_#{r.name}.jpg"} label={r.label} value={r.name} />
+                      <.img_box src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{@gender}_#{r.name}.jpg"} label={r.label} value={r.name} stage_id={@stage.id} />
                     <% else %>
-                      <.img_box src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{r.name}.jpg"} label={r.label} value={r.name} />
+                      <.img_box src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{r.name}.jpg"} label={r.label} value={r.name} stage_id={@stage.id} />
                     <% end %>
                   <% end %>
                 </.stage_box>
@@ -92,9 +92,9 @@
                 <.stage_box>
                   <%= for s <- @sentiments do %>
                     <%= if @type == "subject" do %>
-                      <.img_box src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{@gender}_#{@realm}_#{s.name}.jpg"} label={s.label} value={s.name} />
+                      <.img_box src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{@gender}_#{@realm}_#{s.name}.jpg"} stage_id={@stage.id} label={s.label} value={s.name} />
                     <% else %>
-                      <.img_box src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{@realm}_#{s.name}.jpg"} label={s.label} value={s.name} />
+                      <.img_box src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{@realm}_#{s.name}.jpg"} stage_id={@stage.id} label={s.label} value={s.name} />
                     <% end %>
                   <% end %>
                 </.stage_box>
@@ -104,7 +104,7 @@
                 <.stage_msg msg={@stage.msg} />
                 <.stage_box>
                   <%= for p <- @style_prompts do %>
-                    <.img_box src={p.image_url} label={p.name} value={p.id} />
+                    <.img_box src={p.image_url} label={p.name} value={p.id} prompt_id={@prompt_id} stage_id={@stage.id} />
                   <% end %>
                 </.stage_box>
               <% end %>
@@ -128,8 +128,12 @@
 
 
     <div class="py-20 px-8 lg:col-start-6 lg:col-end-13 lg:py-auto">
-      <.img aspect_ratio={@aspect_ratio} img_url={@img_url} request_id={@request_id} request_completed={@request_completed} />
+      <.img aspect_ratio={@aspect_ratio}
+            img_url={@img_url}
+            request_id={@request_id}
+            request_completed={@request_completed}
+          />
     </div>
-    <div class="aspect-square hidden"/>
+    <div class="aspect-square translate-y-6 hidden"/>
 </div>
 

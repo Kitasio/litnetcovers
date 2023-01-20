@@ -166,12 +166,11 @@ defmodule LitcoversWeb.RequestsLive.Index do
         {:noreply, socket}
 
       3 ->
-        stage = get_stage(socket.assigns.stage.id + 1)
         prompt = Sd.get_prompt!(value)
 
         socket =
           socket
-          |> assign(stage: stage, style_prompt: prompt.style_prompt, prompt_id: prompt.id)
+          |> assign(style_prompt: prompt.style_prompt, prompt_id: prompt.id)
 
         {:noreply, socket}
 
@@ -330,19 +329,19 @@ defmodule LitcoversWeb.RequestsLive.Index do
       <%= for stage <- stages() do %>
         <%= if stage.id <= assigns.stage do %>
           <%= if stage.id == assigns.stage do %>
-            <button class="capitalize text-zinc-100 font-light">
+            <div class="cursor-pointer capitalize text-zinc-100 font-light">
               <%= stage.name %>
-            </button>
+            </div>
           <% else %>
-            <button
+            <div
               phx-click={
                 JS.push("set_stage") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")
               }
               phx-value-stage={stage.id}
-              class="capitalize text-zinc-400 hover:text-zinc-100 font-light"
+              class="cursor-pointer capitalize text-zinc-400 hover:text-zinc-100 font-light"
             >
               <%= stage.name %>
-            </button>
+            </div>
           <% end %>
           <span class="last:hidden pb-1 mx-2 text-zinc-400">></span>
         <% end %>
@@ -352,12 +351,16 @@ defmodule LitcoversWeb.RequestsLive.Index do
   end
 
   def img_box(assigns) do
+    assigns = assign_new(assigns, :prompt_id, fn -> nil end)
+    assigns = assign_new(assigns, :value, fn -> nil end)
+    assigns = assign_new(assigns, :stage_id, fn -> nil end)
+
     if assigns.value == nil do
       ~H"""
       <div></div>
       """
     else
-      src = default_img(assigns.src)
+      src = default_img_or(assigns.src)
 
       label = assigns.label |> String.upcase()
       url = insert_tr(src, label)
@@ -367,6 +370,7 @@ defmodule LitcoversWeb.RequestsLive.Index do
       <div
         id={"#{@url}"}
         class="mr-8 aspect-cover overflow-hidden rounded-xl border-2 border-stroke-main hover:border-accent-main transition inline-block min-w-[250px] sm:min-w-fit sm:mr-0"
+        x-bind:class={"'#{@value}' == '#{@prompt_id}' && 'border-accent-main'"}
         x-data={"{ showImage: false, imageUrl: '#{@url}' }"}
       >
         <img
@@ -375,8 +379,8 @@ defmodule LitcoversWeb.RequestsLive.Index do
           x-bind:src="imageUrl"
           x-on:load="showImage = true"
           alt={assigns.label}
-          class="w-full h-full object-cover aspect-cover cursor-pointer transition duration-500 ease-out hover:scale-[1.02] hover:saturate-[1.3]"
-          phx-click={JS.push("next") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")}
+          class="w-full h-full object-cover aspect-cover cursor-pointer transition duration-300 ease-out hover:scale-[1.02] hover:saturate-[1.3]"
+          phx-click={next_stage_push_anim(@stage_id)}
           phx-value-value={assigns.value}
         />
       </div>
@@ -384,7 +388,15 @@ defmodule LitcoversWeb.RequestsLive.Index do
     end
   end
 
-  defp default_img(img) do
+  defp next_stage_push_anim(stage_id) do
+    if stage_id >= 3 do
+      JS.push("next")
+    else
+      JS.push("next") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")
+    end
+  end
+
+  defp default_img_or(img) do
     if img == nil do
       "https://ik.imagekit.io/soulgenesis/litnet/realm_fantasy.jpg"
     else
