@@ -2,6 +2,61 @@ defmodule LitcoversWeb.UiComponents do
   use Phoenix.Component
   import LitcoversWeb.Gettext
 
+  def img(assigns) do
+    assigns = assign_new(assigns, :img_url, fn -> nil end)
+    assigns = assign_new(assigns, :aspect_ratio, fn -> "cover" end)
+    assigns = assign_new(assigns, :request_id, fn -> nil end)
+    assigns = assign_new(assigns, :request_completed, fn -> false end)
+
+    assigns =
+      assign_new(assigns, :spin, fn ->
+        assigns.request_id != nil and assigns.request_completed == false
+      end)
+
+    if assigns.spin do
+      ~H"""
+      <div
+        x-data={"{ showImage: false, imageUrl: '#{@img_url}' }"}
+        class={"bg-sec flex items-center justify-center max-w-lg overflow-hidden rounded-lg aspect-#{@aspect_ratio} transition-all duration-300 mx-auto"}
+      >
+        <svg
+          class="animate-slow-spin"
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          fill="none"
+        >
+          <g clip-path="url(#a)">
+            <g stroke="#fff" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#b)">
+              <path d="M7 1.167V3.5M7 10.5v2.333M2.876 2.876l1.65 1.65M9.473 9.473l1.651 1.651M1.167 7H3.5M10.5 7h2.333M2.876 11.124l1.65-1.65M9.473 4.527l1.651-1.651" />
+            </g>
+          </g>
+          <defs>
+            <clipPath id="a"><path fill="#fff" d="M0 0h14v14H0z" /></clipPath>
+            <clipPath id="b"><path fill="#fff" d="M0 0h14v14H0z" /></clipPath>
+          </defs>
+        </svg>
+      </div>
+      """
+    else
+      ~H"""
+      <div
+        x-data={"{ showImage: false, imageUrl: '#{@img_url}' }"}
+        class={"bg-sec max-w-lg overflow-hidden rounded-lg aspect-#{@aspect_ratio} transition-all duration-300 mx-auto"}
+      >
+        <img
+          x-show="showImage"
+          x-transition.duration.500ms
+          x-bind:src="imageUrl"
+          x-on:load="showImage = true"
+          alt="Generated picture"
+          class="w-full h-full object-cover aspect-cover"
+        />
+      </div>
+      """
+    end
+  end
+
   def request_info(assigns) do
     ~H"""
     <div class="mt-5 flex flex-col gap-7">

@@ -1,25 +1,28 @@
-<div class="my-10">
-  <.h1><%= @title %></.h1>
-
-  <%= if Enum.empty?(@requests) do %>
-    <%= if @current_user.litcoins > 0 do %>
-      <%= live_redirect to: ~p"/#{@locale}/request" do %>
-        <div class="mt-10 flex items-center justify-center w-full h-96 rounded border border-zinc-400 hover:border-pink-500 transition duration-300">
-          <.p class="text-center"><%= gettext "There's nothing here for now," %><br> <%= gettext "It's time to change it with a click of a button" %></.p>
+<div class="h-screen">
+  <.navbar request_path={~p"/#{@locale}/profile"} locale={@locale} />
+  <div class="bg-sec px-8 py-10">
+    <%= if Enum.empty?(@requests) do %>
+      <%= if @current_user.litcoins > 0 do %>
+        <%= live_redirect to: ~p"/#{@locale}/request" do %>
+          <div class="mt-10 flex items-center justify-center w-full h-96 rounded border border-zinc-400 hover:border-pink-500 transition duration-300">
+            <.p class="text-center"><%= gettext "There's nothing here for now," %><br> <%= gettext "It's time to change it with a click of a button" %></.p>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="mt-10">
+          <p><%= gettext "At the moment you don't have litcoins to make a request." %></p>
         </div>
       <% end %>
     <% else %>
-      <div class="mt-10">
-        <p><%= gettext "At the moment you don't have litcoins to make a request." %></p>
+      <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-20">
+        <%= for request <- @requests do %>
+          <%= for cover <- request.covers do %>
+            <a href={~p"/#{@locale}/profile/#{request.id}"}>
+              <.img img_url={cover.cover_url} />
+            </a>
+          <% end %>
+        <% end %>
       </div>
     <% end %>
-  <% else %>
-    <div class="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-      <%= for request <- @requests do %>
-        <%= live_redirect to: ~p"/#{@locale}/profile/#{request.id}" do %>
-          <.cover_status_box request={request} />
-        <% end %>
-      <% end %>
-    </div>
-  <% end %>
+  </div>
 </div>
